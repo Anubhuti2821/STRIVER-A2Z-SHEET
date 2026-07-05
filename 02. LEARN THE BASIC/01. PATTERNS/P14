@@ -1,0 +1,24 @@
+/*
+PROBLEM: Pattern 14 - Alphabet Triangle
+DESCRIPTION:
+Print alphabet characters in increasing order per row starting from 'A'.
+Each row i contains i characters starting from 'A'.
+*/
+
+
+class Solution {
+public:
+    void pattern14(int n) {
+        for(int i = 0; i < n; i++) {
+            char k = 'A';
+            for(int j = 0; j <= i; j++) {
+                cout << k;
+                k++;
+            }
+            cout << endl;
+        }
+    }
+};
+/*TIME COMPLEXITY: O(n^2)
+SPACE COMPLEXITY: O(1)
+*/
