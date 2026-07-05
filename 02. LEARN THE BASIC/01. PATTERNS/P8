@@ -1,0 +1,29 @@
+/*
+Problem Statement:
+Given an integer N, print an inverted pyramid pattern where the first row contains (2*N-1) stars and each subsequent row decreases by 2 stars while increasing leading spaces by 1.
+
+Example (N = 5):
+*********
+ *******
+  *****
+   ***
+    *
+*/
+
+class Solution {
+public:
+    void pattern8(int n) {
+        for(int i = 0; i < n; i++) {
+            for(int j = 0; j < i; j++) {
+                cout << " ";
+            }
+            for(int j = 0; j < (2 * (n - i)) - 1; j++) {
+                cout << "*";
+            }
+            cout << endl;
+        }
+    }
+};
+
+// Time Complexity: O(n²)
+// Space Complexity: O(1)
