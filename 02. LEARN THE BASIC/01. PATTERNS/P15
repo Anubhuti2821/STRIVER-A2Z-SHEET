@@ -1,0 +1,22 @@
+/*
+PROBLEM: Pattern 15 - Reverse Alphabet Triangle
+DESCRIPTION:
+Print decreasing alphabet sequences starting from 'A'.
+
+TIME COMPLEXITY: O(n^2)
+SPACE COMPLEXITY: O(1)
+*/
+
+class Solution {
+public:
+    void pattern15(int n) {
+        for(int i = 0; i < n; i++) {
+            char k = 'A';
+            for(int j = 0; j < n - i; j++) {
+                cout << k;
+                k++;
+            }
+            cout << endl;
+        }
+    }
+};
