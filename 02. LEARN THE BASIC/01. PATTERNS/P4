@@ -1,0 +1,33 @@
+## Problem Statement
+
+Given an integer `N`, print a pattern where the `i-th` row contains the number `i` repeated `i` times.
+
+### Example
+
+Input:
+N = 5
+
+Output:
+1
+22
+333
+4444
+55555
+
+
+CODE:
+class Solution {
+public:
+    void pattern4(int n) {
+        for(int i = 1 ; i<=n ; i++){
+            for(int j = 0 ; j<=i ; j++){
+                cout<<i;
+            }
+            cout<<endl;
+        }
+
+    }
+};
+
+TIME COMPLEXITY - O(N^2)
+SPACE COMPLEXITY - O(1)
