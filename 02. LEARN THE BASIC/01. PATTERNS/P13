@@ -1,0 +1,22 @@
+/*Prints numbers in a continuous increasing sequence in a triangular pattern where each row has increasing number of 
+elements starting from 1.*/
+
+#include <iostream>
+using namespace std;
+
+class Solution {
+public:
+    void pattern13(int n) {
+        int a = 1;
+        for(int i = 1; i <= n; i++) {
+            for(int j = 1; j <= i; j++) {
+                cout << a;
+                a++;
+            }
+            cout << endl;
+        }
+    }
+};
+
+/*Time Complexity: O(n²)
+Space Complexity: O(1)*/
