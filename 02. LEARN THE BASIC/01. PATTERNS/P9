@@ -1,0 +1,45 @@
+/*
+Problem Statement:
+Given an integer N, print a diamond pattern by combining a pyramid and an inverted pyramid. The middle row should be printed only once.
+
+Example (N = 5):
+    *
+   ***
+  *****
+ *******
+*********
+ *******
+  *****
+   ***
+    *
+*/
+
+class Solution {
+public:
+    void pattern9(int n) {
+       for(int i = 0; i < n; i++) {
+            for(int j = 0; j < n - i - 1; j++) {
+                cout << " ";
+            }
+            for(int j = 0; j < 2 * i + 1; j++) {
+                cout << "*";
+            }
+
+            cout << endl;
+        }
+         for(int i = 0; i < n; i++) {
+            for(int j = 0; j < i; j++) {
+                cout << " ";
+            }
+            for(int j = 0; j < (2 * (n - i)) - 1; j++) {
+                cout << "*";
+            }
+            cout << endl;
+        }
+    }
+
+    };
+
+
+// Time Complexity: O(n²)
+// Space Complexity: O(1)
