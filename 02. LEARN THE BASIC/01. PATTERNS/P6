@@ -1,0 +1,18 @@
+/*## Problem Statement
+Given an integer N, print an inverted right-angled triangle of stars with N stars in the first row, decreasing by one star in each subsequent row.
+cpp*/
+
+class Solution {
+public:
+    void pattern5(int n) {
+        for(int i = 0; i < n; i++) {
+            for(int j = 0; j < n - i; j++) {
+                cout << "*";
+            }
+            cout << endl;
+        }
+    }
+};
+
+// Time Complexity: O(n²)
+// Space Complexity: O(1)
