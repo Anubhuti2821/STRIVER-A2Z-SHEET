@@ -1,0 +1,22 @@
+/*
+PROBLEM: Pattern 16 - Alphabet Repeated Triangle
+DESCRIPTION:
+Print characters starting from 'A', where each row i contains the same character repeated i+1 times.
+
+TIME COMPLEXITY: O(n^2)
+SPACE COMPLEXITY: O(1)
+*/
+
+class Solution {
+public:
+    void pattern16(int n) {
+        char k = 'A';
+        for(int i = 0; i < n; i++) {
+            for(int j = 0; j <= i; j++) {
+                cout << k;
+            }
+            k++;
+            cout << endl;
+        }
+    }
+};
