@@ -1,0 +1,40 @@
+/*
+Overflow Check Explanation
+
+1. A 32-bit signed integer has the following range:
+   INT_MAX = 2147483647
+   INT_MIN = -2147483648
+
+2. Before adding the next digit, we perform:
+   rev = rev * 10 + digit
+
+3. If rev is already greater than INT_MAX/10 (214748364),
+   multiplying it by 10 will definitely exceed INT_MAX,
+   regardless of the next digit.
+
+4. If rev is exactly equal to INT_MAX/10 (214748364),
+   only digits from 0 to 7 are safe because INT_MAX ends with 7.
+   Any digit greater than 7 will cause overflow.
+
+5. Similarly, if rev is already smaller than INT_MIN/10 (-214748364),
+   multiplying it by 10 will definitely go below INT_MIN.
+
+6. If rev is exactly equal to INT_MIN/10 (-214748364),
+   only digits from -8 to 0 are safe because INT_MIN ends with -8.
+   Any digit smaller than -8 will cause overflow.
+
+Overflow Conditions:
+
+if (rev > INT_MAX / 10 || (rev == INT_MAX / 10 && digit > 7))
+    return 0;
+
+if (rev < INT_MIN / 10 || (rev == INT_MIN / 10 && digit < -8))
+    return 0;
+
+Memory Trick:
+- INT_MAX = 2147483647  → Last digit = 7
+- INT_MIN = -2147483648 → Last digit = -8
+
+Always check for overflow BEFORE performing:
+rev = rev * 10 + digit;
+*/
