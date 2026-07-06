@@ -1,0 +1,45 @@
+/*
+Problem: Greatest Common Divisor (GCD)
+
+Given two positive integers n1 and n2, return their Greatest Common Divisor (GCD).
+
+Approach (Brute Force):
+1. The GCD cannot be greater than the smaller of the two numbers.
+2. Iterate from 1 to min(n1, n2).
+3. If a number divides both n1 and n2, update the GCD.
+4. The last common divisor found is the Greatest Common Divisor.
+*/
+
+class Solution {
+public:
+    int GCD(int n1, int n2) {
+        int gc = 1;
+
+        for (int i = 1; i <= min(n1, n2); i++) {
+            if (n1 % i == 0 && n2 % i == 0) {
+                gc = i;
+            }
+        }
+
+        return gc;
+    }
+};
+
+/*
+Time Complexity: O(min(n1, n2))
+Space Complexity: O(1)
+
+Mistakes I Made:
+1. Initially checked only:
+      n2 % i == 0
+   This verified divisibility for only one number.
+   For GCD, 'i' must divide both numbers.
+
+2. Initially iterated till n1.
+   Optimized it to iterate till min(n1, n2) because
+   the GCD can never be greater than the smaller number.
+
+3. This is the brute-force approach.
+   The optimal solution uses Euclid's Algorithm,
+   which has a time complexity of O(log(min(n1, n2))).
+*/
