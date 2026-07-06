@@ -1,0 +1,39 @@
+/*DON'T KNOW WHY BUT IT IS NOT WORKING
+Problem: Number of Digits
+
+Given an integer n, return the number of digits in n.
+The number may be positive, negative, or zero.
+
+Approach:
+1. If n is 0, return 1.
+2. Convert n to its absolute value.
+3. Repeatedly divide by 10 while counting the digits.
+*/
+
+class Solution {
+public:
+    int countDigit(int n) {
+        if (n == 0) {
+            return 1;
+        }
+
+        long long num = n;
+        if (num < 0) {
+            num = -num;
+        }
+
+        int count = 0;
+
+        while (num > 0) {
+            num /= 10;
+            count++;
+        }
+
+        return count;
+    }
+};
+
+/*
+Time Complexity: O(log10(n))
+Space Complexity: O(1)
+*/
