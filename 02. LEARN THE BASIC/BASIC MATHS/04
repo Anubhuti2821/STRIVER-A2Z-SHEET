@@ -1,0 +1,49 @@
+/*
+Problem: Palindrome Number
+
+Given an integer x, return true if x is a palindrome, and false otherwise.
+
+A palindrome number reads the same forward and backward.
+
+Approach:
+1. Store the original number in a temporary variable.
+2. Reverse the number digit by digit.
+3. Compare the reversed number with the original number.
+4. If both are equal, the number is a palindrome; otherwise, it is not.
+*/
+
+class Solution {
+public:
+    bool isPalindrome(int x) {
+        int rev = 0;
+        int temp = x;
+
+        while (x > 0) {
+            int digit = x % 10;
+
+            if (rev > INT_MAX / 10 || (rev == INT_MAX / 10 && digit > 7))
+                return false;
+
+            if (rev < INT_MIN / 10 || (rev == INT_MIN / 10 && digit < -8))
+                return false;
+
+            rev = rev * 10 + digit;
+            x /= 10;
+        }
+
+        return rev == temp;
+    }
+};
+
+/*
+Time Complexity: O(log10(n))
+In each iteration, I divide the number by 10, removing one digit. Since an integer with d digits requires d iterations 
+to become 0, and the number of digits in n is ⌊log₁₀(n)⌋ + 1, the time complexity is O(log₁₀ n)."
+Space Complexity: O(1)
+
+Mistakes I Made:
+1.x must be stored in temp first as at last it become 0
+
+2. read the question statement carefully they have told -121(neg) is not palindrome so keep it in mind keep 
+loop cond while(x > 0)
+
