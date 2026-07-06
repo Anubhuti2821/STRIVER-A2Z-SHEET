@@ -1,0 +1,40 @@
+/*THIS QUESTION APPEARED TO BE VERY EASY BUT THE BASE CASE MADE IT MEDIUM ,TWO POINT FIRST NEG OR POSSITVE KA OVERFLOW HO JATA HE ... 2ND IS THE BASE CASES
+Problem: Reverse Integer
+
+Given a signed 32-bit integer x, return x with its digits reversed.
+If reversing x causes the value to go outside the signed 32-bit integer range
+[-2^31, 2^31 - 1], return 0.
+
+Approach:
+1. Extract the last digit using modulo.
+2. Check if appending the digit will cause overflow.
+3. If safe, append the digit to the reversed number.
+4. Continue until the number becomes 0.
+*/
+
+class Solution {
+public:
+    int reverse(int x) {
+        int rev = 0;
+
+        while (x != 0) {
+            int digit = x % 10;
+
+            if (rev > INT_MAX / 10 || (rev == INT_MAX / 10 && digit > 7))
+                return 0;
+
+            if (rev < INT_MIN / 10 || (rev == INT_MIN / 10 && digit < -8))
+                return 0;
+
+            rev = rev * 10 + digit;
+            x /= 10;
+        }
+
+        return rev;
+    }
+};
+
+/*
+Time Complexity: O(log10(|x|))
+Space Complexity: O(1)
+*/
