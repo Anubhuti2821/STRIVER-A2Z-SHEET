@@ -1,0 +1,36 @@
+/*
+Problem: Greatest Common Divisor (GCD)
+
+Given two positive integers n1 and n2, return their Greatest Common Divisor (GCD).
+
+Approach (Euclid's Algorithm):
+1. Repeatedly replace the larger number with the remainder obtained after dividing it by the smaller number.
+2. Continue this process until one of the numbers becomes 0.
+3. The other number is the GCD.
+*/
+
+class Solution {
+public:
+    int GCD(int n1, int n2) {
+        while (n2 != 0) {
+            int rem = n1 % n2;
+            n1 = n2;
+            n2 = rem;
+        }
+
+        return n1;
+    }
+};
+
+/*
+Time Complexity: O(log(min(n1, n2)))
+Space Complexity: O(1)
+
+Mistakes I Made:
+1. Initially used the brute-force approach by checking every number from 1 to min(n1, n2).
+2. Optimized the brute-force loop from n1 to min(n1, n2).
+3. Learned Euclid's Algorithm, which repeatedly replaces:
+      (n1, n2) → (n2, n1 % n2)
+   until n2 becomes 0.
+4. The remaining non-zero number is the GCD.
+*/
