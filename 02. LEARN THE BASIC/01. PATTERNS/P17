@@ -1,0 +1,60 @@
+/*
+Problem: Pattern 17
+
+Pattern:
+    A
+   ABA
+  ABCBA
+ ABCDCBA
+ABCDEDCBA
+
+Approach:
+- For each row:
+  1. Print leading spaces.
+  2. Print characters from 'A' up to the current row's character.
+  3. Move one character back twice to avoid printing the middle character again.
+  4. Print characters in reverse order to complete the palindrome pattern.
+
+Time Complexity: O(N²)
+Space Complexity: O(1)
+*/
+
+class Solution {
+public:
+    void pattern17(int n) {
+        for (int i = 1; i <= n; i++) {
+
+            // Print leading spaces
+            for (int j = 0; j < n - i; j++) {
+                cout << " ";
+            }
+
+            // Print increasing characters
+            char ch = 'A';
+            for (int j = 1; j <= i; j++) {
+                cout << ch;
+                ch++;
+            }
+
+            // Move back to the previous character
+            ch--;
+            ch--;
+
+            // Print decreasing characters
+            for (int j = 1; j < i; j++) {
+                cout << ch;
+                ch--;
+            }
+
+            cout << endl;
+        }
+    }
+};
+
+/*
+Possible Optimization:
+- No optimization is possible.
+- Every character in the pattern must be printed exactly once,
+  so O(N²) time is optimal.
+- Space complexity is already O(1).
+*/
