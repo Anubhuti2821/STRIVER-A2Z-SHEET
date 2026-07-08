@@ -1,0 +1,84 @@
+/*
+Problem: Pattern 19
+
+Pattern (N = 5):
+**********
+****  ****
+***    ***
+**      **
+*        *
+*        *
+**      **
+***    ***
+****  ****
+**********
+
+Approach:
+- Print the upper half:
+  1. Print decreasing stars.
+  2. Print increasing spaces.
+  3. Print decreasing stars.
+- Print the lower half:
+  1. Print increasing stars.
+  2. Print decreasing spaces.
+  3. Print increasing stars.
+
+Time Complexity: O(N²)
+Space Complexity: O(1)
+*/
+
+class Solution {
+public:
+    void pattern19(int n) {
+
+        // Upper Half
+        for (int i = 0; i < n; i++) {
+
+            // Left stars
+            for (int j = 0; j < n - i; j++) {
+                cout << "*";
+            }
+
+            // Middle spaces
+            for (int j = 0; j < 2 * i; j++) {
+                cout << " ";
+            }
+
+            // Right stars
+            for (int j = 0; j < n - i; j++) {
+                cout << "*";
+            }
+
+            cout << endl;
+        }
+
+        // Lower Half
+        for (int i = 1; i <= n; i++) {
+
+            // Left stars
+            for (int j = 0; j < i; j++) {
+                cout << "*";
+            }
+
+            // Middle spaces
+            for (int j = 0; j < 2 * (n - i); j++) {
+                cout << " ";
+            }
+
+            // Right stars
+            for (int j = 0; j < i; j++) {
+                cout << "*";
+            }
+
+            cout << endl;
+        }
+    }
+};
+
+/*
+Possible Optimization:
+- No optimization is possible.
+- Every character in the pattern must be printed exactly once,
+  so O(N²) time is optimal.
+- Space complexity is already O(1).
+*/
