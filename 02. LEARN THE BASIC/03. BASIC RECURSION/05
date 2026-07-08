@@ -1,0 +1,33 @@
+/*
+Problem: Factorial of a Number using Recursion
+
+Approach:
+- If n is 0 or 1, return 1.
+- Otherwise, return the current number multiplied by the factorial of n-1.
+- This follows the recursive relation:
+  factorial(n) = n * factorial(n - 1)
+
+Time Complexity: O(N)
+Space Complexity: O(N)
+(Recursion stack)
+*/
+
+class Solution {
+public:
+    int factorial(int n) {
+        if (n <= 1) {
+            return 1;
+        }
+
+        return n * factorial(n - 1);
+    }
+};
+
+/*
+Possible Optimization:
+- An iterative approach computes the factorial in O(N) time with O(1) extra space,
+  avoiding the recursion stack.
+
+Time Complexity: O(N)
+Space Complexity: O(1)
+*/
