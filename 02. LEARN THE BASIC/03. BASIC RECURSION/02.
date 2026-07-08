@@ -1,0 +1,32 @@
+/*
+Problem: Print Numbers from 1 to N using Recursion
+
+Approach:
+- If n becomes 0, stop the recursion.
+- First recursively print numbers from 1 to n-1.
+- Then print the current number n.
+- This ensures the numbers are printed in increasing order.
+
+Time Complexity: O(N)
+Space Complexity: O(N)
+(Recursion stack)
+*/
+
+class Solution {
+public:
+    void printNumbers(int n) {
+        if (n == 0) {
+            return;
+        }
+
+        printNumbers(n - 1);
+        cout << n << " ";
+    }
+};
+
+/*
+Possible Optimization:
+- No optimization is possible.
+- Every number from 1 to N must be printed exactly once, so the time complexity
+  cannot be better than O(N).
+*/
