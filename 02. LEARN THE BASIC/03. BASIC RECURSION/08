@@ -1,0 +1,42 @@
+/*
+Problem: Fibonacci Number
+
+Approach:
+- If n is 0 or 1, return n.
+- Otherwise, recursively compute the sum of the previous two Fibonacci numbers.
+- This follows the recursive relation:
+  Fibonacci(n) = Fibonacci(n - 1) + Fibonacci(n - 2)
+
+Time Complexity: O(2^N)
+Space Complexity: O(N)
+(Recursion stack)
+*/
+
+class Solution {
+public:
+    int fib(int n) {
+        if (n == 0 || n == 1) {
+            return n;
+        }
+
+        return fib(n - 1) + fib(n - 2);
+    }
+};
+
+/*
+Possible Optimization:
+- Use Dynamic Programming (Memoization or Tabulation) to avoid repeated
+  calculations.
+
+Memoization:
+- Time Complexity: O(N)
+- Space Complexity: O(N)
+
+Tabulation:
+- Time Complexity: O(N)
+- Space Complexity: O(N)
+
+Space Optimized DP:
+- Time Complexity: O(N)
+- Space Complexity: O(1)
+*/
