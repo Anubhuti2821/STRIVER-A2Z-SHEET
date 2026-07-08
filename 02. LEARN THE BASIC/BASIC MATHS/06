@@ -1,0 +1,39 @@
+/*
+Problem: Armstrong Number
+
+Approach:
+- Store the original number in a temporary variable.
+- Extract each digit using the modulus operator.
+- Add the cube of each digit to a running sum.
+- Compare the final sum with the original number.
+- If both are equal, the number is an Armstrong number.
+
+Time Complexity: O(D)
+Space Complexity: O(1)
+
+(D = Number of digits)
+*/
+
+class Solution {
+public:
+    bool isArmstrong(int n) {
+        int sum = 0;
+        int temp = n;
+
+        while (n > 0) {
+            int d = n % 10;
+            sum += d * d * d;
+            n /= 10;
+        }
+
+        return sum == temp;
+    }
+};
+
+/*
+Possible Optimization:
+- No optimization is required for the GFG version since it is specifically for
+  3-digit numbers and already runs in O(D) time with O(1) space.
+- For the general Armstrong Number problem, compute the number of digits first
+  and raise each digit to that power instead of always using the cube.
+*/
