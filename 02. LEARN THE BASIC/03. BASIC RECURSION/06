@@ -1,0 +1,38 @@
+/*
+Problem: Reverse an Array using Recursion
+
+Approach:
+- Use two pointers: one at the beginning and one at the end.
+- Swap the elements at these pointers.
+- Recursively move the pointers towards the center.
+- Stop when the left pointer becomes greater than or equal to the right pointer.
+
+Time Complexity: O(N)
+Space Complexity: O(N)
+(Recursion stack)
+*/
+
+class Solution {
+public:
+    void helper(int arr[], int left, int right) {
+        if (left >= right) {
+            return;
+        }
+
+        swap(arr[left], arr[right]);
+        helper(arr, left + 1, right - 1);
+    }
+
+    void reverse(int arr[], int n) {
+        helper(arr, 0, n - 1);
+    }
+};
+
+/*
+Possible Optimization:
+- An iterative two-pointer approach reverses the array in O(N) time
+  with O(1) extra space, avoiding the recursion stack.
+
+Optimal Time Complexity: O(N)
+Optimal Space Complexity: O(1)
+*/
