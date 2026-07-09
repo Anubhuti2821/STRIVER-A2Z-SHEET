@@ -1,0 +1,46 @@
+/*
+Problem: Check if Array Is Sorted and Rotated
+
+Description:
+Given an array nums, return true if the array was originally sorted in non-decreasing order
+and then rotated some number of positions (including zero). Otherwise, return false.
+
+Approach:
+- Count the number of places where the array decreases (nums[i-1] > nums[i]).
+- If there are no decreases, the array is already sorted.
+- If there is exactly one decrease, the first element must be greater than or equal to
+  the last element for it to be a valid rotated sorted array.
+- Otherwise, the array is not a valid rotated sorted array.
+*/
+
+class Solution {
+public:
+    bool check(vector<int>& nums) {
+        int n = nums.size();
+        int drop = 0;
+
+        for (int i = 1; i < n; i++) {
+            if (nums[i - 1] > nums[i]) {
+                drop++;
+            }
+        }
+
+        if (drop == 0 || (drop == 1 && nums[0] >= nums[n - 1])) {
+            return true;
+        }
+
+        return false;
+    }
+};
+
+/*
+Time Complexity: O(n)
+Space Complexity: O(1)
+
+Possible Optimization:
+An alternative implementation treats the array as circular by comparing
+nums[i] with nums[(i + 1) % n] for all indices and counting the number
+of decreases. If the count is at most one, the array is valid. This
+removes the need for the separate condition involving nums[0] and
+nums[n - 1].
+*/
