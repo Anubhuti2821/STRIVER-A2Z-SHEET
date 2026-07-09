@@ -1,0 +1,48 @@
+```cpp
+/*
+Problem: Two Sum
+
+Description:
+Given an integer array nums and an integer target, return the indices of the
+two numbers such that they add up to the target.
+
+You may assume that each input has exactly one solution, and you may not use
+the same element twice.
+
+Approach:
+1. Traverse the array once.
+2. For each element, calculate its complement (target - current element).
+3. Check if the complement already exists in the hash map.
+4. If found, return the indices of the complement and the current element.
+5. Otherwise, store the current element and its index in the hash map.
+
+Time Complexity: O(n)
+Space Complexity: O(n)
+*/
+
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+        unordered_map<int, int> m;
+
+        for (int i = 0; i < nums.size(); i++) {
+            int complement = target - nums[i];
+
+            if (m.find(complement) != m.end()) {
+                return {m[complement], i};
+            }
+
+            m[nums[i]] = i;
+        }
+
+        return {};
+    }
+};
+
+/*
+Possible Optimization:
+This is already the optimal solution with O(n) time and O(n) extra space.
+A sorting + two-pointer approach is possible, but it takes O(n log n) time
+and requires preserving the original indices.
+*/
+```
