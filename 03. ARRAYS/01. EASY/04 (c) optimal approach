@@ -1,0 +1,38 @@
+/*
+Problem: Remove Duplicates from Sorted Array
+
+Approach (Using erase()):
+- Traverse the sorted array.
+- Whenever two consecutive elements are equal, erase the duplicate.
+- After erasing, decrement the index because elements shift one position to the left.
+
+Note:
+- This approach is correct but not optimal.
+- Each erase() operation takes O(n) time because elements after the erased position
+  must be shifted.
+- Therefore, the overall time complexity becomes O(n²), which results in
+  Time Limit Exceeded (TLE) on large test cases.
+*/
+
+class Solution {
+public:
+    int removeDuplicates(vector<int>& nums) {
+        for (int i = 1; i < nums.size(); i++) {
+            if (nums[i] == nums[i - 1]) {
+                nums.erase(nums.begin() + i);
+                i--;
+            }
+        }
+
+        return nums.size();
+    }
+};
+
+/*
+Time Complexity: O(n²)
+Space Complexity: O(1)
+
+Possible Optimization:
+Use the two-pointer approach to overwrite duplicate elements in-place.
+This reduces the time complexity to O(n) while maintaining O(1) extra space.
+*/
