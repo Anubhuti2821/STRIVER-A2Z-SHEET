@@ -1,0 +1,32 @@
+/*
+Problem: Left Rotate Array by One
+
+Approach:
+- Store the last element in a temporary variable.
+- Replace the last element with the first element.
+- Shift all remaining elements one position to the left.
+- Place the stored last element at the second last position.
+
+Example:
+Input : [1, 2, 3, 4, 5]
+Output: [2, 3, 4, 5, 1]
+
+Time Complexity: O(n)
+Space Complexity: O(1)
+*/
+
+class Solution {
+public:
+    void rotateArrayByOne(vector<int>& nums) {
+        int n = nums.size();
+
+        int temp = nums[n - 1];
+        nums[n - 1] = nums[0];
+
+        for (int i = 0; i < n - 2; i++) {
+            nums[i] = nums[i + 1];
+        }
+
+        nums[n - 2] = temp;
+    }
+};
