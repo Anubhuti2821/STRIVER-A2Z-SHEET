@@ -3,7 +3,7 @@
 Problem: Left Rotate Array by K Places (Brute Force)
 
 Approach:
-1. Store the first k elements in a temporary vector.
+1. Store the first k elements in a temporary vector.  MAKE k = k%n;
 2. Shift the remaining (n - k) elements to the left.
 3. Copy the stored elements to the end of the array.
 
