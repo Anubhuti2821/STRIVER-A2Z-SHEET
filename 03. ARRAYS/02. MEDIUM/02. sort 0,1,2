@@ -1,0 +1,56 @@
+```cpp
+/*
+Problem: Sort Colors (Dutch National Flag Algorithm)
+
+Description:
+Given an array nums containing only 0s, 1s, and 2s, sort the array in-place
+so that objects of the same color are adjacent, with the colors in the order
+0, 1, and 2.
+
+Approach:
+1. Maintain three pointers:
+   - low: Next position for 0.
+   - mid: Current element being processed.
+   - high: Next position for 2.
+2. Traverse the array while mid <= high:
+   - If nums[mid] == 0, swap it with nums[low] and increment both low and mid.
+   - If nums[mid] == 1, simply increment mid.
+   - If nums[mid] == 2, swap it with nums[high] and decrement high.
+     Do not increment mid because the swapped element needs to be processed.
+
+Time Complexity: O(n)
+Space Complexity: O(1)
+*/
+
+class Solution {
+public:
+    void sortColors(vector<int>& nums) {
+        int n = nums.size();
+
+        int low = 0;
+        int mid = 0;
+        int high = n - 1;
+
+        while (mid <= high) {
+            if (nums[mid] == 0) {
+                swap(nums[mid], nums[low]);
+                low++;
+                mid++;
+            }
+            else if (nums[mid] == 1) {
+                mid++;
+            }
+            else {
+                swap(nums[mid], nums[high]);
+                high--;
+            }
+        }
+    }
+};
+
+/*
+Possible Optimization:
+This is already the optimal solution. The Dutch National Flag Algorithm
+sorts the array in a single traversal using constant extra space.
+*/
+```
