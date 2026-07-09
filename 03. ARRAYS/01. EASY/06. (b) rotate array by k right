@@ -1,0 +1,42 @@
+/*
+-------------------------------------------------------
+Problem: Right Rotate Array by K Places (Brute Force)
+
+Approach:
+1. Store the last k elements in a temporary vector.
+2. Shift the remaining elements to the right.
+3. Copy the stored elements to the beginning.
+
+Time Complexity: O(n)
+Space Complexity: O(k)
+-------------------------------------------------------
+*/
+
+class Solution {
+public:
+    void rotateArray(vector<int>& nums, int k) {
+        int n = nums.size();
+
+        if (n == 0) return;
+
+        k = k % n;
+
+        vector<int> temp;
+
+        // Store last k elements
+        for (int i = n - k; i < n; i++) {
+            temp.push_back(nums[i]);
+        }
+
+        // Shift remaining elements to the right
+        for (int i = n - k - 1; i >= 0; i--) {
+            nums[i + k] = nums[i];
+        }
+
+        // Copy stored elements to the beginning
+        int idx = 0;
+        for (int i = 0; i < k; i++) {
+            nums[i] = temp[idx++];
+        }
+    }
+};
