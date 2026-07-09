@@ -1,0 +1,47 @@
+/*
+Problem: Second Largest Element in an Array
+
+Description:
+Given an array of integers, return the second largest distinct element.
+If the second largest element does not exist, return -1.
+*/
+
+class Solution {
+public:
+    int secondLargestElement(vector<int>& nums) {
+        int n = nums.size();
+        int highest = nums[0];
+        int secondHighest = INT_MIN;
+
+        for (int i = 1; i < n; i++) {
+            if (nums[i] > highest) {
+                secondHighest = highest;
+                highest = nums[i];
+            }
+            else if (nums[i] < highest && nums[i] > secondHighest) {
+                secondHighest = nums[i];
+            }
+        }
+
+        if (secondHighest == INT_MIN)
+            return -1;
+
+        return secondHighest;
+    }
+};
+
+/*
+Time Complexity: O(n)
+Space Complexity: O(1)
+
+Possible Optimization:
+No further optimization is possible. Every element must be examined at least
+once to determine the second largest distinct element, so O(n) is optimal.
+
+
+MISTAKE
+Initialized second largest with -100000000 instead of INT_MIN.
+ Incorrectly checked 'highest > secondHighest' before returning.
+ This returns INT_MIN for cases like {5} or {7,7,7}.
+ Should check 'secondHighest == INT_MIN' and return -1 if true.
+*/ 
