@@ -1,0 +1,69 @@
+/*
+Problem: Union of Two Sorted Arrays
+
+Approach:
+1. Traverse both sorted arrays using two pointers.
+2. Compare the current elements:
+   - If the first array element is smaller, add it (if not already present) and move the first pointer.
+   - If the second array element is smaller, add it (if not already present) and move the second pointer.
+   - If both are equal, add it only once and move both pointers.
+3. After one array is exhausted, add the remaining elements of the other array while avoiding duplicates.
+*/
+
+class Solution {
+public:
+    vector<int> unionArray(vector<int>& nums1, vector<int>& nums2) {
+        int n = nums1.size();
+        int m = nums2.size();
+
+        vector<int> ans;
+        int i = 0;
+        int j = 0;
+
+        while(i < n && j < m) {
+            if(nums1[i] < nums2[j]) {
+                if(ans.empty() || ans.back() != nums1[i]) {
+                    ans.push_back(nums1[i]);
+                }
+                i++;
+            }
+            else if(nums1[i] > nums2[j]) {
+                if(ans.empty() || ans.back() != nums2[j]) {
+                    ans.push_back(nums2[j]);
+                }
+                j++;
+            }
+            else {
+                if(ans.empty() || ans.back() != nums1[i]) {
+                    ans.push_back(nums1[i]);
+                }
+                i++;
+                j++;
+            }
+        }
+
+        while(i < n) {
+            if(ans.empty() || ans.back() != nums1[i]) {
+                ans.push_back(nums1[i]);
+            }
+            i++;
+        }
+
+        while(j < m) {
+            if(ans.empty() || ans.back() != nums2[j]) {
+                ans.push_back(nums2[j]);
+            }
+            j++;
+        }
+
+        return ans;
+    }
+};
+
+/*
+Time Complexity: O(n + m)
+Space Complexity: O(1) (excluding the output array)
+
+Possible Optimization:
+This is already the optimal solution.
+*/
