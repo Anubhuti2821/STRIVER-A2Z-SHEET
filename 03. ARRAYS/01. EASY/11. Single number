@@ -1,0 +1,30 @@
+/*
+Problem: Single Number
+
+Approach:
+1. Initialize the answer as 0.
+2. Traverse the array and XOR each element with the answer.
+3. Since x ^ x = 0 and x ^ 0 = x, all duplicate elements cancel out.
+4. The remaining value is the element that appears only once.
+*/
+
+class Solution {
+public:
+    int singleNumber(vector<int>& nums) {
+        int ans = 0;
+
+        for(int i : nums) {
+            ans ^= i;
+        }
+
+        return ans;
+    }
+};
+
+/*
+Time Complexity: O(n)
+Space Complexity: O(1)
+
+Possible Optimization:
+This is already the optimal solution. It uses the XOR property to find the unique element in linear time with constant extra space.
+*/
