@@ -1,0 +1,63 @@
+/*MY APPROACH
+Problem: Union of Two Sorted Arrays
+
+Approach:
+1. Use a set to store unique elements.
+2. Traverse both sorted arrays using two pointers.
+3. Insert the smaller element into the set and move its pointer.
+4. After one array is exhausted, insert the remaining elements of the other array.
+5. Copy all elements from the set into the answer vector.
+
+Note:
+The set automatically removes duplicates and maintains the elements in sorted order.
+NOTE U USED BOTH SET AND TWO POINTER .NOTE THAT SET ALREADY REMOVE DUPLICATE AND ARRANGE ELEMENTS IN SORTED ORDER HENCE U DO NOT NEED TWO POINTER
+*/
+
+class Solution {
+public:
+    vector<int> unionArray(vector<int>& nums1, vector<int>& nums2) {
+        set<int> s;
+        vector<int> ans;
+
+        int n = nums1.size();
+        int m = nums2.size();
+
+        int i = 0;
+        int j = 0;
+
+        while(i <= n - 1 && j <= m - 1) {
+            if(nums1[i] > nums2[j]) {
+                s.insert(nums2[j]);
+                j++;
+            }
+            else {
+                s.insert(nums1[i]);
+                i++;
+            }
+        }
+
+        while(i <= n - 1) {
+            s.insert(nums1[i]);
+            i++;
+        }
+
+        while(j <= m - 1) {
+            s.insert(nums2[j]);
+            j++;
+        }
+
+        for(auto it : s) {
+            ans.push_back(it);
+        }
+
+        return ans;
+    }
+};
+
+/*
+Time Complexity: O((n + m) * log(n + m))
+Space Complexity: O(n + m)
+
+Possible Optimization:
+Since both arrays are already sorted, the union can be found using only the two-pointer technique without a set, achieving O(n + m) time while using only the output array for extra space.
+*/
