@@ -1,0 +1,49 @@
+/*
+Problem: Next Permutation
+
+Approach:
+1. Traverse from the right and find the pivot (the first element smaller than its next element).
+2. If no pivot exists, the array is in descending order, so reverse the entire array.
+3. Traverse from the right and find the first element greater than the pivot.
+4. Swap that element with the pivot.
+5. Reverse the suffix after the pivot to obtain the next lexicographically smallest permutation.
+*/
+
+class Solution {
+public:
+    void nextPermutation(vector<int>& nums) {
+        int n = nums.size();
+        int pivot = -1;
+
+        for(int i = n - 1; i > 0; i--) {
+            if(nums[i] > nums[i - 1]) {
+                pivot = i - 1;
+                break;
+            }
+        }
+
+        if(pivot == -1) {
+            reverse(nums.begin(), nums.end());
+            return;
+        }
+
+        // Traverse from the right. Since the suffix is in decreasing order,
+        // the first element greater than the pivot is the smallest greater element.
+        for(int j = n - 1; j > pivot; j--) {
+            if(nums[j] > nums[pivot]) {
+                swap(nums[j], nums[pivot]);
+                break;
+            }
+        }
+
+        reverse(nums.begin() + pivot + 1, nums.end());
+    }
+};
+
+/*
+Time Complexity: O(n)
+Space Complexity: O(1)
+
+Possible Optimization:
+This is already the optimal solution with linear time and constant extra space.
+*/
