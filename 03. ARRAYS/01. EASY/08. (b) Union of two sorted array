@@ -1,0 +1,42 @@
+//THIS IS HOW SET MUST BE USED
+/*
+Problem: Union of Two Sorted Arrays (Using Set)
+
+Approach:
+1. Insert all elements of the first array into a set.
+2. Insert all elements of the second array into the same set.
+3. The set automatically removes duplicates and stores elements in sorted order.
+4. Copy the elements from the set into the answer vector.
+*/
+
+class Solution {
+public:
+    vector<int> unionArray(vector<int>& nums1, vector<int>& nums2) {
+        set<int> s;
+
+        for(int x : nums1)
+            s.insert(x);
+
+        for(int x : nums2)
+            s.insert(x);
+
+        vector<int> ans(s.begin(), s.end());
+
+        return ans;
+    }
+};
+
+/*
+Time Complexity:
+- Inserting n elements from nums1: O(n log(n + m))
+- Inserting m elements from nums2: O(m log(n + m))
+- Copying set to vector: O(n + m)
+
+Overall: O((n + m) log(n + m))
+
+Space Complexity:
+O(n + m)
+
+Possible Optimization:
+Since both arrays are already sorted, use the two-pointer approach to achieve O(n + m) time with O(1) extra space (excluding the output array).
+*/
