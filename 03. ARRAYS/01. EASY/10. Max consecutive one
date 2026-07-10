@@ -1,0 +1,41 @@
+/*
+Problem: Max Consecutive Ones
+
+Approach:
+1. Traverse the array once.
+2. Maintain a count of consecutive 1s.
+3. Update the maximum count whenever a 1 is encountered.
+4. Reset the count to 0 whenever a 0 is encountered.
+*/
+
+class Solution {
+public:
+    int findMaxConsecutiveOnes(vector<int>& nums) {
+        int n = nums.size();
+
+        int one_count = 0;
+        int max_one = INT_MIN;
+
+        for(int i = 0; i < n; i++) {
+            if(nums[i] == 1) {
+                one_count++;
+            }
+
+            max_one = max(max_one, one_count);
+
+            if(nums[i] == 0) {
+                one_count = 0;
+            }
+        }
+
+        return max_one;
+    }
+};
+
+/*
+Time Complexity: O(n)
+Space Complexity: O(1)
+
+Possible Optimization:
+Initialize `max_one` to 0 instead of `INT_MIN`, since the maximum number of consecutive 1s can never be negative.
+*/
