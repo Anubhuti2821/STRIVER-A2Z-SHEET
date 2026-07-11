@@ -1,0 +1,42 @@
+/*
+Problem: Pascal's Triangle
+
+Description:
+Given an integer numRows, return the first numRows of Pascal's Triangle.
+
+Approach:
+- Create each row with all elements initialized to 1.
+- The first and last elements remain 1.
+- Fill the middle elements using the previous row:
+    row[j] = ans[i-1][j-1] + ans[i-1][j]
+- Store each completed row in the answer vector.
+*/
+
+class Solution {
+public:
+    vector<vector<int>> generate(int numRows) {
+        vector<vector<int>> ans;
+
+        for (int i = 0; i < numRows; i++) {
+            vector<int> row(i + 1, 1);
+
+            if (i >= 2) {
+                for (int j = 1; j < i; j++) {
+                    row[j] = ans[i - 1][j - 1] + ans[i - 1][j];
+                }
+            }
+
+            ans.push_back(row);
+        }
+
+        return ans;
+    }
+};
+
+/*
+Time Complexity: O(numRows²)
+Space Complexity: O(numRows²)
+
+Possible Optimization:
+Since the output itself contains O(numRows²) elements, the overall space complexity cannot be reduced when returning the entire triangle. The current approach is already optimal.
+*/
