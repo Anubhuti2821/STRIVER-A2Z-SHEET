@@ -1,0 +1,56 @@
+/*
+Problem: Rotate Image
+
+Given an n x n 2D matrix representing an image, rotate the image by
+90 degrees clockwise in-place.
+
+Approach:
+1. Take the transpose of the matrix.
+2. Reverse every row.
+3. This results in a 90° clockwise rotation without using extra space.
+*/
+
+class Solution {
+public:
+    void rotate(vector<vector<int>>& matrix) {
+
+        int n = matrix.size();
+
+        // Transpose the matrix
+        for(int i = 0; i < n; i++) {
+            for(int j = i + 1; j < n; j++) {
+                swap(matrix[i][j], matrix[j][i]);
+            }
+        }
+
+        // Reverse every row
+        for(int i = 0; i < n; i++) {
+            reverse(matrix[i].begin(), matrix[i].end());
+        }
+    }
+};
+
+/*
+Time Complexity: O(n^2)
+Space Complexity: O(1)
+
+Mistakes I Made:
+1. Initially tried to find a direct relation:
+   (i, j) -> (j, n - i - 1), but couldn't perform the rotation in-place.
+2. Thought an extra matrix might be required, but the problem explicitly asked for O(1) extra space.
+3. While taking the transpose, I first used:
+      for(int j = 0; j < n; j++)
+   which swapped each pair twice and restored the original matrix.
+4. Corrected the transpose by starting the inner loop from:
+      j = i + 1
+   so each pair is swapped exactly once.
+5. Was confused about whether to reverse rows or columns after transpose.
+   Finally understood that:
+      - Transpose + Reverse Rows  -> 90° Clockwise Rotation
+      - Transpose + Reverse Columns -> 90° Anti-Clockwise Rotation
+
+Possible Optimization:
+This is already the optimal solution.
+Time Complexity: O(n²)
+Space Complexity: O(1)
+*/
