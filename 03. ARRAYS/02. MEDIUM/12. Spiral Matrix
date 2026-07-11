@@ -1,0 +1,87 @@
+/*
+Problem: Spiral Matrix
+
+Given an m x n matrix, return all elements of the matrix in spiral order.
+
+Approach:
+- Maintain four boundaries:
+  1. startRow
+  2. endRow
+  3. startCol
+  4. endCol
+- Traverse the matrix layer by layer:
+  - Left to Right
+  - Top to Bottom
+  - Right to Left
+  - Bottom to Top
+- After traversing each side, update the corresponding boundary.
+
+Time Complexity: O(m * n)
+Space Complexity: O(1) (excluding the output vector)
+*/
+
+class Solution {
+public:
+    vector<int> spiralOrder(vector<vector<int>>& matrix) {
+
+        vector<int> ans;
+
+        int n = matrix.size();
+        int m = matrix[0].size();
+
+        int startRow = 0;
+        int endRow = n - 1;
+        int startCol = 0;
+        int endCol = m - 1;
+
+        while (startRow <= endRow && startCol <= endCol) {
+
+            // Top Row
+            for (int j = startCol; j <= endCol; j++) {
+                ans.push_back(matrix[startRow][j]);
+            }
+            startRow++;
+
+            // Right Column
+            for (int i = startRow; i <= endRow; i++) {
+                ans.push_back(matrix[i][endCol]);
+            }
+            endCol--;
+
+            // Bottom Row
+            if (startRow <= endRow) {
+                for (int j = endCol; j >= startCol; j--) {
+                    ans.push_back(matrix[endRow][j]);
+                }
+                endRow--;
+            }
+
+            // Left Column
+            if (startCol <= endCol) {
+                for (int i = endRow; i >= startRow; i--) {
+                    ans.push_back(matrix[i][startCol]);
+                }
+                startCol++;
+            }
+        }
+
+        return ans;
+    }
+};
+
+/*
+Time Complexity: O(m * n)
+Space Complexity: O(1) (excluding the output vector)
+
+Mistakes I Made:
+1. Used the wrong while condition (>= instead of <=).
+2. Excluded boundary elements by using < instead of <=.
+3. Used incorrect loop conditions while traversing backwards.
+4. Updated all four boundaries together at the end instead of after each traversal.(srow++ , scol++ , ecol-- ,erow-- u did this all at end
+5. Missed the if checks before traversing the bottom row and left column, causing duplicate traversal in edge cases.
+6. Forgot to return the answer vector initially.
+
+Possible Optimization:
+This is already the optimal approach. Every element is visited exactly once, so O(m × n) time is the best possible.
+*/
+
