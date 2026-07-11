@@ -1,0 +1,123 @@
+# How to Identify the Pattern
+
+## Step 1: Is the array sorted?
+
+YES
+→ Think Two Pointers
+
+Examples:
+- Two Sum II
+- 3Sum
+- Remove Duplicates
+- Container With Most Water
+
+NO
+→ Go to Step 2.
+
+----------------------------------------------------
+
+## Step 2: Does the problem ask about a CONTIGUOUS subarray/substring?
+
+NO
+→ Think HashMap, Greedy, DP, etc.
+
+YES
+→ Go to Step 3.
+
+----------------------------------------------------
+
+## Step 3: What is the question asking?
+
+Maximum / Minimum Length
+Longest / Shortest
+Maximum Sum of Size K
+
+→ Think Sliding Window
+
+Count Subarrays
+Subarray Sum = K
+Range Sum
+
+→ Think Prefix Sum
+
+----------------------------------------------------
+
+## Step 4: Are negative numbers present?
+
+YES
+
+❌ Sliding Window usually fails.
+
+Think:
+Prefix Sum + HashMap
+
+NO
+
+Sliding Window is usually possible.
+
+----------------------------------------------------
+
+## Step 5: Is the window size fixed?
+
+YES
+
+Sliding Window (Fixed)
+
+NO
+
+Sliding Window (Variable)
+
+----------------------------------------------------
+
+# One-Line Memory Trick
+
+Sorted?
+→ Two Pointers
+
+Contiguous?
+→ Sliding Window
+
+Subarray Sum?
+→ Prefix Sum
+
+Count Subarrays?
+→ Prefix + HashMap
+
+Negative Numbers?
+→ Prefix Sum
+
+Frequency?
+→ HashMap
+
+
+Pattern 1
+
+"Mujhe pair chahiye?"
+
+→ Two Pointers
+
+Pattern 2
+
+"Mujhe contiguous subarray/subsequence chahiye?"
+
+→ Sliding Window ya Prefix Sum
+
+Pattern 3
+
+"Maximum/Minimum length?"
+
+→ Sliding Window
+
+Pattern 4
+
+"Count kitne subarrays?"
+
+→ Prefix Sum + HashMap
+
+Pattern 5
+
+"Negative numbers bhi hain?"
+
+→ Sliding Window ko doubt karo.
+
+Prefix Sum socho.
