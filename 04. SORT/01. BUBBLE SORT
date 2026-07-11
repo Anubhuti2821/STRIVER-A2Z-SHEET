@@ -1,0 +1,58 @@
+/*
+Problem: Bubble Sort
+
+Given an array of integers, sort the array in ascending order using
+the Bubble Sort algorithm.
+
+Approach:
+1. Repeatedly compare adjacent elements.
+2. Swap them if they are in the wrong order.
+3. After each pass, the largest unsorted element moves to its correct position.
+4. If no swaps occur during a pass, the array is already sorted, so stop early.
+*/
+
+class Solution {
+public:
+    vector<int> bubbleSort(vector<int>& nums) {
+
+        int n = nums.size();
+
+        for(int i = 0; i < n - 1; i++) {
+
+            bool is_swap = false;
+
+            for(int j = 0; j < n - i - 1; j++) {
+
+                if(nums[j] > nums[j + 1]) {
+                    swap(nums[j], nums[j + 1]);
+                    is_swap = true;
+                }
+            }
+
+            if(!is_swap) {
+                break;
+            }
+        }
+
+        return nums;
+    }
+};
+
+/*
+Time Complexity:
+Best Case: O(n)
+Average Case: O(n²)
+Worst Case: O(n²)
+
+Space Complexity: O(1)
+
+Mistakes I Made:
+1. Compared nums[i] with nums[j] instead of comparing adjacent elements (nums[j] and nums[j+1]).
+2. Swapped nums[i] and nums[j] instead of nums[j] and nums[j+1].
+3. Declared 'is_swap' again inside the if block, creating a new local variable instead of updating the existing one.
+4. Placed the 'if(!is_swap)' check outside the outer loop, making 'is_swap' out of scope.
+5. The optimization should break the loop, not return immediately, although both give the correct result for this problem.
+
+Possible Optimization:
+The early-exit optimization using 'is_swap' is already the optimal improvement for Bubble Sort. It reduces the best-case time complexity from O(n²) to O(n).
+*/
