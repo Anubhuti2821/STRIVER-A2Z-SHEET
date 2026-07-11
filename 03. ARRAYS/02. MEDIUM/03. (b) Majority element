@@ -1,0 +1,49 @@
+/*
+Problem: Majority Element
+
+Description:
+Given an array nums of size n, return the majority element.
+The majority element is the element that appears more than ⌊n / 2⌋ times.
+
+Approach:
+- Use Boyer-Moore Voting Algorithm.
+- Maintain a candidate and a count.
+- If count becomes 0, choose the current element as the new candidate.
+- If the current element matches the candidate, increment count.
+- Otherwise, decrement count.
+- Since the problem guarantees that a majority element always exists,
+  the final candidate is the answer.
+*/
+
+class Solution {
+public:
+    int majorityElement(vector<int>& nums) {
+        int candidate = 0;
+        int count = 0;
+
+        for (int num : nums) {
+            if (count == 0) {
+                candidate = num;
+            }
+
+            if (num == candidate) {
+                count++;
+            } else {
+                count--;
+            }
+        }
+
+        return candidate;
+    }
+};
+
+/*
+Time Complexity: O(n)
+Space Complexity: O(1)
+
+Possible Optimization:
+This is already the optimal solution.
+in case question says it is not sure to have a majority element then u have to check the majority element returned by function as this tech always return an element
+for ex  FOR [2,3,7,3,4] there is no majority element but it will still return 4
+
+*/
