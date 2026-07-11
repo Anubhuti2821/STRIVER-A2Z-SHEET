@@ -1,0 +1,107 @@
+/*
+Problem: Longest Consecutive Sequence
+
+Description:
+Given an unsorted array of integers, return the length of the longest
+consecutive elements sequence.
+
+Approach:
+1. Store all elements in an unordered_set.
+2. Traverse only the unique elements in the set.
+3. A number is the starting element of a sequence only if (num - 1)
+   does not exist in the set.
+4. Count consecutive elements using the set.
+5. Update the maximum sequence length.
+*/
+
+class Solution {
+public:
+    int longestConsecutive(vector<int>& nums) {
+        if (nums.empty()) {
+            return 0;
+        }
+
+        unordered_set<int> s;
+
+        for (int num : nums) {
+            s.insert(num);
+        }
+
+        int ans = 0;
+
+        // Iterate over the set instead of the vector.
+        // This avoids processing duplicate values multiple times.
+        for (int num : s) {
+
+            // If the previous consecutive element exists,
+            // this is not the start of a sequence.
+            if (s.find(num - 1) != s.end()) {
+                continue;
+            }
+
+            int current = num;
+            int length = 1;
+
+            while (s.find(current + 1) != s.end()) {
+                current++;
+                length++;
+            }
+
+            ans = max(ans, length);
+        }
+
+        return ans;
+    }
+};
+
+/*
+Time Complexity: O(n)
+Space Complexity: O(n)
+
+Important Points:
+1. Check (num - 1), NOT the previous index.
+   Wrong:
+       s.find(nums[i - 1])
+   Correct:
+       s.find(num - 1)
+
+2. Use a separate variable (current/st) inside the while loop.
+   Don't keep checking nums[i] because nums[i] never changes.
+
+3. Reset length = 1 for every new sequence.
+
+4. Store the maximum answer using:
+       ans = max(ans, length);
+
+5. Handle the empty array case before processing.
+
+Common Mistakes I Made While Solving:
+❌ Forgot nums.size().
+❌ Used nums[i - 1] instead of num - 1.
+❌ Declared length outside the loop.
+❌ Returned length instead of ans.
+❌ Forgot to update the moving variable (st/current).
+❌ Missed the empty array check.
+
+Why iterating over the vector may lead to TLE:
+If nums contains many duplicate values, the same sequence can be
+processed multiple times.
+
+Example:
+nums = [1,1,1,1,2,3,4]
+
+Looping over nums:
+1 -> counts sequence
+1 -> counts sequence again
+1 -> counts sequence again
+...
+
+Looping over unordered_set:
+1 -> counts once
+2 -> skipped
+3 -> skipped
+4 -> skipped
+
+Thus, iterating over the set avoids repeated work on duplicates and is
+the cleaner implementation.
+*/
