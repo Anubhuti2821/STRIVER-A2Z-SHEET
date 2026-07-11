@@ -1,0 +1,41 @@
+/*
+Problem: Majority Element II
+
+Description:
+Given an integer array nums of size n, return all elements that appear
+more than ⌊n / 3⌋ times.
+
+Approach:
+- Count the frequency of each element using an unordered_map.
+- Traverse the map and collect all elements whose frequency is greater
+  than n / 3.
+*/
+
+class Solution {
+public:
+    vector<int> majorityElement(vector<int>& nums) {
+        unordered_map<int, int> mp;
+        vector<int> ans;
+
+        for (int num : nums) {
+            mp[num]++;
+        }
+
+        for (auto it : mp) {
+            if (it.second > nums.size() / 3) {
+                ans.push_back(it.first);
+            }
+        }
+
+        return ans;
+    }
+};
+
+/*
+Time Complexity: O(n)
+Space Complexity: O(n)
+
+Possible Optimization:
+This problem has an optimal Boyer-Moore Voting Algorithm solution
+with O(n) time and O(1) extra space.
+*/
