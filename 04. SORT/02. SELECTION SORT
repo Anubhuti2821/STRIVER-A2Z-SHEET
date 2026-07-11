@@ -1,0 +1,48 @@
+/*
+Problem: Selection Sort
+
+Given an array of integers, sort the array in ascending order using
+the Selection Sort algorithm.
+
+Approach:
+1. Assume the current index contains the smallest element.
+2. Search for the actual smallest element in the remaining unsorted part.
+3. Swap it with the current index.
+4. Repeat until the array is sorted.
+*/
+
+class Solution {
+public:
+    vector<int> selectionSort(vector<int>& nums) {
+
+        int n = nums.size();
+
+        for(int i = 0; i < n - 1; i++) {
+
+            int small = i;
+
+            for(int j = i + 1; j < n; j++) {
+
+                if(nums[j] < nums[small]) {
+                    small = j;
+                }
+            }
+
+            swap(nums[i], nums[small]);
+        }
+
+        return nums;
+    }
+};
+
+/*
+Time Complexity: O(n²)
+Space Complexity: O(1)
+
+Mistakes I Made:
+1. Started the inner loop from j = 0 instead of j = i + 1, causing the already sorted portion to be searched again.
+2. Forgot to return the sorted vector at the end.
+
+Possible Optimization:
+Selection Sort always performs O(n²) comparisons, even if the array is already sorted. There is no early-exit optimization like Bubble Sort.
+*/
