@@ -1,0 +1,211 @@
+# Array Pattern Cheat Sheet
+
+## 1. Two Pointers
+
+### When to Use
+- Array is **sorted**.
+- Need to find a **pair** satisfying a condition.
+- Comparing elements from both ends.
+- Merging two sorted arrays.
+- In-place array modifications.
+
+### Common Keywords
+- Pair Sum
+- Two Sum II
+- Remove Duplicates
+- Merge
+- Palindrome
+- Sorted Array
+
+### Common Problems
+- Two Sum II
+- 3Sum
+- 4Sum
+- Container With Most Water
+- Remove Duplicates from Sorted Array
+- Move Zeroes
+
+### Do NOT Use
+- Unsorted arrays where order matters.
+- Counting subarrays.
+- Problems involving negative numbers affecting window movement.
+
+---
+
+## 2. Sliding Window
+
+### When to Use
+- **Contiguous** subarray or substring.
+- Maximum / Minimum length.
+- Fixed-size window.
+- Variable-size window (usually when elements are non-negative).
+
+### Common Keywords
+- Longest
+- Shortest
+- Maximum
+- Minimum
+- Continuous
+- Contiguous
+- Substring
+- Subarray
+
+### Types
+
+#### A. Fixed Size Window
+Examples:
+- Maximum Sum Subarray of Size K
+- First Negative Number in Every Window
+- Maximum Average Subarray
+
+#### B. Variable Size Window
+Examples:
+- Longest Substring Without Repeating Characters
+- Fruits Into Baskets
+- Minimum Size Subarray Sum
+- Longest Repeating Character Replacement
+
+### Do NOT Use
+- Variable-size window with **negative numbers**.
+- Counting arbitrary subarrays with a given sum.
+
+---
+
+## 3. Prefix Sum
+
+### When to Use
+- Subarray sum.
+- Range sum queries.
+- Counting subarrays.
+- Arrays containing negative numbers.
+
+### Formula
+
+Subarray Sum(i...j)
+
+= Prefix[j] - Prefix[i-1]
+
+### Common Keywords
+- Sum
+- Range Sum
+- Prefix
+- Cumulative Sum
+- Subarray Sum
+
+### Common Problems
+- Range Sum Query
+- Subarray Sum Equals K
+- Continuous Subarray Sum
+- Count Binary Subarrays
+
+### Advantages
+- Works even when negative numbers are present.
+- Converts repeated range sum calculations into O(1).
+
+---
+
+## 4. Prefix Sum + HashMap
+
+### When to Use
+- Count subarrays.
+- Find longest subarray.
+- Negative numbers are present.
+- Need frequency of prefix sums.
+
+### Common Problems
+- Subarray Sum Equals K
+- Longest Subarray With Sum K
+- Binary Subarrays With Sum
+- Contiguous Array
+
+### Key Idea
+
+Current Prefix Sum = S
+
+Need previous prefix sum = S - K
+
+Store frequencies using:
+
+unordered_map<int,int>
+
+---
+
+## 5. HashMap
+
+### When to Use
+- Frequency counting.
+- Fast lookup.
+- Duplicate detection.
+- Character counting.
+
+### Common Problems
+- Two Sum
+- Valid Anagram
+- Group Anagrams
+- Top K Frequent Elements
+- Longest Consecutive Sequence
+
+---
+
+# Decision Flow
+
+### Step 1
+Is the array **sorted**?
+
+→ Yes → **Two Pointers**
+
+---
+
+### Step 2
+Is it asking about a **contiguous subarray/substring**?
+
+→ Yes → **Sliding Window**
+
+---
+
+### Step 3
+Are there **negative numbers**?
+
+→ Yes → **Prefix Sum**
+
+---
+
+### Step 4
+Is it asking to **count subarrays**?
+
+→ Yes → **Prefix Sum + HashMap**
+
+---
+
+### Step 5
+Need frequencies or fast lookup?
+
+→ **HashMap**
+
+---
+
+# Quick Revision Table
+
+| Pattern | Use When | Avoid When |
+|----------|----------|------------|
+| Two Pointers | Sorted array, pair problems | Unsorted arrays where order matters |
+| Sliding Window | Contiguous subarray/substring | Variable window with negative numbers |
+| Prefix Sum | Subarray sum, range queries | Not useful for pair problems |
+| Prefix + HashMap | Count subarrays, negative numbers | Simple fixed-size window problems |
+| HashMap | Frequency, lookup | Order-based traversal |
+
+---
+
+# Golden Rules
+
+✅ Sorted Array → Two Pointers
+
+✅ Contiguous + Non-Negative → Sliding Window
+
+✅ Subarray Sum → Prefix Sum
+
+✅ Count Subarrays → Prefix Sum + HashMap
+
+✅ Negative Numbers → Prefix Sum (Not Sliding Window)
+
+✅ Frequency / Lookup → HashMap
