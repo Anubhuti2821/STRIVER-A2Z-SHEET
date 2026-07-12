@@ -1,0 +1,299 @@
+# Sliding Window Notes
+
+## What is Sliding Window?
+Sliding Window is an optimization technique used for arrays and strings. Instead of checking every possible subarray/substring, we maintain a continuous window using two pointers.
+
+## Two Pointers
+- `left` → Shrinks the window.
+- `right` → Expands the window.
+
+Example:
+```text
+Array: [1,2,3,4,5]
+
+left = 0
+right = 0
+
+Window: [1]
+
+right++
+Window: [1,2]
+
+right++
+Window: [1,2,3]
+```
+
+## Golden Rule
+```text
+right++ → Expand Window
+left++  → Shrink Window
+```
+
+## Types of Sliding Window
+
+### 1. Fixed Size Sliding Window
+Window size never changes.
+
+Examples:
+- Maximum sum of subarray of size K
+- Average of every K elements
+- First negative number in every window of size K
+
+Example:
+```text
+K = 3
+
+[2,1,5]
+[1,5,1]
+[5,1,3]
+[1,3,2]
+```
+
+### Pattern
+```cpp
+while(right<n){
+
+    // include nums[right]
+
+    if(window_size==k){
+
+        // calculate answer
+
+        // remove left element
+        left++;
+    }
+
+    right++;
+}
+```
+
+## 2. Variable Size Sliding Window
+Window size changes according to the condition.
+
+Examples:
+- Longest substring without repeating characters
+- Longest subarray with sum ≤ K
+- Minimum window substring
+- Maximum frequency after at most K operations
+
+Example:
+```text
+[1]
+[1,2]
+[1,2,4]
+[2,4]
+[2,4,5]
+```
+
+### Pattern
+```cpp
+while(right<n){
+
+    // include nums[right]
+
+    while(window is invalid){
+
+        // remove nums[left]
+        left++;
+    }
+
+    // update answer
+
+    right++;
+}
+```
+
+## Why While and Not If?
+
+Wrong:
+```cpp
+if(window is invalid){
+    left++;
+}
+```
+
+Correct:
+```cpp
+while(window is invalid){
+    left++;
+}
+```
+
+Reason:
+The window may still remain invalid after removing only one element.
+
+Example:
+```text
+Window = [2,3,5,4]
+Condition: sum <= 10
+
+Sum = 14 ❌
+
+left++
+
+[3,5,4]
+Sum = 12 ❌
+
+left++
+
+[5,4]
+Sum = 9 ✅
+```
+
+## Fixed vs Variable
+
+### Fixed
+Question contains:
+- Size K
+- Window Size K
+- K consecutive elements
+
+### Variable
+Question contains:
+- Longest
+- Shortest
+- Minimum
+- Maximum Length
+- At Most
+- At Least
+- Condition based
+
+## Example Classification
+
+### Fixed
+- Maximum sum of subarray of size K
+- Maximum average of K elements
+- First negative number in every window of size K
+
+### Variable
+- Longest substring without repeating characters
+- Longest subarray with sum ≤ K
+- Minimum window substring
+- Maximum frequency after at most K operations
+
+# Maximum Frequency of an Element
+
+## Problem
+Increment any element at most K times.
+Return the maximum possible frequency.
+
+## Observations
+
+### 1. Sort the Array
+Reason:
+Only increment is allowed.
+Sorting helps convert smaller elements into larger ones.
+
+### 2. Target Element
+Always choose:
+```cpp
+nums[right]
+```
+
+Reason:
+We cannot decrease elements.
+
+### 3. Window
+Treat consecutive sorted elements as one group.
+
+Example:
+```text
+[1,2,4]
+Target = 4
+```
+
+### 4. Frequency
+```cpp
+window_size = right-left+1
+```
+
+Frequency = Window Size.
+
+### 5. Maintain Window Sum
+Store the sum of the current window.
+
+### 6. Required Sum
+```cpp
+required_sum = nums[right] * window_size
+```
+
+### 7. Cost Formula
+```cpp
+cost = nums[right] * window_size - sum;
+```
+
+Meaning:
+Number of increments required.
+
+### 8. Valid Window
+```cpp
+cost <= k
+```
+
+Expand the window.
+
+### 9. Invalid Window
+```cpp
+cost > k
+```
+
+Shrink the window.
+```cpp
+while(cost > k){
+    sum -= nums[left];
+    left++;
+}
+```
+
+### 10. Update Answer
+```cpp
+ans = max(ans, window_size);
+```
+
+## Exactly K vs At Most K
+
+### Exactly K
+Must use all operations.
+
+### At Most K
+May use fewer operations.
+
+Only check:
+```cpp
+cost <= k
+```
+
+Remaining operations do not matter.
+
+## Complete Pattern
+```text
+Sort
+↓
+Expand Right
+↓
+Maintain Sum
+↓
+Calculate Cost
+↓
+Cost > K ?
+      ↓
+   Yes → Shrink Left
+      ↓
+Update Maximum Window Size
+```
+
+## Time Complexity
+
+### Fixed Sliding Window
+- Time: O(N)
+- Space: O(1)
+
+### Variable Sliding Window
+- Time: O(N)
+- Space: O(1)
+
+### Maximum Frequency Problem
+- Sorting: O(N log N)
+- Sliding Window: O(N)
+- Overall: O(N log N)
+- Space: O(1)
