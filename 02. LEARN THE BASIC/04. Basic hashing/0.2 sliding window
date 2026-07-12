@@ -1,0 +1,53 @@
+Fixed: if (window_size == k) ✅
+Variable: while (window_invalid) ✅
+/*
+Basic Fixed Sliding Window Template
+*/
+
+int left = 0;
+
+for (int right = 0; right < n; right++) {
+
+    // Step 1: Include current element
+    // sum += nums[right];
+
+    // Step 2: Check if window size becomes K
+    if (right - left + 1 == k) {
+
+        // Process current window
+        // ans = max(ans, sum);
+
+        // Step 3: Remove left element
+        // sum -= nums[left];
+
+        // Step 4: Slide the window
+        left++;
+    }
+}
+
+/*
+Basic Variable Sliding Window Template
+*/
+
+int left = 0;
+
+for (int right = 0; right < n; right++) {
+
+    // 1. Include current element
+    // sum += nums[right];
+    // freq[nums[right]]++;
+    // etc.
+
+    // 2. Shrink window until it becomes valid
+    while (/* window is invalid */) {
+
+        // Remove left element
+        // sum -= nums[left];
+        // freq[nums[left]]--;
+
+        left++;
+    }
+
+    // 3. Update answer
+    // ans = max(ans, right - left + 1);
+}
