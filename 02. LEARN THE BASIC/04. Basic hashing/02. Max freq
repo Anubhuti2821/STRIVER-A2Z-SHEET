@@ -1,0 +1,52 @@
+/*
+Problem: Highest Occurring Element in an Array
+
+Description:
+Given an integer array nums, return the element that occurs the maximum
+number of times. If multiple elements have the same maximum frequency,
+return the smallest among them.
+
+Approach:
+1. Use an unordered_map to count the frequency of each element.
+2. Traverse the map:
+   - If an element has a higher frequency, update the answer.
+   - If frequencies are equal, choose the smaller element.
+
+Time Complexity: O(n)
+Space Complexity: O(n)
+*/
+
+class Solution {
+public:
+    int mostFrequentElement(vector<int>& nums) {
+        unordered_map<int, int> freq;
+
+        // Count frequencies
+        for (int num : nums) {
+            freq[num]++;
+        }
+
+        int maxFrequency = 0;
+        int ans = INT_MAX;
+
+        // Find the most frequent element
+        for (auto it : freq) {
+            if (it.second > maxFrequency) {
+                maxFrequency = it.second;
+                ans = it.first;
+            }
+            else if (it.second == maxFrequency) {
+                ans = min(ans, it.first);
+            }
+        }
+
+        return ans;
+    }
+};
+
+/*
+Possible Optimization:
+- This is already optimal.
+- Time Complexity: O(n)
+- Space Complexity: O(n)
+*/
