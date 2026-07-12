@@ -1,0 +1,102 @@
+/*
+Problem: Floor and Ceil in Sorted Array
+
+Definition:
+Floor  -> Largest element <= x
+Ceil   -> Smallest element >= x
+
+Approach:
+1. Apply Binary Search.
+2. If nums[mid] > x:
+   - nums[mid] can be a potential ceil.
+   - Search on the left side for a smaller valid ceil.
+3. If nums[mid] < x:
+   - nums[mid] can be a potential floor.
+   - Search on the right side for a larger valid floor.
+4. If nums[mid] == x:
+   - Both floor and ceil are x.
+   - Stop searching.
+5. If floor or ceil doesn't exist, return -1.
+
+Time Complexity: O(log N)
+Space Complexity: O(1)
+*/
+
+class Solution {
+public:
+    vector<int> getFloorAndCeil(vector<int> nums, int x) {
+        vector<int> ans;
+        int n = nums.size();
+        int st = 0;
+        int end = n - 1;
+        int floor = -1;
+        int ceil = -1;
+
+        while (st <= end) {
+            int mid = st + (end - st) / 2;
+
+            if (nums[mid] > x) {
+                ceil = mid;
+                end = mid - 1;
+            }
+            else if (nums[mid] < x) {
+                floor = mid;
+                st = mid + 1;
+            }
+            else {
+                floor = mid;
+                ceil = mid;
+                break;
+            }
+        }
+
+        floor == -1 ? ans.push_back(-1) : ans.push_back(nums[floor]);
+        ceil == -1 ? ans.push_back(-1) : ans.push_back(nums[ceil]);
+
+        return ans;
+    }
+};
+
+/*
+Mistakes I Made While Learning:
+
+1. Compared:
+   if(mid > x)
+   Correct:
+   if(nums[mid] > x)
+   (mid is an index, not the element.)
+
+2. Forgot the equality case.
+   Correct:
+   if(nums[mid] == x){
+       floor = mid;
+       ceil = mid;
+       break;
+   }
+
+3. Used:
+   nums[floor]
+   nums[ceil]
+   without checking if floor/ceil existed.
+   This can cause nums[-1] (Runtime Error).
+
+4. Learned that:
+   floor = last element <= x
+   ceil  = first element >= x
+
+5. Remembered:
+   nums[mid] > x  -> Possible Ceil -> Search Left
+   nums[mid] < x  -> Possible Floor -> Search Right
+   nums[mid] == x -> Floor = Ceil = x
+
+Key Binary Search Rule:
+Left Search  -> end = mid - 1;
+Right Search -> st = mid + 1;
+*/
+
+/*
+Possible Optimization:
+Instead of storing the indices of floor and ceil, store their values directly.
+This avoids indexing checks while returning the answer, but the time and space
+complexities remain O(log N) and O(1).
+*/
