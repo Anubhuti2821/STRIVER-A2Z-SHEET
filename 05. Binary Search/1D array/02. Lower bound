@@ -1,0 +1,89 @@
+/*
+Problem: Lower Bound
+
+Definition:
+Return the index of the first element greater than or equal to x.
+If no such element exists, return n.
+
+Approach:
+1. Initialize answer as n.
+2. Apply Binary Search.
+3. If nums[mid] >= x:
+   - Store mid as a potential answer.
+   - Search on the left side for a smaller valid index.
+4. Otherwise, search on the right side.
+5. Return the answer.
+
+Time Complexity: O(log N)
+Space Complexity: O(1)
+*/
+
+class Solution {
+public:
+    int lowerBound(vector<int> &nums, int x) {
+        int n = nums.size();
+        int st = 0;
+        int end = n - 1;
+        int ans = n;
+
+        while (st <= end) {
+            int mid = st + (end - st) / 2;
+
+            if (nums[mid] >= x) {
+                ans = mid;
+                end = mid - 1;
+            } else {
+                st = mid + 1;
+            }
+        }
+
+        return ans;
+    }
+};
+
+/*
+Mistakes I Made While Learning:
+
+1. Used:
+   while(st >= end)
+   Correct:
+   while(st <= end)
+
+2. Compared:
+   if(mid == x)
+   Correct:
+   if(nums[mid] >= x)
+
+3. Used:
+   end--;
+   Correct:
+   end = mid - 1;
+   (Discard the entire right half, not just one element.)
+
+4. Used:
+   st++;
+   Correct:
+   st = mid + 1;
+   (Discard the entire left half.)
+
+5. Initialized answer with:
+   INT_MIN / INT_MAX
+   Better:
+   ans = n;
+   (If no lower bound exists, insertion position is n.)
+
+6. Used:
+   ans = min(ans, mid);
+   Better:
+   ans = mid;
+   (Since we're already searching on the left, the latest valid mid is always a better candidate.)
+
+7. Used wrong variable names:
+   a[mid], i
+   Correct:
+   nums[mid], x
+
+Key Binary Search Rule:
+Left Search  -> end = mid - 1;
+Right Search -> st = mid + 1;
+*/
