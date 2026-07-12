@@ -1,7 +1,7 @@
 | Problem                | Formula         |
 | ---------------------- | --------------- |
-| Lower Bound            | First `>= x`    |
-| Upper Bound            | First `> x`     |
+| Lower Bound            | First `>= x`    |(it shows the first occurence of any element)
+| Upper Bound            | First `> x`     |(it shows the element just after the last occurnce of that element)
 | Search Insert Position | Lower Bound     |
 | First Occurrence       | Lower Bound     |
 | Last Occurrence        | Upper Bound - 1 |
