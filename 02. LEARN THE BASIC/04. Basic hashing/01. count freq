@@ -1,0 +1,43 @@
+/*
+Problem: Count Frequencies of Elements
+
+Description:
+Given an integer array nums, return a 2D vector where each inner vector
+contains:
+- The element
+- Its frequency in the array
+
+Approach:
+- Use an unordered_map to count the frequency of each element.
+- Traverse the map and store each {element, frequency} pair in the answer.
+
+Time Complexity: O(n)
+Space Complexity: O(n)
+*/
+
+class Solution {
+public:
+    vector<vector<int>> countFrequencies(vector<int>& nums) {
+        unordered_map<int, int> freq;
+
+        // Count frequencies
+        for (int num : nums) {
+            freq[num]++;
+        }
+
+        // Store result
+        vector<vector<int>> result;
+        for (auto it : freq) {
+            result.push_back({it.first, it.second});
+        }
+
+        return result;
+    }
+};
+
+/*
+Possible Optimization:
+- If the problem requires the output in sorted order or in the order of
+  first appearance, use map or maintain an additional vector along with
+  the unordered_map.
+*/
