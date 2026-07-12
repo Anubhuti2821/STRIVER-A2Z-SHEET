@@ -1,3 +1,12 @@
 Problem	Formula
 First Occurrence	Lower Bound(target)
 Last Occurrence	Upper Bound(target) - 1
+Search Insert Position	Lower Bound(target)
+Ceil	Lower Bound(target)
+Floor	Binary Search keeping last <= target
+
+Lower Bound
+
+Definition:
+
+First element >= x
