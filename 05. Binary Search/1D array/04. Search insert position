@@ -1,3 +1,20 @@
+/*
+Problem: Search Insert Position
+
+Definition:
+Given a sorted array of distinct integers and a target value,
+return the index if the target is found.
+Otherwise, return the index where it should be inserted.
+
+Approach:
+This problem is equivalent to finding the Lower Bound.
+Find the first index where nums[index] >= target.
+If no such index exists, return n.
+
+Time Complexity: O(log N)
+Space Complexity: O(1)
+*/
+
 class Solution {
 public:
     int searchInsert(vector<int>& nums, int target) {
@@ -20,3 +37,50 @@ public:
         return ans;
     }
 };
+
+/*
+Mistakes I Made While Learning:
+
+1. Created a separate 'insert' variable.
+   Better:
+   This problem is exactly the Lower Bound problem.
+   Use 'ans' directly.
+
+2. Used:
+   insert = mid - 1;
+   Correct:
+   ans = mid;
+   (The insertion position is the current index.)
+
+3. Used:
+   insert = mid + 1;
+   Correct:
+   Continue Binary Search.
+   The insertion position is decided only after the search completes.
+
+4. Thought insertion always happens at the end.
+   Actually, insertion can happen:
+   - At the beginning (index 0)
+   - In the middle
+   - At the target's existing index
+   - At the end (index n)
+
+5. Learned:
+   Search Insert Position = Lower Bound
+
+6. Initialized:
+   int insert;
+   Better:
+   int ans = n;
+   (If no element >= target exists, insert at the end.)
+
+Key Concept:
+Lower Bound -> First element >= target
+Search Insert Position -> First valid insertion index
+Both use the same Binary Search template.
+*/
+
+/*
+Possible Optimization:
+This is already the optimal Binary Search solution with O(log N) time and O(1) space.
+*/
