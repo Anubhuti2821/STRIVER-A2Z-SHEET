@@ -10,3 +10,8 @@ Lower Bound
 Definition:
 
 First element >= x
+Upper Bound
+
+Definition:
+
+First element > x
