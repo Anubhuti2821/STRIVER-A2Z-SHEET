@@ -1,0 +1,46 @@
+/*
+Problem: Frequency of the Most Frequent Element
+
+Approach:
+1. Sort the array.
+2. Use a variable sliding window.
+3. Maintain the sum of the current window.
+4. Treat nums[right] as the target element.
+5. Calculate the cost required to make every element in the window equal to nums[right].
+6. If cost > k, shrink the window from the left.
+7. Update the maximum window size.
+
+Time Complexity: O(N log N)
+Space Complexity: O(1)
+*/
+
+class Solution {
+public:
+    int maxFrequency(vector<int>& nums, int k) {
+        sort(nums.begin(), nums.end());
+
+        int left = 0;
+        long long sum = 0;
+        int ans = 1;
+
+        for (int right = 0; right < nums.size(); right++) {
+            sum += nums[right];
+
+            while ((long long)nums[right] * (right - left + 1) - sum > k) {
+                sum -= nums[left];
+                left++;
+            }
+
+            ans = max(ans, right - left + 1);
+        }
+
+        return ans;
+    }
+};
+
+/*
+Possible Optimization:
+This is already the optimal approach.
+Sorting takes O(N log N), and the sliding window runs in O(N).
+No asymptotically faster solution exists because sorting is necessary.
+*/
