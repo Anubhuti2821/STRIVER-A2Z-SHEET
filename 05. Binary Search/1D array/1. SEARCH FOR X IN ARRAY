@@ -1,0 +1,23 @@
+class Solution{
+public:
+    int longestSubarray(vector<int> &nums, int k){
+        //VARIABLE SLIDING WINDOW PROBLEM
+        int left = 0;
+        int n = nums.size();
+        int sum = 0;
+        int max_size = 0;
+        for(int right = 0 ; right < n ; right++ ){
+            sum += nums[right];
+            if(sum == k){
+                max_size = max(max_size , right-left+1);
+                
+            }
+            if(sum>k){
+                sum-=nums[left];
+                left++;
+            }
+
+        }
+        return max_size;
+    }
+};
