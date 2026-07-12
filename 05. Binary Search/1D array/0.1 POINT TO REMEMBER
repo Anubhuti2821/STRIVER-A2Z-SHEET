@@ -1,0 +1,3 @@
+Problem	Formula
+First Occurrence	Lower Bound(target)
+Last Occurrence	Upper Bound(target) - 1
