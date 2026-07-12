@@ -1,0 +1,86 @@
+/*
+Problem: Upper Bound
+
+Definition:
+Return the index of the first element greater than x.
+If no such element exists, return n.
+
+Approach:
+1. Initialize answer as n.
+2. Apply Binary Search.
+3. If nums[mid] > x:
+   - Store mid as a potential answer.
+   - Search on the left side for a smaller valid index.
+4. Otherwise, search on the right side.
+5. Return the answer.
+
+Time Complexity: O(log N)
+Space Complexity: O(1)
+*/
+
+class Solution {
+public:
+    int upperBound(vector<int> &nums, int x) {
+        int n = nums.size();
+        int st = 0;
+        int end = n - 1;
+        int ans = n;
+
+        while (st <= end) {
+            int mid = st + (end - st) / 2;
+
+            if (nums[mid] > x) {
+                ans = mid;
+                end = mid - 1;
+            } else {
+                st = mid + 1;
+            }
+        }
+
+        return ans;
+    }
+};
+
+/*
+Mistakes I Made While Learning:
+
+1. Used:
+   nums[mid] >= x
+   Correct:
+   nums[mid] > x
+   (Upper Bound finds the first element strictly greater than x.)
+
+2. Updated both pointers in the same if block:
+   end = mid - 1;
+   st = mid + 1;
+   Correct:
+   Move only one pointer based on the condition.
+
+3. Wrote:
+   start = mid + 1;
+   Correct:
+   st = mid + 1;
+
+4. Forgot the else block.
+   Binary Search always follows:
+   if (condition) {
+       // save answer
+       // search left
+   } else {
+       // search right
+   }
+
+Key Difference:
+
+Lower Bound -> First element >= x
+Upper Bound -> First element > x
+
+Binary Search Rule:
+Left Search  -> end = mid - 1;
+Right Search -> st = mid + 1;
+*/
+
+/*
+Possible Optimization:
+This is already the optimal Binary Search solution with O(log N) time and O(1) space.
+*/
