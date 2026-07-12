@@ -65,3 +65,7 @@ Sum increases when right moves.
 Sum decreases when left moves.
 
 So sliding window works.
+
+So for Longest Subarray with Sum = K:
+Only positive numbers → Sliding Window ✅
+Negative numbers allowed → Prefix Sum + HashMap ✅
