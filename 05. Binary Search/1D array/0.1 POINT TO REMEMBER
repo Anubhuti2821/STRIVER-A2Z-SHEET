@@ -1,17 +1,9 @@
-Problem	Formula
-First Occurrence	Lower Bound(target)
-Last Occurrence	Upper Bound(target) - 1
-Search Insert Position	Lower Bound(target)
-Ceil	Lower Bound(target)
-Floor	Binary Search keeping last <= target
-
-Lower Bound
-
-Definition:
-
-First element >= x
-Upper Bound
-
-Definition:
-
-First element > x
+| Problem                | Formula         |
+| ---------------------- | --------------- |
+| Lower Bound            | First `>= x`    |
+| Upper Bound            | First `> x`     |
+| Search Insert Position | Lower Bound     |
+| First Occurrence       | Lower Bound     |
+| Last Occurrence        | Upper Bound - 1 |
+| Ceil                   | Lower Bound     |
+| Floor                  | Last `<= x`     |
