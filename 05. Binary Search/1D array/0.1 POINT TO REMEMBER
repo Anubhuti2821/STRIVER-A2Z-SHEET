@@ -7,3 +7,6 @@
 | Last Occurrence        | Upper Bound - 1 |
 | Ceil                   | Lower Bound     |
 | Floor                  | Last `<= x`     |
+
+ int target = *min_element(nums.begin(), nums.end()); to find min element in vector
+*max_element(nums.begin(), nums.end());
