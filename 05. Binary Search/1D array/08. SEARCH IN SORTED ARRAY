@@ -1,0 +1,203 @@
+/*
+Problem: 33. Search in Rotated Sorted Array
+
+Approach:
+1. At every step, one half of the array is always sorted.
+2. Identify whether the left half or the right half is sorted.
+3. Check if the target lies inside the sorted half.
+4. If yes, search in that half; otherwise, search in the other half.
+
+Time Complexity: O(log n)
+Space Complexity: O(1)
+*/
+
+class Solution {
+public:
+    int search(vector<int>& nums, int target) {
+
+        int n = nums.size();
+        int st = 0;
+        int end = n - 1;
+
+        while (st <= end) {
+
+            int mid = st + (end - st) / 2;
+
+            if (nums[mid] == target)
+                return mid;
+
+            // Left half is sorted
+            if (nums[mid] >= nums[st]) {
+
+                if (target >= nums[st] && target < nums[mid]) {
+                    end = mid - 1;
+                } else {
+                    st = mid + 1;
+                }
+            }
+
+            // Right half is sorted
+            else {
+
+                if (target > nums[mid] && target <= nums[end]) {
+                    st = mid + 1;
+                } else {
+                    end = mid - 1;
+                }
+            }
+        }
+
+        return -1;
+    }
+};
+
+/*
+==========================================
+My Misconceptions / Learnings
+==========================================
+
+1. ❌ Wrong Mid Calculation
+
+Initially I wrote:
+
+    mid = st + ((st - end) / 2);
+
+Correct:
+
+    mid = st + (end - st) / 2;
+
+Reason:
+Using (st - end) may produce a negative value, leading to an incorrect
+middle index.
+
+------------------------------------------
+
+2. ❌ Checking if Left Half is Sorted
+
+Initially:
+
+    nums[mid] > nums[st]
+
+Correct:
+
+    nums[mid] >= nums[st]
+
+Reason:
+
+When st == mid, the left half contains only one element, which is
+still considered sorted.
+
+Example:
+
+nums = {3,1}
+
+Initially:
+
+st = 0
+mid = 0
+
+nums[mid] == nums[st]
+
+Using '>' incorrectly assumes the right half is sorted.
+
+------------------------------------------
+
+3. ❌ Incorrect Range Check for Left Half
+
+Initially:
+
+    nums[mid] > target && nums[st] <= target
+
+Although this works logically, it is clearer and follows the standard
+binary search pattern to write:
+
+    target >= nums[st] && target < nums[mid]
+
+Reason:
+
+We are checking whether the target belongs to the sorted interval:
+
+[ nums[st] ... nums[mid] )
+
+Left boundary is included because the target may be at st.
+
+Mid is excluded because we already checked:
+
+    if(nums[mid] == target)
+
+------------------------------------------
+
+4. ❌ Incorrect Thinking About the Right Half
+
+The correct range is:
+
+( nums[mid] ... nums[end] ]
+
+Therefore the condition becomes:
+
+    target > nums[mid] && target <= nums[end]
+
+Reason:
+
+Mid is already checked.
+
+End can still be the answer.
+
+------------------------------------------
+
+5. ✅ Important Observation
+
+In every iteration (without duplicates),
+
+either
+
+Left Half
+
+or
+
+Right Half
+
+is guaranteed to be sorted.
+
+The entire algorithm depends on identifying the sorted half first.
+
+------------------------------------------
+
+6. ✅ Key Conditions to Remember
+
+Left Half Sorted
+
+    nums[mid] >= nums[st]
+
+Target inside Left Half
+
+    target >= nums[st] && target < nums[mid]
+
+Right Half Sorted
+
+    nums[mid] < nums[st]
+
+Target inside Right Half
+
+    target > nums[mid] && target <= nums[end]
+
+------------------------------------------
+
+7. ✅ Why Exclude 'mid' in the Range Check?
+
+Because the very first condition is:
+
+    if(nums[mid] == target)
+        return mid;
+
+So there is no need to include mid again while deciding which half
+to search.
+
+------------------------------------------
+
+Possible Optimization:
+
+The solution is already optimal.
+
+Time Complexity : O(log n)
+Space Complexity : O(1)
