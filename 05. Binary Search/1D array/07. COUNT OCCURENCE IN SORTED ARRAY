@@ -1,0 +1,264 @@
+/*
+Problem: Count Occurrences in a Sorted Array
+
+Approach:
+1. Find the Lower Bound (first index where arr[i] >= target).
+2. If the target is not present, return 0.
+3. Find the Upper Bound (first index where arr[i] > target).
+4. The number of occurrences is:
+        Upper Bound - Lower Bound
+
+Time Complexity: O(log n)
+Space Complexity: O(1)
+*/
+
+class Solution {
+public:
+    int countOccurrences(vector<int>& arr, int target) {
+
+        int n = arr.size();
+
+        int st = 0;
+        int end = n - 1;
+
+        int lb = n;
+        int ub = n;
+
+        // Find Lower Bound
+        while (st <= end) {
+
+            int mid = st + (end - st) / 2;
+
+            if (arr[mid] >= target) {
+                lb = mid;
+                end = mid - 1;
+            } else {
+                st = mid + 1;
+            }
+        }
+
+        // Target not present
+        if (lb == n || arr[lb] != target)
+            return 0;
+
+        // Find Upper Bound
+        st = 0;
+        end = n - 1;
+
+        while (st <= end) {
+
+            int mid = st + (end - st) / 2;
+
+            if (arr[mid] > target) {
+                ub = mid;
+                end = mid - 1;
+            } else {
+                st = mid + 1;
+            }
+        }
+
+        return ub - lb;
+    }
+};
+
+/*
+==========================================
+My Misconceptions / Learnings
+==========================================
+
+1. ❌ I was using 'nums' instead of 'arr'
+
+Initially, I wrote:
+
+    nums.size()
+    nums[mid]
+
+But the function parameter is:
+
+    vector<int>& arr
+
+Always use the same variable name throughout the function.
+
+------------------------------------------
+
+2. ❌ I forgot to declare Lower Bound and Upper Bound
+
+Before using:
+
+    lb = mid;
+    ub = mid;
+
+I must declare them.
+
+Correct:
+
+    int lb = n;
+    int ub = n;
+
+------------------------------------------
+
+3. ❌ I was initializing lb and ub with -1
+
+Initially:
+
+    int lb = -1;
+    int ub = -1;
+
+Although this can work with extra checks, it is not the standard
+implementation of Lower Bound and Upper Bound.
+
+Correct:
+
+    int lb = n;
+    int ub = n;
+
+Reason:
+
+Lower Bound
+= First index where arr[i] >= target
+
+Upper Bound
+= First index where arr[i] > target
+
+If such an index doesn't exist, the correct answer is:
+
+    n
+
+which represents the position just after the last element.
+
+Example:
+
+arr = {1,2,3,4}
+target = 5
+
+Lower Bound = 4 (= n)
+
+Example:
+
+arr = {1,2,3,4}
+target = 4
+
+Upper Bound = 4 (= n)
+
+This is exactly how C++ STL's lower_bound() and upper_bound() work.
+
+------------------------------------------
+
+4. ❌ Returning -1 when the target is absent
+
+The problem asks for the number of occurrences.
+
+If the target is not present,
+
+Correct Answer:
+
+    0
+
+Incorrect:
+
+    -1
+
+------------------------------------------
+
+5. ❌ Wrong Formula for Count
+
+Initially, I wrote:
+
+    ub - 1 - lb
+
+Example:
+
+arr = {2,4,4,4,6}
+
+Lower Bound = 1
+Upper Bound = 4
+
+Wrong:
+
+    4 - 1 - 1 = 2
+
+Correct:
+
+    4 - 1 = 3
+
+Formula:
+
+Count = Upper Bound - Lower Bound
+
+------------------------------------------
+
+6. ✅ Why Initialize with 'n' Instead of '-1'?
+
+Think of 'n' as an imaginary position after the last element.
+
+Example:
+
+Index : 0 1 2 3 4
+Value : 1 2 3 4
+                ^
+                n (past-the-end)
+
+If no valid Lower Bound or Upper Bound exists, Binary Search naturally
+returns this position.
+
+This is also the behavior of STL's:
+
+    lower_bound()
+    upper_bound()
+
+------------------------------------------
+
+7. ✅ Why This Check?
+
+    if (lb == n || arr[lb] != target)
+
+Reason:
+
+Case 1:
+lb == n
+
+No element is greater than or equal to the target.
+
+Case 2:
+
+arr[lb] != target
+
+Lower Bound exists, but it points to the next greater element,
+meaning the target is absent.
+
+Either way, the answer is:
+
+    0
+
+------------------------------------------
+
+8. ✅ Key Definitions
+
+Lower Bound
+
+= First index where arr[i] >= target
+
+Upper Bound
+
+= First index where arr[i] > target
+
+Count of Occurrences
+
+= Upper Bound - Lower Bound
+
+------------------------------------------
+
+Possible Optimization:
+
+Instead of writing two binary searches inside the main function,
+create two helper functions:
+
+    lowerBound()
+    upperBound()
+
+Then simply return:
+
+    upperBound(arr, target) - lowerBound(arr, target);
+
+This makes the solution cleaner, reusable, and easier to debug.
+*/
