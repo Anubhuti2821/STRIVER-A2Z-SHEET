@@ -1,0 +1,115 @@
+/*
+Problem: 153. Find Minimum in Rotated Sorted Array
+
+Approach:
+1. Use Binary Search.
+2. Compare nums[mid] with nums[end].
+3. If nums[mid] > nums[end], the minimum lies in the right half.
+4. Otherwise, the minimum is at mid or in the left half.
+5. Continue until st == end.
+
+Time Complexity: O(log n)
+Space Complexity: O(1)
+*/
+
+class Solution {
+public:
+    int findMin(vector<int>& nums) {
+
+        int st = 0;
+        int end = nums.size() - 1;
+
+        while (st < end) {
+
+            int mid = st + (end - st) / 2;
+
+            // Minimum lies in the right half
+            if (nums[mid] > nums[end]) {
+                st = mid + 1;
+            }
+
+            // Minimum is at mid or in the left half
+            else {
+                end = mid;
+            }
+        }
+
+        return nums[st];
+    }
+};
+
+/*
+==========================================
+My Misconceptions / Learnings
+==========================================
+
+1. I first found the minimum using min_element(),
+which is O(n). Although accepted, it does not
+satisfy the required O(log n) complexity.
+
+------------------------------------------
+
+2. I then tried finding the peak first and
+returning the next element.
+
+That approach also works in O(log n), but it
+requires extra edge-case handling.
+
+------------------------------------------
+
+3. The optimal approach does not search for the
+peak.
+
+Instead, it directly finds the minimum by
+comparing nums[mid] with nums[end].
+
+------------------------------------------
+
+4. Why compare nums[mid] with nums[end]?
+
+If nums[mid] > nums[end],
+the rotation point (minimum) must be in the
+right half.
+
+Example:
+
+4 5 6 7 0 1 2
+      ^
+      mid
+
+Since 7 > 2, the minimum is on the right.
+
+------------------------------------------
+
+5. Why do we write:
+
+end = mid;
+
+instead of
+
+end = mid - 1;
+
+Because nums[mid] itself can be the minimum,
+so we must keep it in the search space.
+
+------------------------------------------
+
+6. Why is the loop:
+
+while (st < end)
+
+instead of
+
+while (st <= end) ?
+
+When st == end, only one element remains,
+and that element is the minimum.
+
+------------------------------------------
+
+7. Complexity
+
+Time Complexity: O(log n)
+
+Space Complexity: O(1)
+*/
