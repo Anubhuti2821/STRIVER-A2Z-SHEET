@@ -10,3 +10,15 @@
 
  int target = *min_element(nums.begin(), nums.end()); to find min element in vector
 *max_element(nums.begin(), nums.end());
+
+Short trick 👇
+
+✅ If you do end = mid, use:
+while (st < end)
+
+because when st == end, mid doesn't change, leading to an infinite loop.
+
+✅ If you do end = mid - 1, use:
+while (st <= end)
+
+because the search space definitely shrinks every iteration.
