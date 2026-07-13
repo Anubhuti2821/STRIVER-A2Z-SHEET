@@ -1,0 +1,119 @@
+Problem: 81. Search in Rotated Sorted Array II
+
+Approach:
+1. If nums[mid] == target, return true.
+2. If duplicates at both ends create ambiguity
+   (nums[st] == nums[mid] == nums[end]),
+   shrink the search space by moving both pointers.
+3. Otherwise, identify the sorted half.
+4. Check whether the target lies inside the sorted half.
+5. Continue Binary Search.
+
+Time Complexity:
+Average Case : O(log n)
+Worst Case   : O(n)
+
+Space Complexity:
+O(1)
+*/
+
+class Solution {
+public:
+    bool search(vector<int>& nums, int target) {
+
+        int n = nums.size();
+
+        int st = 0;
+        int end = n - 1;
+
+        while (st <= end) {
+
+            int mid = st + (end - st) / 2;
+
+            if (nums[mid] == target)
+                return true;
+
+            // Remove duplicates from both ends
+            if (nums[st] == nums[mid] && nums[mid] == nums[end]) {
+                st++;
+                end--;
+            }
+
+            // Left half is sorted
+            else if (nums[mid] >= nums[st]) {
+
+                if (target >= nums[st] && target < nums[mid]) {
+                    end = mid - 1;
+                } else {
+                    st = mid + 1;
+                }
+            }
+
+            // Right half is sorted
+            else {
+
+                if (target > nums[mid] && target <= nums[end]) {
+                    st = mid + 1;
+                } else {
+                    end = mid - 1;
+                }
+            }
+        }
+
+        return false;
+    }
+};
+/*
+==========================================
+My Misconceptions / Learnings
+==========================================
+
+1. Problem 81 is NOT a completely new problem.
+
+It is simply Problem 33 + one extra condition to handle duplicates.
+
+------------------------------------------
+
+2. Why do we add this condition?
+
+if(nums[st] == nums[mid] && nums[mid] == nums[end]){
+    st++;
+    end--;
+}
+
+Reason:
+
+When st, mid, and end have the same value, we cannot determine
+which half is sorted because duplicates hide the rotation point.
+
+------------------------------------------
+
+3. Why do we do st++ and end--?
+
+We only remove duplicate values from both ends.
+
+These duplicates do not provide any useful information, so removing
+them helps eliminate the ambiguity without losing the target.
+
+------------------------------------------
+
+4. Why not do st = mid + 1 or end = mid - 1?
+
+Because we don't know which half contains the target.
+
+Jumping may skip the target completely.
+
+Shrinking by one position is the safest option.
+
+------------------------------------------
+
+5. Time Complexity
+
+Average Case : O(log n)
+Worst Case   : O(n)
+
+Reason:
+
+When there are many duplicates, we may have to shrink the search
+space one element at a time instead of cutting it in half.
+*/
