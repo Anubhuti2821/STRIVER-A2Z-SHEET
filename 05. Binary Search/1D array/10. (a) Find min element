@@ -1,0 +1,135 @@
+/*
+Problem: 153. Find Minimum in Rotated Sorted Array
+
+Approach:
+1. If the array is already sorted, return the first element.
+2. Use Binary Search to locate the peak (maximum element). PEAK ELEMENT
+3. The element immediately after the peak is the minimum.
+4. If nums[mid] > nums[mid + 1], then nums[mid + 1] is the answer.
+5. Otherwise:
+   - If nums[mid] belongs to the left sorted half,
+     move right.
+   - Else, move left.
+
+Time Complexity: O(log n)
+Space Complexity: O(1)
+*/
+
+class Solution {
+public:
+    int findMin(vector<int>& nums) {
+
+        int n = nums.size();
+
+        // Array is already sorted
+        if (nums[0] <= nums[n - 1])
+            return nums[0];
+
+        int st = 0;
+        int end = n - 1;
+
+        while (st <= end) {
+
+            int mid = st + (end - st) / 2;
+
+            // Peak found
+            if (mid < n - 1 && nums[mid] > nums[mid + 1])
+                return nums[mid + 1];
+
+            // Peak lies on the right
+            if (nums[mid] >= nums[st]) {
+                st = mid + 1;
+            }
+
+            // Peak lies on the left
+            else {
+                end = mid - 1;
+            }
+        }
+
+        return -1;
+    }
+};
+
+/*
+==========================================
+My Misconceptions / Learnings
+==========================================
+
+1. I first tried finding the minimum directly.
+
+Then I realized another way is to first find the
+peak (maximum element), because the minimum is
+always the element just after the peak.
+
+------------------------------------------
+
+2. Why do we first check if the array is sorted?
+
+Example:
+
+0 1 2 3 4
+
+There is no rotation, so there is no peak.
+The first element itself is the minimum.
+
+------------------------------------------
+
+3. Why only check:
+
+nums[mid] > nums[mid + 1]
+
+and not
+
+nums[mid] > nums[mid - 1] ?
+
+Because in a rotated sorted array with unique
+elements, the only place where an element is
+greater than its next element is the rotation point
+(the peak).
+
+So checking the next element is sufficient.
+
+------------------------------------------
+
+4. Why do we write:
+
+mid < n - 1
+
+Before accessing nums[mid + 1]?
+
+To avoid going out of bounds when mid is the
+last index.
+
+------------------------------------------
+
+5. How do we decide which side to search?
+
+If
+
+nums[mid] >= nums[st]
+
+then mid lies in the left sorted part, so the
+peak must be at mid or on its right.
+
+Otherwise, mid lies in the right sorted part,
+so the peak must be on the left.
+
+------------------------------------------
+
+6. Complexity
+
+Time Complexity: O(log n)
+
+Space Complexity: O(1)
+
+------------------------------------------
+
+Note:
+
+The standard solution compares nums[mid] with
+nums[end] and directly searches for the minimum.
+
+This peak-based approach is also O(log n), but
+requires a few more edge-case checks.
+*/
