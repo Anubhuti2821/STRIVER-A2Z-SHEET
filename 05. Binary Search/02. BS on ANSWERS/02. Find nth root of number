@@ -1,0 +1,59 @@
+/*
+Problem: Find Nth Root of M
+
+Given two integers N and M, find the Nth root of M.
+If M is a perfect Nth power, return its root.
+Otherwise, return -1.
+*/
+
+class Solution {
+public:
+    int NthRoot(int N, int M) {
+        int i = 0;
+        int j = M;
+
+        while (i <= j) {
+            int mid = i + (j - i) / 2;
+            int val = pow(mid, N);
+
+            if (val == M) {
+                return mid;
+            }
+            else if (val < M) {
+                i = mid + 1;
+            }
+            else {
+                j = mid - 1;
+            }
+        }
+
+        return -1;
+    }
+};
+
+/*
+Time Complexity: O(log M × N)      // pow() internally takes multiple multiplications
+Space Complexity: O(1)
+
+Mistakes / Concept Errors:
+1. Used (i + j) / 2
+   - Can cause integer overflow for very large values.
+   - Better: mid = i + (j - i) / 2.
+
+2. Used int to store pow(mid, N).
+   - pow() returns a double.
+   - Converting it to int may lead to precision errors for large numbers.
+
+3. pow() may overflow or lose precision.
+   - For larger values of N and M, pow() is unreliable.
+   - The preferred approach is to multiply manually and stop as soon as the product exceeds M.
+
+4. Variable name 'sq' is misleading.
+   - The value is actually mid^N, not necessarily a square.
+   - Better names: val, power, or ans.
+
+Possible Optimization:
+- Instead of using pow(), create a helper function that multiplies 'mid' exactly N times.
+- Stop early if the product becomes greater than M.
+- This avoids floating-point precision issues and works correctly for large constraints.
+*/
