@@ -1,0 +1,29 @@
+Haan, isko short points me yaad rakhna:
+
+Binary Search on Answer kab lagta hai?
+Question minimum/maximum answer pooch raha ho.
+Minimum days
+Minimum speed
+Maximum distance
+Minimum capacity
+Answer ek range me ho.
+Yahan: min(bloomDay) se max(bloomDay) tak.
+Har guessed answer (mid) ke liye check kar sakte ho ki woh possible hai ya nahi.
+Yahan: isValid(day) → true ya false.
+Answer monotonic ho.
+Agar day = 7 par bouquets ban gaye,
+To day = 8, 9, 10... par bhi banenge.
+
+Pattern:
+
+F F F F T T T T
+
+Ya
+
+T T T F F
+
+(Bas ek hi transition hona chahiye.)
+
+Brute force bahut slow ho.
+Har day check karna O(maxBloomDay) hota, jo 10^9 tak ja sakta hai.
+Binary search se O(log(maxBloomDay)) checks hi lagenge.
