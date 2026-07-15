@@ -1,0 +1,52 @@
+class Solution {
+public:
+    bool is_valid(vector<int>& bloomDay, int m, int k, int mid) {
+        int count = 0;
+        int b = 0;
+        int n = bloomDay.size();
+
+        for (int i = 0; i < n; i++) {
+            if (bloomDay[i] <= mid) {
+                count++;
+            } else {
+                b += count / k;
+                count = 0;
+            }
+        }
+
+        b += count / k;
+
+        return b >= m;
+    }
+
+    int minDays(vector<int>& bloomDay, int m, int k) {
+        int n = bloomDay.size();
+
+        if (1LL * m * k > n) {
+            return -1;
+        }
+
+        int st = *min_element(bloomDay.begin(), bloomDay.end());
+        int end = *max_element(bloomDay.begin(), bloomDay.end());
+
+        while (st <= end) {
+            int mid = st + (end - st) / 2;
+
+            if (is_valid(bloomDay, m, k, mid)) {
+                end = mid - 1;
+            } else {
+                st = mid + 1;
+            }
+        }
+
+        return st;
+    }
+};
+
+/*
+Time Complexity: O(n * log(maxBloomDay - minBloomDay))
+Space Complexity: O(1)
+
+Possible Optimization:
+None. This is the optimal Binary Search on Answer solution.
+*/
