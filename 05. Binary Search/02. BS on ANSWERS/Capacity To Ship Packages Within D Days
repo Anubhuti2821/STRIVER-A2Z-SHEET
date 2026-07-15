@@ -1,0 +1,107 @@
+/*
+1011. Capacity To Ship Packages Within D Days
+
+Problem:
+A conveyor belt has packages that must be shipped from one port to another
+within the given number of days.
+
+The ith package has a weight of weights[i]. Packages must be loaded in the
+given order, and the total weight loaded in a single day cannot exceed the
+ship's capacity.
+
+Return the least weight capacity of the ship that will result in all the
+packages being shipped within the given number of days.
+*/
+
+class Solution {
+public:
+    bool isValid(vector<int>& weights, int days, int capacity) {
+        int currWeight = 0;
+        int requiredDays = 1;
+
+        for (int i = 0; i < weights.size(); i++) {
+            if (currWeight + weights[i] <= capacity) {
+                currWeight += weights[i];
+            } else {
+                requiredDays++;
+                currWeight = weights[i];
+            }
+        }
+
+        return requiredDays <= days;
+    }
+
+    int shipWithinDays(vector<int>& weights, int days) {
+        int st = *max_element(weights.begin(), weights.end());
+        int end = accumulate(weights.begin(), weights.end(), 0);
+
+        while (st <= end) {
+            int mid = st + (end - st) / 2;
+
+            if (isValid(weights, days, mid)) {
+                end = mid - 1;
+            } else {
+                st = mid + 1;
+            }
+        }
+
+        return st;
+    }
+};
+
+/*
+Time Complexity: O(n * log(sum(weights)))
+Space Complexity: O(1)
+
+Possible Optimization:
+None. This is the optimal Binary Search on Answer approach.
+
+My Mistakes & Conceptual Errors:
+
+1. Started the search range with min(weights).
+   Reason:
+   The ship must be able to carry the heaviest package.
+   Therefore, the minimum possible capacity is max(weights).
+
+2. Initialized requiredDays = 0.
+   Reason:
+   Shipping always starts from Day 1, so requiredDays should start from 1.
+
+3. Used two independent 'if' statements instead of 'if-else'.
+   Reason:
+   After adding the current package, the second 'if' was checked again,
+   causing the same package to be processed twice.
+   Using 'else' ensures each package is handled exactly once.
+
+4. When capacity exceeded, I forgot to start a new day's load.
+   Reason:
+   After moving to the next day:
+       requiredDays++;
+       currWeight = weights[i];
+   The current package belongs to the new day and cannot be skipped.
+
+5. Returned 'mid' instead of 'st'.
+   Reason:
+   In Binary Search on Answer:
+   - mid is only the current guess.
+   - After the loop ends, st points to the minimum valid capacity
+     (first True), which is the required answer.
+
+6. Binary Search Pattern Confusion.
+   Reason:
+   I mixed two different Binary Search templates.
+
+   Pattern 1:
+       while(st <= end)
+       True  -> end = mid - 1
+       False -> st = mid + 1
+       return st
+
+   Pattern 2:
+       while(st < end)
+       True  -> end = mid
+       False -> st = mid + 1
+       return st
+
+   Never mix these two patterns.
+*/
