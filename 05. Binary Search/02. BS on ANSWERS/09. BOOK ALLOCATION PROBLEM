@@ -1,0 +1,64 @@
+// Problem: Allocate Minimum Number of Pages (GFG)
+// Similar LeetCode: 410. Split Array Largest Sum
+
+class Solution {
+public:
+    bool is_valid(vector<int> &nums, int m, int mid) {
+        int n = nums.size();
+        int student = 1;
+        int pages = 0;
+
+        for (int i = 0; i < n; i++) {
+            if (nums[i] > mid) {
+                return false;
+            }
+
+            if (pages + nums[i] <= mid) {
+                pages += nums[i];
+            } else {
+                student++;
+                pages = nums[i];
+            }
+        }
+
+        return student <= m;
+    }
+
+    int findPages(vector<int> &nums, int m) {
+        int n = nums.size();
+
+        if (m > n) {
+            return -1;
+        }
+
+        int all_page = 0;
+        for (int i = 0; i < n; i++) {
+            all_page += nums[i];
+        }
+
+        int st = *max_element(nums.begin(), nums.end());
+        int end = all_page;
+
+        while (st <= end) {
+            int mid = st + (end - st) / 2;
+
+            if (is_valid(nums, m, mid)) {
+                end = mid - 1;
+            } else {
+                st = mid + 1;
+            }
+        }
+
+        return st;
+    }
+};
+
+/*
+Time Complexity: O(n * log(sum of pages))
+Space Complexity: O(1)
+
+Possible Optimization:
+This is the optimal approach. Binary Search on the answer combined with
+Greedy allocation gives the minimum possible maximum pages in
+O(n * log(sum of pages)) time.
+*/
