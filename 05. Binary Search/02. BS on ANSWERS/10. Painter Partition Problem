@@ -1,0 +1,71 @@
+// Problem: Painter's Partition Problem (InterviewBit)
+// Similar LeetCode: 410. Split Array Largest Sum
+
+class Solution {
+public:
+    bool is_valid(int A, int B, vector<int> &C, int mid) {
+        int painter = 1;
+        int paintedLength = 0;
+
+        for (int i = 0; i < C.size(); i++) {
+            if (paintedLength + C[i] <= mid) {
+                paintedLength += C[i];
+            } else {
+                painter++;
+                paintedLength = C[i];
+            }
+        }
+
+        return painter <= A;
+    }
+
+    int paint(int A, int B, vector<int> &C) {
+        int totalLength = 0;
+        for (int i = 0; i < C.size(); i++) {
+            totalLength += C[i];
+        }
+
+        int st = *max_element(C.begin(), C.end());
+        int end = totalLength;
+
+        while (st <= end) {
+            int mid = st + (end - st) / 2;
+
+            if (is_valid(A, B, C, mid)) {
+                end = mid - 1;
+            } else {
+                st = mid + 1;
+            }
+        }
+
+        const int MOD = 10000003;
+        return (1LL * st * B) % MOD;
+    }
+};
+
+/*
+Time Complexity: O(n * log(sum of board lengths))
+Space Complexity: O(1)
+
+My Mistakes:
+1. Wrote 'True' and 'False' instead of 'true' and 'false' in C++.
+2. Forgot to take the final answer modulo 10000003.
+3. Returned st * B directly, which can overflow. Used 1LL for safe multiplication.
+4. Initially got confused about whether the current board should be assigned after creating a new painter (it should be: paintedLength = C[i]).
+
+Important Notes:
+1. Unlike Book Allocation, if A > number of boards, it is VALID.
+   Extra painters can remain idle.
+2. Do NOT write:
+       if (A > C.size()) return -1;
+3. Binary Search starts from:
+       st = maximum board length
+       end = sum of all board lengths
+4. This problem is the same pattern as:
+   - Book Allocation (GFG)
+   - Split Array Largest Sum (LeetCode 410)
+
+Possible Optimization:
+This is the optimal solution. Binary Search on the answer combined with
+Greedy allocation minimizes the maximum time taken by any painter.
+*/
