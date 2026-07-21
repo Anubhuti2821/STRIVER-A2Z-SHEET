@@ -1,0 +1,38 @@
+🔹 Integer Binary Search
+- Search space contains only integers.
+- After checking mid, there is no integer between mid and mid+1 (or mid-1).
+- Therefore we can safely discard mid using:
+    st = mid + 1
+    end = mid - 1
+
+Example:
+... 4, 5 ...
+No integer exists between 4 and 5.
+
+--------------------------------------------------
+
+🔹 Double Binary Search
+- Search space contains real (decimal) numbers.
+- Between any two decimal numbers, infinitely many numbers exist.
+
+Example:
+Between 2.5 and 3.0:
+2.6, 2.75, 2.9, 2.99, 2.999..., ...
+
+If we do:
+    st = mid + 1
+or
+    end = mid - 1
+
+we skip an entire interval that may contain the correct answer.
+
+Therefore:
+    if(valid) end = mid;
+    else      st = mid;
+
+Stop condition:
+    while(end - st > 1e-6)
+
+Key Rule:
+✔ Integer BS  → use ±1
+✔ Double BS   → NEVER use ±1
