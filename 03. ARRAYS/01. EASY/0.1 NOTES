@@ -1,0 +1,45 @@
+/*
+Two Pointer:
+--------------
+Uses two indices to solve a problem.
+
+Pointers may move:
+- Towards each other.
+- In the same direction.
+- Independently.
+
+No window is required.
+
+Examples:
+- Two Sum II
+- Remove Duplicates
+- Container With Most Water
+
+------------------------------------------------
+
+Sliding Window:
+---------------
+A special case of Two Pointers.
+
+Maintains a continuous window [l...r].
+
+Operations:
+- Expand Window
+- Shrink Window
+
+Used for:
+- Subarray
+- Substring
+- Continuous range problems
+
+Examples:
+- Longest Subarray Sum K (Positive)
+- Longest Substring Without Repeating Characters
+- Maximum Sum Subarray of Size K
+
+------------------------------------------------
+
+Rule:
+Every Sliding Window is a Two Pointer technique,
+but every Two Pointer problem is NOT Sliding Window.
+*/
