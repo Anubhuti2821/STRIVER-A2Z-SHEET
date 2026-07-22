@@ -1,0 +1,20 @@
+/*
+Key Observation:
+
+As maximum allowed distance (mid) increases,
+the number of required gas stations decreases.
+
+mid ↑  -> requiredStations ↓
+mid ↓  -> requiredStations ↑
+
+If requiredStations <= k:
+    Current distance is achievable.
+    Try to minimize it further.
+    end = mid;
+
+Else:
+    Current distance is too small.
+    More than k stations are required.
+    Increase the allowed distance.
+    st = mid;
+*/
