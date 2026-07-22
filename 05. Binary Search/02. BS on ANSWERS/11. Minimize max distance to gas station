@@ -1,0 +1,190 @@
+/*
+Problem: Minimize Max Distance to Gas Station (GFG)
+Similar LeetCode: No official equivalent.
+*/
+
+class Solution {
+public:
+    bool is_valid(vector<int> &arr, int k, double mid) {
+        int cnt = 0;
+
+        for (int i = 0; i < arr.size() - 1; i++) {
+            double gap = arr[i + 1] - arr[i];
+
+            int stations = gap / mid;
+
+            if (fabs(gap - stations * mid) < 1e-6) {
+                stations--;
+            }
+
+            cnt += stations;
+        }
+
+        return cnt <= k;
+    }
+
+    long double minimiseMaxDistance(vector<int> &arr, int k) {
+        double st = 0.0;
+        double end = 0.0;
+
+        for (int i = 0; i < arr.size() - 1; i++) {
+            end = max(end, (double)(arr[i + 1] - arr[i]));
+        }
+
+        long double ans = 0.0;
+
+        while (end - st > 1e-6) {
+            double mid = st + (end - st) / 2.0;
+
+            if (is_valid(arr, k, mid)) {
+                ans = mid;
+                end = mid;
+            } else {
+                st = mid;
+            }
+        }
+
+        return ans;
+    }
+};
+
+/*
+Time Complexity:
+O(n * log(maxGap / 1e-6))
+
+Space Complexity:
+O(1)
+
+---------------------------------------------------------
+My Mistakes / Learning Notes
+---------------------------------------------------------
+
+1. Initially treated this as a normal Integer Binary Search.
+   - Used:
+        st = mid + 1;
+        end = mid - 1;
+   - Wrong because the answer is a decimal.
+   - In Double Binary Search we NEVER use ±1.
+
+2. Major Concept Learned:
+   Integer Search Space:
+        4, 5
+        -> No value exists between them.
+        -> Safe to use ±1.
+
+   Double Search Space:
+        2.5, 2.500001, 2.5000001...
+        -> Infinite values exist.
+        -> Using ±1 skips an entire interval which may contain
+           the answer.
+
+3. Learned why:
+        end = mid;
+        st = mid;
+   instead of:
+        end = mid - 1;
+        st = mid + 1;
+
+4. Initially confused whether to return 'ans' or 'end'.
+   Learned that both work if ans is updated whenever a valid
+   answer is found. I kept ans for consistency with my Binary
+   Search template.
+
+5. Biggest misconception:
+   Initially wrote:
+        return cnt >= k;
+
+   because I was thinking like Aggressive Cows.
+
+   Correct understanding:
+
+   Aggressive Cows:
+       Count = cows placed.
+       Need at least k cows.
+       Condition:
+           cows >= k
+
+   Gas Station:
+       Count = minimum stations required.
+       We only have k stations.
+       Condition:
+           requiredStations <= k
+
+6. My First Trial:
+   Counted stations using:
+
+        while(gap > mid){
+            cnt++;
+            gap -= mid;
+        }
+
+   Logic was correct but inefficient.
+   Replaced with mathematical counting.
+
+7. Initially assumed:
+        stations = gap / mid;
+
+   This fails when gap is exactly divisible by mid.
+
+   Example:
+        gap = 9
+        mid = 3
+
+        gap/mid = 3
+
+   Actual required stations = 2.
+
+   Therefore:
+
+        stations--;
+
+   when the division is exact.
+
+8. Floating Point Mistake:
+   Initially compared:
+
+        gap == stations * mid
+
+   This caused Wrong Answer because floating point values
+   should never be compared using ==.
+
+   Correct:
+
+        fabs(gap - stations * mid) < 1e-6
+
+9. Learned why Binary Search ends with:
+
+        while(end - st > 1e-6)
+
+   instead of:
+
+        while(st <= end)
+
+   because doubles form a continuous search space.
+
+10. Binary Search Rule Learned:
+
+    Integer Answer:
+        while(st <= end)
+
+    Double Answer:
+        while(end - st > 1e-6)
+
+11. Final Takeaway:
+    Whenever Binary Search answer is decimal:
+    ✔ Use double.
+    ✔ Never use ±1.
+    ✔ Never compare doubles using ==.
+    ✔ Use precision (1e-6).
+    ✔ Think in terms of ranges, not discrete values.
+
+---------------------------------------------------------
+Difficulty (Personal): 9.5/10
+
+Concepts Learned:
+- Binary Search on Answer (Double)
+- Continuous Search Space
+- Floating Point Precision
+- Mathematical Counting
+---------------------------------------------------------
+*/
