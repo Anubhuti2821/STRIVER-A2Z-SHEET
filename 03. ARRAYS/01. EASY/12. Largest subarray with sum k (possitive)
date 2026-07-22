@@ -1,0 +1,148 @@
+/*
+Problem: Longest Subarray with Sum K (Only Positive Numbers)
+Similar LeetCode: No official equivalent.
+*/
+
+class Solution {
+public:
+    int longestSubarray(vector<int>& arr, int k) {
+        int l = 0;
+        int r = 0;
+        int sum = 0;
+        int ans = 0;
+
+        while (r < arr.size()) {
+            sum += arr[r];
+
+            while (sum > k) {
+                sum -= arr[l];
+                l++;
+            }
+
+            if (sum == k) {
+                ans = max(ans, r - l + 1);
+            }
+
+            r++;
+        }
+
+        return ans;
+    }
+};
+
+/*
+Time Complexity:
+O(n)
+
+Space Complexity:
+O(1)
+
+---------------------------------------------------------
+Important Notes
+---------------------------------------------------------
+
+1. This approach works ONLY when all array elements are positive.
+
+2. Why Sliding Window works?
+   - Adding a new element always increases the sum.
+   - Removing an element always decreases the sum.
+   This monotonic property is necessary for Sliding Window.
+
+3. Sliding Window Rules:
+
+   sum < k
+       -> Expand Window
+       -> r++
+
+   sum > k
+       -> Shrink Window
+       -> sum -= arr[l]
+       -> l++
+
+   sum == k
+       -> Update answer
+       -> Continue expanding (r++)
+
+4. Why while(sum > k) instead of if(sum > k)?
+
+   Example:
+   arr = [2,2,2,2]
+   k = 2
+
+   Window = [2,2,2]
+   sum = 6
+
+   Removing one element:
+   sum = 4
+
+   Still greater than k.
+
+   Therefore we must keep shrinking until:
+   sum <= k
+
+5. Golden Rule:
+
+   Left Pointer (l) always moves forward.
+   Right Pointer (r) always moves forward.
+
+   Never:
+       l--
+       r--
+
+   Otherwise the same element gets processed multiple times,
+   breaking O(n) complexity.
+
+6. Why O(n)?
+
+   Every element:
+   - Enters the window exactly once (r).
+   - Leaves the window at most once (l).
+
+   Hence each element is visited at most twice.
+
+7. This approach FAILS if negative numbers are present.
+
+   Example:
+   arr = [2, -1, 2]
+
+   Removing -1 increases the sum,
+   so Sliding Window no longer works.
+
+   In that case use:
+   Prefix Sum + HashMap.
+
+---------------------------------------------------------
+My Mistakes / Misconceptions
+---------------------------------------------------------
+
+1. Initially thought that when sum > k,
+   moving r-- would reduce the sum.
+
+   Wrong.
+
+   Sliding Window never moves pointers backward.
+
+2. Learned that only l should move when sum > k,
+   because we need to remove elements from the current window.
+
+3. Initially overlooked why while(sum > k) is used.
+
+   Learned that removing one element may still leave
+   sum > k, so repeated shrinking is required.
+
+4. Learned an important Sliding Window property:
+
+   Both pointers always move only in the forward direction.
+
+---------------------------------------------------------
+Concepts Learned
+---------------------------------------------------------
+
+✔ Sliding Window
+✔ Two Pointers
+✔ Window Expansion
+✔ Window Shrinking
+✔ Monotonic Property of Positive Arrays
+✔ Why Sliding Window fails for Negative Numbers
+✔ O(n) Traversal using Two Pointers
+*/
