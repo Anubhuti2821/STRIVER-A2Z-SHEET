@@ -1,0 +1,96 @@
+/*
+===========================================================
+LeetCode 560. Subarray Sum Equals K
+
+Problem:
+Given an integer array nums and an integer k, return the
+total number of continuous subarrays whose sum equals k.
+
+Approach:
+- Use Prefix Sum + HashMap.
+- Store frequency of every prefix sum.
+- If (currentPrefixSum - k) has appeared before,
+  then all those occurrences form a valid subarray.
+===========================================================
+*/
+
+class Solution {
+public:
+    int subarraySum(vector<int>& nums, int k) {
+        int n = nums.size();
+
+        unordered_map<int, int> m;
+
+        int ps = 0;
+        int count = 0;
+
+        for (int i = 0; i < n; i++) {
+            ps += nums[i];
+
+            if (ps == k) {
+                count++;
+            }
+
+            if (m.find(ps - k) != m.end()) {
+                count += m[ps - k];
+            }
+
+            m[ps]++;
+        }
+
+        return count;
+    }
+};
+
+/*
+-----------------------------------------------------------
+Time Complexity:
+O(n)
+
+Space Complexity:
+O(n)
+
+-----------------------------------------------------------
+Important Notes:
+
+1. Prefix Sum (ps)
+   -> Sum of elements from index 0 to i.
+
+2. If current prefix sum is equal to k,
+   then subarray from index 0 to i is valid.
+
+3. If (ps - k) exists in the map,
+   then every previous occurrence of (ps - k)
+   forms one valid subarray.
+
+4. Store FREQUENCY of prefix sums,
+   not their indices.
+
+-----------------------------------------------------------
+My Mistakes / Misconceptions:
+
+1. ❌ Wanted to store index instead of frequency.
+   ✔ Frequency is required because the same prefix sum
+   can occur multiple times.
+
+2. ❌ Confusion why count += m[ps - k]
+   ✔ Because multiple previous prefix sums may match.
+
+3. ❌ Confusion why m[ps]++ instead of m[ps] = i
+   ✔ We only need how many times a prefix sum occurred,
+   not where it occurred.
+
+4. ❌ Confusion about initializing m[0] = 1.
+   ✔ This version avoids it by separately checking:
+      if (ps == k) count++;
+BOTH APPROACHES ARE CORRECT  m[0] = 1 HERE SHOWS KI IF x-k zero hua to invalid nhi he
+-----------------------------------------------------------
+Concepts Learned:
+
+✅ Prefix Sum
+✅ HashMap (Frequency Map)
+✅ Counting Subarrays
+✅ Why frequency is more useful than index
+✅ Prefix Sum + HashMap pattern
+===========================================================
+*/
