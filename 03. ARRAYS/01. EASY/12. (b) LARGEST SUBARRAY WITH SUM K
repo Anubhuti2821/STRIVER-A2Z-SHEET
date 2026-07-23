@@ -43,6 +43,9 @@ My Mistakes / Misconceptions:
 3. Calculated the subarray length incorrectly by treating the stored value as an array element instead of an index.
 4. Forgot to handle the case when `prefixSum == k` (subarray starting from index 0).
 5. Overwrote the first occurrence of a prefix sum instead of storing it only once.
+Store the FIRST occurrence of each prefix sum.
+   - The earliest index gives the maximum possible subarray length.
+   - Never overwrite an existing prefix sum in the hashmap.
 6. Initialized `maxLength` with `INT_MIN` instead of `0`.
 7. Used `int` for prefix sum; `long long` is safer to avoid overflow.
 
