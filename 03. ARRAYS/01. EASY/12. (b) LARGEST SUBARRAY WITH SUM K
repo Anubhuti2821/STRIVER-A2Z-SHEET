@@ -1,0 +1,59 @@
+/*
+Problem: Longest Subarray with Sum K
+
+Given an array nums of size n and an integer k,
+return the length of the longest subarray whose sum is equal to k.
+*/
+
+class Solution {
+public:
+    int longestSubarray(vector<int> &nums, int k) {
+        unordered_map<long long, int> firstOccurrence;
+        long long prefixSum = 0;
+        int maxLength = 0;
+
+        for (int i = 0; i < nums.size(); i++) {
+            prefixSum += nums[i];
+
+            if (prefixSum == k) {
+                maxLength = i + 1;
+            }
+
+            if (firstOccurrence.find(prefixSum - k) != firstOccurrence.end()) {
+                maxLength = max(maxLength, i - firstOccurrence[prefixSum - k]);
+            }
+
+            if (firstOccurrence.find(prefixSum) == firstOccurrence.end()) {
+                firstOccurrence[prefixSum] = i;
+            }
+        }
+
+        return maxLength;
+    }
+};
+
+/*
+Time Complexity: O(n)
+
+Space Complexity: O(n)
+
+My Mistakes / Misconceptions:
+1. Used incorrect variable names (`a` instead of `nums` and undeclared `n`).
+2. Used `p.end()` instead of `ps.end()`.
+3. Calculated the subarray length incorrectly by treating the stored value as an array element instead of an index.
+4. Forgot to handle the case when `prefixSum == k` (subarray starting from index 0).
+5. Overwrote the first occurrence of a prefix sum instead of storing it only once.
+6. Initialized `maxLength` with `INT_MIN` instead of `0`.
+7. Used `int` for prefix sum; `long long` is safer to avoid overflow.
+
+Concepts Learned:
+1. Prefix Sum
+2. HashMap (unordered_map)
+3. Longest Subarray with Sum K
+4. Store only the first occurrence of each prefix sum.
+5. If `(prefixSum - k)` exists, then the subarray from `previousIndex + 1` to the current index has sum `k`.
+6. Always check if `prefixSum == k` to handle subarrays starting from index 0.
+
+Possible Optimization:
+- This is the optimal O(n) solution for arrays containing positive, negative, and zero values.
+*/
