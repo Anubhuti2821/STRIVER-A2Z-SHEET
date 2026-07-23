@@ -1,0 +1,281 @@
+===========================================================
+LeetCode 15 - 3Sum
+
+My Mistakes & Conceptual Errors
+===========================================================
+
+1. Forgot to skip duplicate i
+-----------------------------------------------------------
+Mistake:
+Forgot to write:
+
+if(i > 0 && nums[i] == nums[i-1])
+    continue;
+
+Learning:
+If the fixed element is repeated,
+the same triplets will be generated again.
+
+===========================================================
+
+2. Wrong while condition
+-----------------------------------------------------------
+Mistake:
+
+while(j < k && nums[j] != nums[j-1])
+
+Learning:
+Initially,
+
+j = i + 1
+
+So,
+
+nums[j-1] == nums[i]
+
+I was accidentally comparing j with i.
+
+Correct:
+
+while(j < k)
+
+Duplicate handling should not be inside the loop condition.
+
+===========================================================
+
+3. Forgot to move pointers after finding a triplet
+-----------------------------------------------------------
+Mistake:
+
+triplets.push_back(...);
+
+No j++ and k--.
+
+Result:
+Infinite loop because j and k never changed.
+
+Learning:
+Always move both pointers after storing
+a valid triplet.
+
+===========================================================
+
+4. Wrong placement of j++ and k--
+-----------------------------------------------------------
+Mistake:
+Placed j++ and k-- outside the
+sum == 0 block.
+
+Learning:
+
+j++ and k-- should happen ONLY
+after a valid triplet is found.
+
+===========================================================
+
+5. Wrong order of operations
+-----------------------------------------------------------
+Mistake:
+Wanted to remove duplicates before
+storing the triplet.
+
+Correct Order:
+
+Store Triplet
+↓
+
+j++
+k--
+
+↓
+
+Skip duplicate j
+
+↓
+
+Skip duplicate k
+
+Learning:
+Always save the current valid answer first.
+
+===========================================================
+
+6. Skipping duplicates after every iteration
+-----------------------------------------------------------
+Mistake:
+Placed duplicate skipping outside
+the sum == 0 block.
+
+Learning:
+
+Duplicate removal should happen only
+after finding a valid triplet.
+
+Otherwise valid combinations may be skipped.
+
+===========================================================
+
+7. Forgot duplicate handling for k
+-----------------------------------------------------------
+Mistake:
+Handled duplicates only for j.
+
+Learning:
+
+Duplicates can exist on both sides.
+
+Need
+
+while(nums[j] == nums[j-1])
+
+AND
+
+while(nums[k] == nums[k+1])
+
+===========================================================
+
+8. Wrong position of duplicate handling
+-----------------------------------------------------------
+Mistake:
+Placed duplicate loops outside
+their required scope.
+
+Learning:
+
+Duplicate handling belongs inside
+the sum == 0 block.
+
+===========================================================
+
+9. Brace ({ }) placement mistake
+-----------------------------------------------------------
+Mistake:
+Incorrect nesting of while loops.
+
+Result:
+Duplicate handling executed in
+unexpected places.
+
+Learning:
+
+Always check indentation.
+
+Every opening brace should have
+a clear matching closing brace.
+
+===========================================================
+
+10. Thought changing j automatically handles k
+-----------------------------------------------------------
+Mistake:
+Assumed if j changes,
+k will naturally become unique.
+
+Learning:
+
+j and k move independently.
+
+Both pointers require separate
+duplicate handling.
+
+===========================================================
+
+11. Didn't understand why compare with j-1 and k+1
+-----------------------------------------------------------
+Mistake:
+Confused about
+
+nums[j] == nums[j-1]
+
+nums[k] == nums[k+1]
+
+Learning:
+
+After
+
+j++;
+k--;
+
+Current pointer should be compared
+with its previous position.
+
+===========================================================
+
+12. Forgot loop optimization
+-----------------------------------------------------------
+Mistake:
+
+for(i = 0; i < n; i)
+
+Learning:
+
+Use
+
+for(i = 0; i < n-2; i)
+
+because at least three elements
+are needed.
+
+===========================================================
+
+13. Initially focused on code instead of logic
+-----------------------------------------------------------
+Mistake:
+Tried to memorize conditions.
+
+Learning:
+
+Understand WHY each condition exists.
+
+Every line has a purpose.
+
+===========================================================
+
+Base Cases / Edge Cases
+===========================================================
+
+✔ Array size < 3
+No triplet possible.
+
+✔ All positive numbers
+Answer = empty.
+
+✔ All negative numbers
+Answer = empty.
+
+✔ Multiple duplicate elements
+Need duplicate handling.
+
+✔ Multiple valid triplets
+Store every unique triplet.
+
+✔ Already sorted array
+Algorithm still works.
+
+===========================================================
+
+Concepts Learned
+===========================================================
+
+✅ Sorting
+
+✅ Two Pointer Technique
+
+✅ Fix-One-Element Pattern
+
+✅ Duplicate Handling Strategy
+
+✅ Order of Operations
+
+✅ Pointer Movement
+
+✅ Infinite Loop Debugging
+
+✅ Control Flow & Brace Placement
+
+✅ Independent Movement of j and k
+
+✅ Interview Pattern:
+Sort + Fix One + Two Pointers
+
+===========================================================
