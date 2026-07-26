@@ -1,0 +1,87 @@
+/*
+Problem: Largest Subarray with Sum 0
+
+Link:
+https://www.geeksforgeeks.org/problems/largest-subarray-with-0-sum/1
+
+Approach:
+1. Maintain a Prefix Sum while traversing the array.
+2. Store the first occurrence of every Prefix Sum in a HashMap.
+3. If Prefix Sum becomes 0, update the answer as (i + 1).
+4. If the current Prefix Sum is already present in the map,
+   the subarray between the first occurrence and current index
+   has sum equal to 0.
+5. Update the maximum length whenever a longer subarray is found.
+*/
+
+class Solution {
+public:
+    int maxLen(vector<int>& arr) {
+
+        unordered_map<int, int> mp;
+
+        int prefixSum = 0;
+        int maxLength = 0;
+
+        for(int i = 0; i < arr.size(); i++) {
+
+            prefixSum += arr[i];
+
+            if(prefixSum == 0)
+                maxLength = max(maxLength, i + 1);
+
+            if(mp.find(prefixSum) != mp.end()) {
+                maxLength = max(maxLength, i - mp[prefixSum]);
+            }
+            else {
+                mp[prefixSum] = i;
+            }
+        }
+
+        return maxLength;
+    }
+};
+
+/*
+Time Complexity: O(n)
+
+Space Complexity: O(n)
+
+Important Notes:
+1. Prefix Sum + HashMap is the optimal approach.
+2. If Prefix Sum becomes 0 at index i, then the subarray
+   from index 0 to i has sum 0.
+3. Store only the first occurrence of every Prefix Sum.
+4. If the same Prefix Sum appears again, the elements between
+   the two occurrences always have sum equal to 0.
+5. Do not update the stored index once a Prefix Sum is present,
+   otherwise the maximum possible length may be lost.
+
+My Mistakes / Misconceptions:
+1. Wrote nums[i] instead of arr[i].
+2. Initialized maxLength with INT_MIN instead of 0.
+3. Initially stored:
+      Index -> Prefix Sum
+   Correct mapping is:
+      Prefix Sum -> First Index
+4. Thought the latest occurrence of a Prefix Sum should be stored.
+   Correct Concept:
+   Always store the first occurrence because it gives the
+   longest possible subarray.
+5. Initially updated the map every time the Prefix Sum appeared.
+   This overwrote the first occurrence and reduced the answer.
+6. Used an else-if chain, due to which the first occurrence of
+   Prefix Sum = 0 was not stored in the map.
+7. Learned that for longest subarray problems,
+   first occurrence is more important than the latest occurrence.
+
+Concepts Learned:
+1. Prefix Sum converts subarray sum problems into Prefix Sum comparison problems.
+2. If two Prefix Sums are equal, the sum of elements between them is 0.
+3. For longest subarray problems:
+      Prefix Sum -> First Occurrence
+4. For counting subarrays:
+      Prefix Sum -> Frequency
+5. Always derive what needs to be stored in the HashMap based on
+   what the problem is asking (length, count, existence, etc.).
+*/
