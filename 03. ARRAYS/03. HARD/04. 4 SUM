@@ -1,0 +1,109 @@
+/*
+Problem: 18. 4Sum
+
+Link:
+https://leetcode.com/problems/4sum/
+
+Approach:
+1. Sort the array.
+2. Fix the first two elements using nested loops.
+3. Use Two Pointers (l, k) to find the remaining two elements.
+4. Skip duplicates for i, j, l and k to avoid repeated quadruplets.
+5. Use long long while calculating sum to prevent integer overflow.
+*/
+
+class Solution {
+public:
+    vector<vector<int>> fourSum(vector<int>& nums, int target) {
+
+        sort(nums.begin(), nums.end());
+
+        int n = nums.size();
+        vector<vector<int>> ans;
+
+        for(int i = 0; i < n - 3; i++) {
+
+            if(i > 0 && nums[i] == nums[i - 1])
+                continue;
+
+            for(int j = i + 1; j < n - 2; j++) {
+
+                if(j > i + 1 && nums[j] == nums[j - 1])
+                    continue;
+
+                int l = j + 1;
+                int k = n - 1;
+
+                while(l < k) {
+
+                    long long sum = (long long)nums[i] + nums[j] + nums[l] + nums[k];
+
+                    if(sum == target) {
+
+                        ans.push_back({nums[i], nums[j], nums[l], nums[k]});
+
+                        l++;
+                        k--;
+
+                        while(l < k && nums[l] == nums[l - 1])
+                            l++;
+
+                        while(l < k && nums[k] == nums[k + 1])
+                            k--;
+                    }
+                    else if(sum < target) {
+                        l++;
+                    }
+                    else {
+                        k--;
+                    }
+                }
+            }
+        }
+
+        return ans;
+    }
+};
+
+/*
+Time Complexity: O(n^3)
+
+Space Complexity: O(1)
+(Excluding the output vector)
+
+Important Notes:
+1. Sort the array before applying the two-pointer technique.
+2. Fix two indices (i and j), then use l and k as two pointers.
+3. Skip duplicates for i, j, l and k to avoid repeated quadruplets.
+4. Use long long while calculating the sum to prevent integer overflow.
+
+My Mistakes / Misconceptions:
+1. Forgot to use while(l < k), so pointers moved only once.
+2. Infinite loop because l and k were not updated after finding a valid quadruplet.
+3. Confused loop limits:
+   - i < n - 3
+   - j < n - 2
+4. Initially thought duplicate skipping depended on starting positions (j + 1, n - 1).
+   Correct concept: duplicate skipping depends on active pointers while(l < k).
+5. Forgot duplicate handling for j.
+6. Used int for sum, causing overflow on large test cases.
+7. Learned to derive base cases by asking:
+   "After fixing this pointer, how many elements are still required?"
+
+Concepts Learned:
+1. 4Sum is an extension of the 3Sum pattern.
+2. Nested loops + Two Pointer is a common interview pattern.
+3. Duplicate handling is required at every level (i, j, l, k).
+4. Derive loop boundaries logically instead of memorizing them.
+5. Always consider integer overflow when adding multiple integers.
+*/
+/*
+Misconception:
+I used pointer-position based conditions (l > j + 1, k < n - 1) for
+duplicate skipping.
+
+Correct Concept:
+Duplicate skipping should depend on the validity of the Two Pointer
+search (l < k), not on how far a pointer has moved from its initial
+position.
+*/
