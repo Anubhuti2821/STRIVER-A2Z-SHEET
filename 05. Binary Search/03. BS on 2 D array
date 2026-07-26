@@ -1,0 +1,73 @@
+/*
+Problem: Row with Max 1s (GFG)
+
+Description:
+Given a boolean matrix where each row contains only 0s and 1s,
+find the index of the row having the maximum number of 1s.
+Return -1 if no 1 is present in the matrix.
+
+Approach:
+- Traverse each row of the matrix.
+- Count the number of 1s in that row.
+- Keep track of the maximum count and its row index.
+- Return the row index having the maximum number of 1s.
+
+*/
+
+class Solution {
+public:
+    int rowWithMax1s(vector<vector<int>> &mat) {
+        int maxrow1 = -1;
+        int n = mat.size();
+        int m = mat[0].size();
+
+        int max1 = 0;
+        int count = 0;
+
+        for(int i = 0; i < n; i++) {
+            for(int j = 0; j < m; j++) {
+                if(mat[i][j] == 1) {
+                    count++;
+                }
+            }
+
+            if(count > max1) {
+                max1 = count;
+                maxrow1 = i;
+            }
+
+            count = 0;
+        }
+
+        return maxrow1;
+    }
+};
+
+/*
+Time Complexity: O(n * m)
+
+Space Complexity: O(1)
+
+Important Notes:
+- This brute-force solution works for both sorted and unsorted matrices.
+- Returns -1 if the matrix contains no 1s.
+- Easy to understand and implement.
+
+Possible Optimization:
+- If each row is sorted, use Binary Search to find the first 1 in every row.
+  Time Complexity: O(n log m)
+
+- Most Optimal:
+  Start from the top-right corner and move left/down.
+  Time Complexity: O(n + m)
+
+Concepts Learned:
+- Matrix Traversal
+- Counting Frequency
+- Maintaining Maximum while Traversing
+
+My Mistakes / Misconceptions:
+- Don't assume this is the optimal solution if the matrix rows are sorted.
+- Always read constraints carefully. If rows are sorted, a better approach exists.
+- Handle empty matrix separately if the platform allows n = 0.
+*/
