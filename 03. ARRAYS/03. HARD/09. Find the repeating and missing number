@@ -1,0 +1,45 @@
+// Problem: Find Missing and Repeating Numbers
+// Approach: Sorting
+
+class Solution {
+public:
+    vector<int> findMissingRepeatingNumbers(vector<int> nums) {
+        int n = nums.size();
+        sort(nums.begin(), nums.end());
+
+        int repeating = -1;
+        int missing = -1;
+
+        if (nums[0] != 1)
+            missing = 1;
+
+        for (int i = 1; i < n; i++) {
+            if (nums[i] == nums[i - 1]) {
+                repeating = nums[i];
+            }
+            else if (nums[i] > nums[i - 1] + 1) {
+                missing = nums[i - 1] + 1;
+            }
+        }
+
+        if (missing == -1)
+            missing = n;
+
+        return {repeating, missing};
+    }
+};
+
+/*
+Time Complexity: O(n log n)
+Space Complexity: O(1) (excluding the returned vector)
+
+Important Notes:
+- Sort the array first.
+- If two consecutive elements are equal, that is the repeating number.
+- If the difference between consecutive elements is greater than 1,
+  then the missing number is the previous element + 1.
+- Handle edge cases where the missing number is 1 or n.
+
+Possible Optimization:
+- Solve in O(n) time and O(1) extra space using XOR or mathematical equations.
+*/
