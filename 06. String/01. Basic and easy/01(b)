@@ -1,0 +1,57 @@
+// Problem: Remove Outermost Parentheses
+// LeetCode: 1021
+
+// Why this code is needed:
+// In a valid parentheses string, primitive parentheses contain an outermost pair
+// which does not contribute to the actual nested structure.
+// This code removes only those outermost brackets while keeping all inner brackets.
+
+// Approach:
+// Use a depth counter to track the nesting level.
+// If '(' is not the outermost opening bracket, add it to answer.
+// If ')' is not the outermost closing bracket, add it to answer.
+
+class Solution {
+public:
+    string removeOuterParentheses(string s) {
+        string ans = "";
+        int depth = 0;
+
+        for(char ch : s) {
+            if(ch == '(') {
+                if(depth > 0) {
+                    ans.push_back(ch);
+                }
+                depth++;
+            }
+            else {
+                depth--;
+                if(depth > 0) {
+                    ans.push_back(ch);
+                }
+            }
+        }
+
+        return ans;
+    }
+};
+
+/*
+TIME COMPLEXITY: O(n)
+SPACE COMPLEXITY: O(n)
+
+Mistakes:
+1. Tried modifying the original string using erase(), which caused index shifting problems.
+2. Used substr() incorrectly because C++ substr() takes length, not ending index.
+3. Initially handled each primitive separately, which made the logic more complex.
+4. Did not consider that depth itself can identify outermost parentheses.
+
+Learning:
+1. Depth tracking is useful for problems involving nested parentheses.
+2. Opening bracket at depth 0 and closing bracket returning to depth 0 are outermost brackets.
+3. Building the answer separately is safer and cleaner than modifying the input string.
+4. Many stack-based problems can be solved using only a counter when only balance matters.
+
+Possible Optimization:
+The solution already uses a single traversal, which is the optimal O(n) approach.
+*/
