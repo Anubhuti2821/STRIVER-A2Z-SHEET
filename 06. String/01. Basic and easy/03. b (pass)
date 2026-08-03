@@ -1,0 +1,40 @@
+// Problem: Largest Odd Number in String
+// LeetCode: 1903
+//
+// Mistake Learning:
+// 1. Tried converting string into integer using stoi().
+//    -> Failed because input size can be very large and integer overflow occurs.
+//
+// 2. Using long long with stoi() was also incorrect.
+//    -> stoi() returns int, not long long.
+//
+// 3. For large number problems, do not convert string into number.
+//    -> Perform operations directly on the string.
+//
+// Approach:
+// An odd number always ends with an odd digit (1,3,5,7,9).
+// Traverse from the end and return the substring till the first odd digit.
+
+class Solution {
+public:
+    string largestOddNumber(string num) {
+
+        for(int i = num.size() - 1; i >= 0; i--) {
+
+            if((num[i] - '0') % 2 == 1) {
+                return num.substr(0, i + 1);
+            }
+        }
+
+        return "";
+    }
+};
+
+/*
+TIME COMPLEXITY: O(n)
+
+SPACE COMPLEXITY: O(1)
+
+Possible Optimization:
+No further optimization needed because we only need one traversal from the end.
+*/
