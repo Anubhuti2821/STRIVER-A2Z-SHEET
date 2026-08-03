@@ -1,0 +1,64 @@
+// Problem: Remove Outermost Parentheses
+// LeetCode: 1021
+
+// Approach:
+// Use depth counter to identify outermost parentheses.
+// Skip the first '(' and last ')' of every primitive string.
+
+class Solution {
+public:
+    string removeOuterParentheses(string s) {
+        string ans = "";
+        int n = s.length();
+        int p = 1;
+        int i = 1;
+
+        while(i < n){
+            if(p == 0){
+                continue;
+            }
+            else if(s[i] == '('){
+                i++;
+                p++;
+                ans.push_back('(');
+            }
+            else if(s[i] == ')'){
+                i++;
+                p--;
+                if(p > 0){
+                    ans.push_back(')');
+                }
+            }
+        }
+
+        return ans;
+    }
+};
+
+/*
+TIME COMPLEXITY: O(n)
+SPACE COMPLEXITY: O(n)
+
+Mistakes:
+1. Initially tried to remove parentheses directly using erase(), but modifying the same string
+   changes indices and makes traversal difficult.
+2. Used vector<int> for storing substrings, but substr() returns string.
+3. Variable name "new" cannot be used because it is a C++ keyword.
+4. Did not handle depth properly in the beginning, which made primitive identification complex.
+
+Learning:
+1. Depth counter can identify primitive parentheses boundaries.
+2. Outermost brackets are the ones where depth becomes 1 and returns to 0.
+3. Building a new answer string is safer than modifying the input string.
+4. Learned erase() syntax in C++:
+   string.erase(position, count)
+   It is used to remove characters from a string.
+5. Learned substr() syntax in C++:
+   string.substr(starting_index, length)
+   It is used to extract a part of a string.
+6. Learned that modifying a string using erase() can shift indexes, so careful handling is required.
+7. Understood how balance/depth can simplify nested parentheses problems.
+
+Possible Optimization:
+Use depth = 0 and traverse from the first character to avoid special handling of the first '('.
+*/
