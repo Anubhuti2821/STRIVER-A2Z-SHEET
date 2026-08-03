@@ -1,0 +1,70 @@
+// Problem: Reverse Words in a String
+// LeetCode: 151
+
+// Approach:
+// First reverse the entire string.
+// Then reverse each individual word to get the words in reverse order.
+
+class Solution {
+public:
+    string reverseWords(string s) {
+        string ans = "";
+        int n = s.size();
+
+        reverse(s.begin(), s.end());
+
+        int i = 0;
+
+        while(i < n) {
+            while(i < n && s[i] == ' ') {
+                i++;
+            }
+
+            if(i >= n) {
+                break;
+            }
+
+            int start = i;
+
+            while(i < n && s[i] != ' ') {
+                i++;
+            }
+
+            string word = s.substr(start, i - start);
+            reverse(word.begin(), word.end());
+
+            if(ans.size() > 0) {
+                ans += " ";
+            }
+
+            ans += word;
+        }
+
+        return ans;
+    }
+};
+
+/*
+TIME COMPLEXITY: O(n)
+SPACE COMPLEXITY: O(n)
+
+Mistakes:
+1. Initially tried reversing individual words without reversing the complete string,
+   which reverses characters instead of word order.
+2. Used reverse() assuming it returns a string, but reverse() modifies the string in-place.
+3. Confused substr() second parameter with ending index; in C++, it represents length.
+4. Faced issues in tracking word starting index and length using j.
+5. Did not handle multiple spaces and last word edge case.
+
+Learning:
+1. Learned that reversing the whole string + reversing each word gives reversed word order.
+2. Learned reverse() syntax:
+   reverse(string.begin(), string.end());
+3. Learned substr() syntax:
+   string.substr(starting_index, length);
+4. Learned to track word boundaries using start and current index.
+5. Learned how to handle extra spaces while processing strings.
+
+Possible Optimization:
+Can solve using in-place two pointer technique to reduce extra space.
+*/
