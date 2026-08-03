@@ -1,0 +1,40 @@
+// Problem: Largest Odd Number in String
+// Mistake in this approach:
+// 1. stoi() converts string into int, so large inputs will overflow.
+// 2. Using long long with stoi() does not help because stoi() already returns int.
+// 3. Even stoll() would fail for extremely large strings.
+
+class Solution {
+public:
+    string largestOddNumber(string num) {
+
+        // ERROR:
+        // stoi(num) -> int conversion
+        // long long n = stoi(num);
+        // Large numbers cannot be stored.
+
+        long long n = stoll(num); // Only improvement, but still not enough for this problem
+
+        while(n > 0) {
+
+            if(n % 2 == 1) {
+                return to_string(n);
+            }
+
+            // Removes last digit
+            n = n / 10;
+        }
+
+        return "";
+    }
+};
+
+/*
+TIME COMPLEXITY: O(n)
+
+SPACE COMPLEXITY: O(1)
+
+NOTE:
+This approach works only when num fits inside long long.
+For LeetCode constraints, string traversal is required.
+*/
