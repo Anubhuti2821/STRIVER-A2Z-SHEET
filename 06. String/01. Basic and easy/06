@@ -1,0 +1,27 @@
+// Problem: Rotate String
+// Given two strings s and goal, return true if and only if s can become goal
+// after some number of shifts.
+
+// Learning:
+// 1. Rotation does not change the order of characters, only the starting point changes.
+// 2. All possible rotations of s can be found inside s + s.
+// 3. Use find() to check whether goal exists in s + s.
+// 4. Length check is necessary because strings with different lengths cannot be rotations.
+
+class Solution {
+public:
+    bool rotateString(string s, string goal) {
+        if(s.size() != goal.size())
+            return false;
+
+        string news = s + s;
+
+        if(news.find(goal) != string::npos)
+            return true;
+
+        return false;
+    }
+};
+
+// Time Complexity: O(N)
+// Space Complexity: O(N)
