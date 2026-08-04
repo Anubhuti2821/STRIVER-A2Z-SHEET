@@ -1,0 +1,38 @@
+// Problem: Isomorphic Strings
+// Given two strings s and t, determine if they are isomorphic.
+// Two strings are isomorphic if characters in s can be replaced to get t
+// while maintaining the same order and one-to-one mapping.
+
+// Learning:
+// 1. Isomorphic strings depend on character mapping, not character frequency.
+// 2. A character in s should always map to the same character in t.
+// 3. Two different characters in s cannot map to the same character in t.
+// 4. Therefore, both s -> t and t -> s mappings are required.
+
+class Solution {
+public:
+    bool isIsomorphic(string s, string t) {
+        unordered_map<char,char> h;
+        unordered_map<char,char> h2;
+
+        if(s.size() != t.size())
+            return false;
+
+        for(int i = 0; i < s.size(); i++) {
+            if(h.find(s[i]) == h.end())
+                h[s[i]] = t[i];
+            else if(h[s[i]] != t[i])
+                return false;
+
+            if(h2.find(t[i]) == h2.end())
+                h2[t[i]] = s[i];
+            else if(h2[t[i]] != s[i])
+                return false;
+        }
+
+        return true;
+    }
+};
+
+// Time Complexity: O(N)
+// Space Complexity: O(N)
