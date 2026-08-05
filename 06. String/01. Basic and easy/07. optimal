@@ -1,0 +1,49 @@
+/*
+Problem: Valid Anagram
+Link: https://leetcode.com/problems/valid-anagram/
+
+Approach:
+- If the lengths of both strings are different, they cannot be anagrams.
+- Use a frequency array of size 26 to store character counts.
+- Increase the count for characters of string s.
+- Decrease the count for characters of string t.
+- If all frequencies become zero, both strings have the same characters with the same frequency.
+
+Mistake & Learning:
+- Initially, I used find() and erase() functions to remove matching characters from the string.
+- Learned that find() searches the first occurrence of a character/string and returns its index.
+- Learned that erase() removes characters from a string using index and count.
+- Learned that frequency counting is more efficient than searching and deleting characters repeatedly.
+*/
+
+class Solution {
+public:
+    bool isAnagram(string s, string t) {
+        if (s.size() != t.size()) {
+            return false;
+        }
+
+        int freq[26] = {0};
+
+        for (int i = 0; i < s.size(); i++) {
+            freq[s[i] - 'a']++;
+            freq[t[i] - 'a']--;
+        }
+
+        for (int i = 0; i < 26; i++) {
+            if (freq[i] != 0) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+};
+
+/*
+Time Complexity: O(n)
+Space Complexity: O(1)
+
+Possible Optimization:
+- For larger character sets, use unordered_map instead of a fixed frequency array.
+*/
