@@ -1,0 +1,130 @@
+/*
+Learning Notes:
+
+1. string::find()
+
+- find() is used to search for the first occurrence of a character or substring inside a string.
+- It returns the index position if the element is found.
+- If the element is not found, it returns string::npos.
+
+Syntax:
+string.find(character/string);
+
+Example:
+string s = "banana";
+
+s.find('a');   // returns 1 (first occurrence of 'a')
+s.find('z');   // returns string::npos
+
+
+2. string::erase()
+
+- erase() is used to remove characters from a string.
+- It can remove a single character or a range of characters.
+
+Syntax:
+string.erase(start_index, count);
+
+Example:
+string s = "hello";
+
+s.erase(1,1);  // removes 'e'
+Output: "hllo"
+
+
+3. Lambda Function in sort()
+
+- A lambda function is an anonymous function (function without a name).
+- It is commonly used in STL functions when we need to define our own sorting logic.
+
+Syntax:
+[](parameters){
+    return condition;
+}
+
+Example:
+sort(v.begin(), v.end(), [](auto &a, auto &b){
+    return a.second > b.second;
+});
+
+Explanation:
+- sort() normally sorts according to the first element.
+- Here we provide our own comparator.
+- a and b are two elements of the vector.
+- a.second and b.second represent the frequency values of characters.
+- The condition a.second > b.second sorts elements in decreasing order of frequency.
+
+Example:
+Before sorting:
+(e,2), (a,1), (b,3)
+
+After sorting:
+(b,3), (e,2), (a,1)
+/*
+Lambda Function Notes:
+
+- A lambda function is an anonymous function (a function without a name).
+- It is mainly used when we need to pass a small custom function as an argument to STL functions like sort().
+- It avoids writing a separate comparator function.
+
+Syntax:
+
+[capture](parameters) {
+    // function body
+};
+
+
+Example 1: Addition using lambda
+
+auto add = [](int a, int b){
+    return a + b;
+};
+
+cout << add(3,4);   // Output: 7
+
+
+Example 2: Sorting in decreasing order
+
+sort(v.begin(), v.end(), [](int a, int b){
+    return a > b;
+});
+
+- a and b are two elements of the vector.
+- The condition decides their order.
+- Here, larger elements are placed before smaller elements.
+
+
+Example 3: Sorting pairs according to second value
+
+vector<pair<char,int>> v = {
+    {'a',3},
+    {'b',1},
+    {'c',2}
+};
+
+sort(v.begin(), v.end(), [](auto &a, auto &b){
+    return a.second > b.second;
+});
+
+
+Before sorting:
+(a,3), (b,1), (c,2)
+
+After sorting:
+(a,3), (c,2), (b,1)
+
+
+Explanation:
+- a.first  -> first element of pair
+- a.second -> second element of pair
+- Here second element represents frequency.
+- The lambda function compares frequencies and sorts them in decreasing order.
+
+In Frequency Sort Problem:
+
+sort(v.begin(), v.end(), [](auto &a, auto &b){
+    return a.second > b.second;
+});
+
+This tells sort() to arrange characters according to their frequency instead of their character value.
+*/*/
