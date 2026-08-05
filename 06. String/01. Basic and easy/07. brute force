@@ -1,0 +1,51 @@
+/*
+Problem: Valid Anagram
+Link: https://leetcode.com/problems/valid-anagram/
+
+Approach:
+- If the lengths of both strings are different, they cannot be anagrams.
+- Traverse the first string.
+- For each character, find its first occurrence in the second string.
+- If found, erase that character from the second string.
+- If not found, return false.
+- If all characters are removed from the second string, the strings are anagrams.
+
+Mistake & Learning:
+- Initially, I called t.find(s[i]) twice: once to check if the character existed and again while erasing it.
+- Learned that storing the returned index in a variable avoids repeating the same search.
+- Learned how to use:
+    - string::find() → Returns the index of the first occurrence of a character/string, or string::npos if not found.
+    - string::erase(pos, count) → Removes 'count' characters starting from index 'pos'.
+*/
+
+class Solution {
+public:
+    bool isAnagram(string s, string t) {
+        int n = s.size();
+        int m = t.size();
+
+        if (n != m) {
+            return false;
+        }
+
+        for (int i = 0; i < n; i++) {
+            int pos = t.find(s[i]);
+
+            if (pos == string::npos) {
+                return false;
+            }
+
+            t.erase(pos, 1);
+        }
+
+        return t.empty();
+    }
+};
+
+/*
+Time Complexity: O(n²)
+Space Complexity: O(1)
+
+Possible Optimization:
+- Use a frequency array (size 26) or an unordered_map to achieve O(n) time complexity.
+*/
