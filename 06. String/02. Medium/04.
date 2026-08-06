@@ -1,0 +1,88 @@
+// Problem: String to Integer (atoi)
+// LeetCode 8
+//
+// Implement myAtoi(string s) which converts a string into a 32-bit signed integer.
+
+class Solution {
+public:
+
+    bool is_int(char ch) {
+        return ch >= '0' && ch <= '9';
+    }
+
+    int myAtoi(string s) {
+
+        int n = s.size();
+        int i = 0;
+        int sign = 1;
+        long long num = 0;
+
+        // Step 1: Ignore leading whitespaces
+        while(i < n && s[i] == ' ') {
+            i++;
+        }
+
+        // Step 2: Check sign
+        if(i < n && s[i] == '-') {
+            sign = -1;
+            i++;
+        }
+        else if(i < n && s[i] == '+') {
+            i++;
+        }
+
+        // Step 3: Convert digits
+        while(i < n && is_int(s[i])) {
+
+            num = num * 10 + (s[i] - '0');
+
+            // Step 4: Handle overflow
+            if(sign * num > INT_MAX) {
+                return INT_MAX;
+            }
+
+            if(sign * num < INT_MIN) {
+                return INT_MIN;
+            }
+
+            i++;
+        }
+
+        return (int)(sign * num);
+    }
+};
+
+
+/*
+Learning From Mistakes:
+
+1. Character digit and integer are different.
+   Wrong: ch >= 0 && ch <= 9
+   Correct: ch >= '0' && ch <= '9'
+
+2. To convert character digit into integer:
+   Use: s[i] - '0'
+
+3. Do not use isalnum().
+   Atoi only ignores leading spaces.
+
+4. Non-digit after number stops conversion.
+   Example: "123abc" -> 123
+
+5. Always increase pointer inside loops.
+   Otherwise infinite loop can occur.
+
+6. Keep sign and number separate.
+   sign -> stores +1/-1
+   num  -> stores actual value
+
+7. Use long long for overflow handling.
+
+8. Always check boundaries:
+   i < n before accessing s[i]
+
+
+Time Complexity: O(n)
+
+Space Complexity: O(1)
+*/
