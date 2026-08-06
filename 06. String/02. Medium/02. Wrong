@@ -1,33 +1,33 @@
 // Problem: Maximum Nesting Depth of the Parentheses
-// Approach: Using two separate counters for '(' and ')' (Incorrect Approach)
+
+// My Mistake:
+// I used separate counters for '(' and ')'.
+// I was counting consecutive brackets instead of tracking the actual
+// number of open parentheses at a given point.
+
+// Learning:
+// Use one variable to maintain current depth.
+// '(' increases depth by 1 and ')' decreases depth by 1.
+// The maximum depth reached during traversal is the answer.
+
+// Optimization:
+// The solution is already optimal.
+// Time Complexity: O(n) because every character is visited once.
+// Space Complexity: O(1) because only constant extra variables are used.
 
 class Solution {
 public:
     int maxDepth(string s) {
-        int n = s.size();
-        int t = 0;
-        int count = 0;
-        int count2 = 0;
+        int depth = 0;
         int max_depth = 0;
 
-        for(int i = 0; i < n; i++) {
-            if(isalnum(s[i])) {
-                continue;
+        for(int i = 0; i < s.size(); i++) {
+            if(s[i] == '(') {
+                depth++;
+                max_depth = max(max_depth, depth);
             }
-
-            if(s[i] == ')') {
-                count++;
-
-                max_depth = max(max_depth, count);
-
-                count2 = 0;
-            }
-            else if(s[i] == '(') {
-                count2++;
-
-                max_depth = max(max_depth, count2);
-
-                count = 0;
+            else if(s[i] == ')') {
+                depth--;
             }
         }
 
@@ -39,3 +39,7 @@ public:
 TIME COMPLEXITY: O(n)
 SPACE COMPLEXITY: O(1)
 */
+KEEP IN MIND:
+isalnum(c) is used to check if it is alpha numeric;
+or jab s
+
