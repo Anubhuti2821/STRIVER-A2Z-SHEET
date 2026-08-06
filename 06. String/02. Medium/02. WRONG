@@ -1,0 +1,53 @@
+// Problem: Maximum Nesting Depth of the Parentheses
+// Approach: Using two separate counters for '(' and ')' (Wrong Approach)
+
+// My Mistake:
+// I used two different variables to count opening and closing parentheses.
+// I was counting consecutive '(' and ')' instead of tracking the actual
+// number of currently open parentheses.
+// The depth depends on the balance between opening and closing brackets,
+// not separate counts.
+
+// Learning:
+// Maintain a single depth variable.
+// '(' increases the depth by 1 and ')' decreases the depth by 1.
+// The maximum value reached by depth during traversal is the maximum nesting depth.
+
+class Solution {
+public:
+    int maxDepth(string s) {
+        int n = s.size();
+        int t = 0;
+        int count = 0;
+        int count2 = 0;
+        int max_depth = 0;
+
+        for(int i = 0; i < n; i++) {
+            if(isalnum(s[i])) {
+                continue;
+            }
+
+            if(s[i] == ')') {
+                count++;
+
+                max_depth = max(max_depth, count);
+
+                count2 = 0;
+            }
+            else if(s[i] == '(') {
+                count2++;
+
+                max_depth = max(max_depth, count2);
+
+                count = 0;
+            }
+        }
+
+        return max_depth;
+    }
+};
+
+/*
+TIME COMPLEXITY: O(n)
+SPACE COMPLEXITY: O(1)
+*/
