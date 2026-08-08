@@ -1,0 +1,87 @@
+// FIRST STATEMENT:
+// Given a string s and a positive integer k, return the number of
+// substrings that contain exactly k distinct characters.
+
+// LEETCODE:
+// LeetCode 992 - Subarrays with K Different Integers
+// NOTE: LeetCode 992 uses an integer array, while this version uses a string.
+
+// APPROACH:
+// Count substrings with exactly k distinct characters using:
+// exactly(k) = atMost(k) - atMost(k - 1)
+//
+// For atMost(k):
+// 1. Use a sliding window.
+// 2. Store character frequencies in an unordered_map.
+// 3. If distinct characters exceed k, move left.
+// 4. When the window becomes valid, add (right - left + 1).
+
+class Solution {
+public:
+    int atMostKDistinct(string s, int k) {
+        unordered_map<char, int> freq;
+        int left = 0;
+        int count = 0;
+
+        for (int right = 0; right < s.size(); right++) {
+            freq[s[right]]++;
+
+            while (freq.size() > k) {
+                freq[s[left]]--;
+
+                if (freq[s[left]] == 0) {
+                    freq.erase(s[left]);
+                }
+
+                left++;
+            }
+
+            count += right - left + 1;
+        }
+
+        return count;
+    }
+
+    int countSubstrings(string s, int k) {
+        return atMostKDistinct(s, k) -
+               atMostKDistinct(s, k - 1);
+    }
+};
+
+// MISTAKES:
+// 1. s[right]++ ❌
+//    freq[s[right]]++ ✅
+//    Character ki frequency increase karni hai.
+//
+// 2. s.size() ko distinct count ke liye use karna ❌
+//    freq.size() ✅
+//    s.size() = total string length
+//    freq.size() = current window ke distinct characters
+//
+// 3. s.erase(...) ❌
+//    freq.erase(s[left]) ✅
+//    Original string ko modify nahi karna.
+//
+// 4. count = right - left + 1 ❌
+//    count += right - left + 1 ✅
+//    Har right par naye valid substrings add hote hain.
+
+// LEARNING:
+// 1. Sliding window mein original string ko modify nahi karna.
+// 2. Frequency map current window ke characters store karta hai.
+// 3. freq.size() distinct characters batata hai.
+// 4. right - left + 1 current right par ending valid substrings ki count hai.
+// 5. Exactly K ka pattern:
+//    exactly(k) = atMost(k) - atMost(k - 1)
+
+// TIME COMPLEXITY:
+// O(n)
+
+// SPACE COMPLEXITY:
+// O(min(n, 26)) for lowercase English letters
+// O(n) in the general case
+
+// OPTIMIZATION:
+// Agar string mein sirf lowercase English letters hain,
+// unordered_map ki jagah vector<int> freq(26) use kar sakte hain.
+// Isse hashing overhead remove ho jayega.
