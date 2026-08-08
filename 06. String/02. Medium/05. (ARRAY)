@@ -1,0 +1,86 @@
+// FIRST STATEMENT:
+// Given an integer array nums and an integer k, return the number of
+// subarrays that contain exactly k distinct integers.
+
+// LEETCODE:
+// LeetCode 992 - Subarrays with K Different Integers
+
+// APPROACH:
+// Count subarrays with exactly k distinct integers using:
+// exactly(k) = atMost(k) - atMost(k - 1)
+//
+// For atMost(k):
+// 1. Use a sliding window.
+// 2. Store frequencies of elements in an unordered_map.
+// 3. If distinct elements exceed k, move left and reduce frequencies.
+// 4. When the window is valid, add (right - left + 1) to the answer.
+
+class Solution {
+public:
+    int subarraycount(vector<int>& nums, int k) {
+        unordered_map<int, int> m;
+        int left = 0;
+        int count = 0;
+
+        for (int right = 0; right < nums.size(); right++) {
+            m[nums[right]]++;
+
+            while (m.size() > k) {
+                m[nums[left]]--;
+
+                if (m[nums[left]] == 0) {
+                    m.erase(nums[left]);
+                }
+
+                left++;
+            }
+
+            count += right - left + 1;
+        }
+
+        return count;
+    }
+
+    int subarraysWithKDistinct(vector<int>& nums, int k) {
+        return subarraycount(nums, k) -
+               subarraycount(nums, k - 1);
+    }
+};
+
+// MISTAKES:
+// 1. m[nums[right]++] ❌
+//    m[nums[right]]++ ✅
+//    Frequency increase karni hai, nums[right] ko modify nahi karna.
+//
+// 2. nums.size() ❌
+//    m.size() ✅
+//    nums.size() = total array size
+//    m.size() = current window ke distinct elements
+//
+// 3. nums.erase(...) ❌
+//    m.erase(nums[left]) ✅
+//    Original array ko modify nahi karna.
+//
+// 4. count = right - left + 1 ❌
+//    count += right - left + 1 ✅
+//    Har right par naye valid substrings add hote hain.
+
+// LEARNING:
+// 1. Sliding window mein original array ko modify nahi karna.
+// 2. Frequency map current window ko represent karta hai.
+// 3. m.size() distinct elements batata hai.
+// 4. Valid window ke liye:
+//    right - left + 1 = current right par ending valid substrings.
+// 5. Exactly K ka important pattern:
+//    exactly(k) = atMost(k) - atMost(k - 1)
+
+// TIME COMPLEXITY:
+// O(n)
+
+// SPACE COMPLEXITY:
+// O(n)
+
+// OPTIMIZATION:
+// unordered_map ki jagah vector<int> frequency array use kar sakte hain
+// agar nums[i] ki value ki range limited ho. Isse hashing overhead kam
+// ho sakta hai, while overall complexity O(n) hi rahegi.
