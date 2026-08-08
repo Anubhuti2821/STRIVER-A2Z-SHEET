@@ -1,39 +1,64 @@
+```cpp
+/*
+PROBLEM STATEMENT:
+Given a string s, return the longest palindromic substring in s.
+
+LEETCODE QUESTION NO: 5
+
+APPROACH:
+1. Consider every character as the center of an odd-length palindrome.
+2. Consider every gap between two characters as the center of an even-length palindrome.
+3. Expand left and right while characters are equal.
+4. Whenever a longer palindrome is found, update its starting index and length.
+5. Return the longest palindrome using substr().
+
+TIME COMPLEXITY: O(n^2)
+SPACE COMPLEXITY: O(1)
+*/
+
 class Solution {
 public:
-
     string longestPalindrome(string s) {
-
         int n = s.size();
-
         int start = 0;
         int maxLen = 1;
 
-
         auto expand = [&](int left, int right) {
-
             while(left >= 0 && right < n && s[left] == s[right]) {
-
                 if(right - left + 1 > maxLen) {
                     maxLen = right - left + 1;
                     start = left;
                 }
-
                 left--;
                 right++;
             }
         };
 
-
         for(int i = 0; i < n; i++) {
-
-            // odd length
-            expand(i, i);
-
-            // even length
-            expand(i, i + 1);
+            expand(i, i);       // Odd length
+            expand(i, i + 1);   // Even length
         }
-
 
         return s.substr(start, maxLen);
     }
 };
+
+/*
+MISTAKES TO AVOID:
+1. Checking only odd-length palindromes.
+2. Forgetting the even-length case: expand(i, i + 1).
+3. Updating start before checking whether the palindrome is actually longer.
+4. Using wrong length formula:
+   length = right - left + 1
+
+LEARNING:
+- Every palindrome can be identified by its center.
+- Odd palindrome -> one center character.
+- Even palindrome -> center lies between two characters.
+- Expand from the center instead of generating every substring.
+
+OPTIMIZATION:
+Brute force checking every substring and then checking whether it is a palindrome
+can take O(n^3). Expanding around every center reduces it to O(n^2).
+*/
+```
