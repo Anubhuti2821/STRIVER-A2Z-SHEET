@@ -1,0 +1,37 @@
+/*
+Problem Statement:
+Given a node in a singly linked list, delete that node.
+The head of the linked list is not given.
+The given node is guaranteed to not be the last node.
+
+LeetCode Question No: 237
+
+Approach:
+Since the previous node is not available, we cannot directly remove the given node.
+Instead, copy the value of the next node into the current node and then skip the next node.
+
+Time Complexity: O(1)
+Space Complexity: O(1)
+
+Code:
+*/
+
+class Solution {
+public:
+    void deleteNode(ListNode* node) {
+        node->val = node->next->val;
+        node->next = node->next->next;
+    }
+};
+
+/*
+Mistakes:
+- Cannot access the previous node because head is not given.
+- Do not swap the current node and next node.
+- The next node is bypassed after copying its value.
+
+Learning:
+When the previous node is unavailable, we can copy the next node's
+value into the current node and connect the current node to the
+next node's next node.
+*/
