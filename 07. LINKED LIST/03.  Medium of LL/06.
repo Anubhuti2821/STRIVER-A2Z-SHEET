@@ -1,0 +1,138 @@
+## Problem Statement
+
+Given the head of a singly linked list, determine the **length of the loop/cycle** present in the linked list. If there is no loop, return `0`.
+
+## LeetCode Question No.
+
+**Not a standard LeetCode problem.**
+This is commonly known as **Find Length of Loop in Linked List**.
+
+## Approach
+
+We use **Floyd's Cycle Detection Algorithm**.
+
+### Step 1: Detect the loop
+
+Use two pointers:
+
+* `slow` moves one step.
+* `fast` moves two steps.
+
+If they meet, a cycle exists.
+
+### Step 2: Find the starting node of the loop
+
+After finding the meeting point:
+
+* Put `slow` back at `head`.
+* Keep `fast` at the meeting point.
+* Move both one step at a time.
+* Their meeting point is the **start of the loop**.
+
+### Step 3: Find the loop length
+
+Start from the loop's starting node and keep moving until you reach the same node again.
+
+Count the number of nodes visited.
+
+## Time Complexity
+
+**O(N)**
+
+Each pointer traverses the linked list a constant number of times.
+
+## Space Complexity
+
+**O(1)**
+
+Only a few pointers are used.
+
+## Code
+
+```cpp
+class Solution {
+public:
+
+    // Returns the meeting point of slow and fast
+    // if a loop exists, otherwise returns NULL.
+    ListNode* loop(ListNode* head) {
+
+        ListNode* slow = head;
+        ListNode* fast = head;
+
+        while (fast != NULL && fast->next != NULL) {
+
+            slow = slow->next;
+            fast = fast->next->next;
+
+            if (slow == fast) {
+                return slow;
+            }
+        }
+
+        return NULL;
+    }
+
+    // Returns the starting node of the loop.
+    // If no loop exists, returns NULL.
+    ListNode* start(ListNode* head) {
+
+        ListNode* meeting = loop(head);
+
+        if (meeting == NULL) {
+            return NULL;
+        }
+
+        ListNode* slow = head;
+        ListNode* fast = meeting;
+
+        while (slow != fast) {
+            slow = slow->next;
+            fast = fast->next;
+        }
+
+        return slow;
+    }
+
+    int findLengthOfLoop(ListNode* head) {
+
+        ListNode* s = start(head);
+
+        // No loop
+        if (s == NULL) {
+            return 0;
+        }
+
+        ListNode* temp = s->next;
+        int length = 1;
+
+        while (temp != s) {
+            length++;
+            temp = temp->next;
+        }
+
+        return length;
+    }
+};
+```
+
+## Mistakes in My Original Code
+
+1. `ListNode* slow = slow;` → `slow` should start at `head`.
+2. `loop()` was declared as `int`, but it returns a `ListNode*`.
+3. `return -1` was inside the `while` loop, causing premature termination.
+4. `loop()` had no proper return when no cycle existed.
+5. `start()` was declared `int`, but it returns a `ListNode*`.
+6. `slow` and `fast` were not declared inside `start()`.
+7. `loop(head)` was called twice unnecessarily.
+8. The no-loop case wasn't handled before accessing `s->next`.
+
+## Learning
+
+The key distinction is:
+
+**Meeting point ≠ starting point of the loop.**
+
+Floyd's algorithm first gives us the **meeting point**. Then, by resetting one pointer to `head` and moving both pointers equally, we find the **starting point of the cycle**.
+
+After that, counting nodes around the cycle gives its length.
