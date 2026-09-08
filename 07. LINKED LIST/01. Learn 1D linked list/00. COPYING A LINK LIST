@@ -1,0 +1,19 @@
+class Solution {
+public:
+    ListNode* copyList(ListNode* head) {
+        if (head == NULL)
+            return NULL;
+
+        ListNode* copy = new ListNode(head->val);
+        ListNode* t = copy;
+        ListNode* temp = head->next;
+
+        while (temp != NULL) {
+            t->next = new ListNode(temp->val);
+            t = t->next;
+            temp = temp->next;
+        }
+
+        return copy;
+    }
+};
