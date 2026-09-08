@@ -1,0 +1,98 @@
+# Delete the Middle Node of a Linked List
+
+## Problem Statement
+
+Given the head of a singly linked list, delete the middle node of the linked list and return the head of the modified list.
+
+For an even-length list, the **second middle node** is considered the middle node.
+
+## LeetCode Question No.
+
+**2095 — Delete the Middle Node of a Linked List**
+
+## Approach
+
+1. Use two pointers:
+
+   * `slow` moves one step at a time.
+   * `fast` moves two steps at a time.
+2. When `fast` reaches the end, `slow` points to the middle node.
+3. Store the middle node in `m`.
+4. Traverse again using `temp` to find the node just before `m`.
+5. Connect `temp` directly to `m->next`.
+6. Delete `m`.
+7. Handle the base case where the list has `0` or `1` node.
+
+## Time Complexity
+
+**O(n)**
+
+There are two traversals, but both together are still O(n).
+
+## Space Complexity
+
+**O(1)**
+
+Only pointer variables are used.
+
+## Code
+
+```cpp
+class Solution {
+public:
+    ListNode* deleteMiddle(ListNode* head) {
+        if (head == NULL || head->next == NULL)
+            return NULL;
+
+        ListNode* slow = head;
+        ListNode* fast = head;
+        ListNode* temp = head;
+
+        while (fast != NULL && fast->next != NULL) {
+            fast = fast->next->next;
+            slow = slow->next;
+        }
+
+        ListNode* m = slow;
+
+        while (temp->next != m) {
+            temp = temp->next;
+        }
+
+        temp->next = m->next;
+        delete m;
+
+        return head;
+    }
+};
+```
+
+## Mistakes
+
+* Initially used:
+
+  ```cpp
+  while(temp != m)
+  ```
+
+  which moves `temp` to the middle node instead of the node before it.
+* Correct condition:
+
+  ```cpp
+  while(temp->next != m)
+  ```
+* **I did not consider the base case initially.** For a single-node list, `temp` becomes `NULL`, and accessing `temp->next` causes a runtime error.
+* Fixed the base case using:
+
+  ```cpp
+  if (head == NULL || head->next == NULL)
+      return NULL;
+  ```
+
+## Learning
+
+* Use `slow` and `fast` pointers to find the middle of a linked list.
+* To delete a node in a singly linked list, we need its previous node.
+* Always consider **base cases / edge cases** before accessing pointers.
+* A single-node list becomes empty after deleting its middle node.
+* The solution uses **O(1) extra space**.
