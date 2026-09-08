@@ -1,0 +1,127 @@
+# Palindrome Linked List
+
+## Problem Statement
+
+Given the head of a singly linked list, determine whether the linked list is a palindrome.
+
+A linked list is a palindrome if it reads the same forward and backward.
+
+## LeetCode Question No.
+
+**234 — Palindrome Linked List**
+
+## Approach
+
+1. Create a copy of the original linked list.
+2. Reverse the copied linked list.
+3. Compare the original list with the reversed copy.
+4. If all node values are equal, return `true`.
+5. If any value differs, return `false`.
+
+### Example
+
+```text
+Original List:
+1 → 2 → 2 → 1
+
+Copied List:
+1 → 2 → 2 → 1
+
+Reversed Copy:
+1 → 2 → 2 → 1
+
+Comparison:
+Same → Palindrome
+```
+
+## Time Complexity
+
+**O(n)**
+
+* Copying the list: `O(n)`
+* Reversing the copy: `O(n)`
+* Comparing both lists: `O(n)`
+
+Overall: **O(n)**
+
+## Space Complexity
+
+**O(n)**
+
+A separate copy of the linked list is created.
+
+## Code
+
+```cpp
+class Solution {
+public:
+
+    ListNode* reverse(ListNode* head) {
+        ListNode* next = NULL;
+        ListNode* prev = NULL;
+        ListNode* curr = head;
+
+        while (curr != NULL) {
+            next = curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr = next;
+        }
+
+        return prev;
+    }
+
+    bool isPalindrome(ListNode* head) {
+
+        if (head == NULL)
+            return true;
+
+        ListNode* temp = head;
+
+        // Copy of original list
+        ListNode* copy = new ListNode(head->val);
+        ListNode* t = copy;
+
+        temp = temp->next;
+
+        while (temp != NULL) {
+            t->next = new ListNode(temp->val);
+            t = t->next;
+            temp = temp->next;
+        }
+
+        // Reverse copied list
+        ListNode* b = reverse(copy);
+
+        // Compare original and reversed copy
+        temp = head;
+
+        while (b != NULL && temp != NULL) {
+            if (b->val != temp->val) {
+                return false;
+            }
+
+            b = b->next;
+            temp = temp->next;
+        }
+
+        return true;
+    }
+};
+```
+
+## Mistakes
+
+* `head == NULL` case handle karna bhool sakte hain.
+* Copy banate waqt **new nodes** create karne hain.
+* Original list ko reverse nahi karna, isliye copy reverse ki.
+* `t` copied list ko build karne ke liye use hota hai.
+* `temp` original list ko traverse karta hai.
+
+## Learning
+
+* Linked list ko traverse karna.
+* New linked list create karna.
+* Iterative linked-list reversal.
+* Two linked lists ko compare karna.
+* Extra space use karke problem ko simple banana.
