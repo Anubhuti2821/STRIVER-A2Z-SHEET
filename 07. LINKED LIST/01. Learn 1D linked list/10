@@ -1,0 +1,130 @@
+# Add Two Numbers
+
+### Problem Statement
+
+Given two non-empty linked lists representing two non-negative integers, add the two numbers and return the sum as a linked list.
+
+The digits are stored in **reverse order**, and each node contains a single digit.
+
+### LeetCode
+
+**Question No.: 2 — Add Two Numbers**
+
+### Approach
+
+My initial approach was:
+
+1. Traverse the first linked list and store its digits in a vector.
+2. Convert the vector into an integer.
+3. Do the same for the second linked list.
+4. Add the two integers.
+5. Convert the resulting integer back into a linked list.
+
+Since the digits are stored in reverse order, I traverse the vector from the end to construct the number.
+
+### Code
+
+```cpp
+class Solution {
+public:
+    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+
+        vector<int> st;
+        vector<int> ss;
+
+        ListNode* temp = l1;
+        ListNode* t = l2;
+
+        // Store first list digits
+        while (temp != NULL) {
+            st.push_back(temp->val);
+            temp = temp->next;
+        }
+
+        // Convert first list into number
+        int n1 = 0;
+
+        for (int i = st.size() - 1; i >= 0; i--) {
+            n1 = st[i] + n1 * 10;
+        }
+
+        // Store second list digits
+        while (t != NULL) {
+            ss.push_back(t->val);
+            t = t->next;
+        }
+
+        // Convert second list into number
+        int n2 = 0;
+
+        for (int i = ss.size() - 1; i >= 0; i--) {
+            n2 = ss[i] + n2 * 10;
+        }
+
+        // Add both numbers
+        int n3 = n1 + n2;
+
+        // Convert result into linked list
+        if (n3 == 0) {
+            return new ListNode(0);
+        }
+
+        ListNode* head = NULL;
+        ListNode* tail = NULL;
+
+        while (n3 > 0) {
+
+            int digit = n3 % 10;
+            n3 = n3 / 10;
+
+            ListNode* newNode = new ListNode(digit);
+
+            if (head == NULL) {
+                head = newNode;
+                tail = newNode;
+            }
+            else {
+                tail->next = newNode;
+                tail = newNode;
+            }
+        }
+
+        return head;
+    }
+};
+```
+
+### Time Complexity
+
+**O(n + m)** for traversing the two lists and constructing the result.
+
+### Space Complexity
+
+**O(n + m)** for the two vectors and result linked list.
+
+### Mistakes
+
+* Used `null` instead of `NULL`/`nullptr`.
+* Forgot to pass the value to `push_back()`.
+* Accidentally updated `n1` while calculating `n2`.
+* Initially forgot to convert the final sum back into a linked list.
+* `int` causes **signed integer overflow** for large numbers.
+
+### Learning
+
+* Linked-list nodes store individual digits.
+* The input lists are in reverse order.
+* A number can be reconstructed from its digits using:
+
+```cpp
+number = digit + number * 10;
+```
+
+* `% 10` extracts the last digit.
+* `/ 10` removes the last digit.
+
+### Limitation / Optimization
+
+This approach **does not work for very large inputs** because `int` cannot store numbers with many digits.
+
+A better approach is to perform addition **digit by digit using carry**, without converting the entire linked list into an integer.
