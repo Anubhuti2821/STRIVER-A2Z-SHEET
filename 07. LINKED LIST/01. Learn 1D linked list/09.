@@ -1,0 +1,158 @@
+# Intersection of Two Linked Lists
+
+**LeetCode:** 160
+**Link:** https://leetcode.com/problems/intersection-of-two-linked-lists/
+
+## Problem Statement
+
+Given the heads of two singly linked lists, return the node at which the two lists intersect. If the two linked lists do not intersect, return `NULL`.
+
+Important: Intersection means **the same node**, not just two nodes having the same value.
+
+## Approach
+
+1. Find the length of both linked lists.
+2. Calculate the difference between their lengths.
+3. Move the pointer of the longer list forward by this difference.
+4. Now both pointers are at the same distance from the end.
+5. Move both pointers one step at a time.
+6. Compare the **addresses/nodes** using `a == b`.
+7. The first common node is the intersection.
+8. If both become `NULL`, there is no intersection.
+
+## Time Complexity
+
+**O(n + m)**
+
+We traverse both lists to calculate their lengths and then traverse them again to find the intersection.
+
+## Space Complexity
+
+**O(1)**
+
+Only a constant number of pointers and variables are used.
+
+## Code
+
+```cpp
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+
+class Solution {
+public:
+
+    ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
+
+        ListNode* a = headA;
+        ListNode* b = headB;
+
+        int lenA = 0;
+        int lenB = 0;
+
+        // Find length of List A
+        while (a != NULL) {
+            lenA++;
+            a = a->next;
+        }
+
+        // Find length of List B
+        while (b != NULL) {
+            lenB++;
+            b = b->next;
+        }
+
+        // Reset pointers
+        a = headA;
+        b = headB;
+
+        // Move longer list pointer ahead
+        if (lenA > lenB) {
+            int diff = lenA - lenB;
+
+            while (diff--) {
+                a = a->next;
+            }
+        }
+        else {
+            int diff = lenB - lenA;
+
+            while (diff--) {
+                b = b->next;
+            }
+        }
+
+        // Find intersection
+        while (a != b) {
+            a = a->next;
+            b = b->next;
+        }
+
+        return a;
+    }
+};
+```
+
+## Mistakes
+
+### 1. Comparing values instead of nodes
+
+I initially used:
+
+```cpp
+a->val != b->val
+```
+
+This is incorrect because two different nodes can have the same value.
+
+Correct:
+
+```cpp
+a != b
+```
+
+### 2. Moving both pointers from the beginning
+
+If the lists have different lengths, moving both simultaneously doesn't align them.
+
+The longer list's pointer must first move ahead by:
+
+```text
+length of longer list - length of shorter list
+```
+
+### 3. Not handling `NULL`
+
+Accessing:
+
+```cpp
+a->val
+```
+
+when `a == NULL` causes an error.
+
+Using:
+
+```cpp
+while (a != b)
+```
+
+also safely handles the case where there is no intersection because both pointers eventually become `NULL`.
+
+## Learning
+
+* **Intersection means same node/address, not same value.**
+* For linked lists of different lengths, first **align the pointers**.
+* `a == b` compares whether two pointers point to the **same node**.
+* Fixed number of pointers/variables → **O(1) space**.
+
+## Optimization
+
+There is also a more elegant **two-pointer switching approach** that achieves **O(n + m) time and O(1) space** without explicitly calculating the lengths.
+
+I haven't used it here because this solution follows the length-based method I developed first.
