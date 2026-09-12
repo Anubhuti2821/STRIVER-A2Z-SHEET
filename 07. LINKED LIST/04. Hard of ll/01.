@@ -1,0 +1,146 @@
+# LeetCode 25 — Reverse Nodes in k-Group
+
+## Problem Statement
+
+Given the head of a linked list, reverse the nodes of the list `k` at a time and return the modified list.
+
+* If the number of remaining nodes is less than `k`, leave those nodes unchanged.
+* The values of the nodes cannot be changed; only the links between nodes should be modified.
+
+### Example
+
+Input:
+`1 -> 2 -> 3 -> 4 -> 5`, `k = 2`
+
+Output:
+`2 -> 1 -> 4 -> 3 -> 5`
+
+---
+
+## LeetCode Question No.
+
+**25 — Reverse Nodes in k-Group**
+
+---
+
+## Approach
+
+1. Use `temp` to point to the starting node of the current group.
+2. Use `check` to verify whether at least `k` nodes are available.
+3. If fewer than `k` nodes remain, stop reversing.
+4. Reverse exactly `k` nodes using the `reverse()` helper function.
+5. `currentHead` stores the new head of the reversed group.
+6. The original first node of the group becomes its tail after reversal.
+7. Connect the previous group's tail to the current group's new head using `prevTail`.
+8. Move `temp` to the next group.
+9. Finally, connect the last reversed group to any remaining nodes.
+
+---
+
+## Time Complexity
+
+**O(n)**
+
+Each node is visited a constant number of times.
+
+---
+
+## Space Complexity
+
+**O(1)**
+
+Only a few pointers are used; no extra data structure is required.
+
+---
+
+## Code
+
+```cpp
+class Solution {
+public:
+
+    ListNode* reverse(ListNode* start, int k) {
+        ListNode* prev = NULL;
+        ListNode* next = NULL;
+        ListNode* curr = start;
+
+        int m = 1;
+
+        while (m <= k) {
+            next = curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr = next;
+            m++;
+        }
+
+        return prev;
+    }
+
+    ListNode* reverseKGroup(ListNode* head, int k) {
+
+        ListNode* temp = head;
+        ListNode* prevTail = NULL;
+        ListNode* newHead = NULL;
+
+        while (temp != NULL) {
+
+            ListNode* check = temp;
+            int count = 0;
+
+            while (check != NULL && count < k) {
+                check = check->next;
+                count++;
+            }
+
+            if (count < k)
+                break;
+
+            ListNode* start = temp;
+
+            ListNode* currentHead = reverse(start, k);
+
+            if (newHead == NULL) {
+                newHead = currentHead;
+            }
+            else {
+                prevTail->next = currentHead;
+            }
+
+            prevTail = start;
+
+            temp = check;
+        }
+
+        if (prevTail != NULL) {
+            prevTail->next = temp;
+        }
+
+        return newHead;
+    }
+};
+```
+
+---
+
+## Mistakes
+
+* Initially, I tried reversing the group without properly checking whether `k` nodes were available.
+* I confused `curr` and `prev` after reversing the group.
+* After reversal, the original `start` node becomes the **tail** of that group.
+* I needed to preserve the next group's starting node before changing links.
+* I initially did not clearly handle the connection between two reversed groups.
+
+---
+
+## Learning
+
+* Before reversing a group, first check whether `k` nodes are available.
+* In linked-list reversal:
+
+  * `prev` becomes the new head.
+  * `curr` points to the next unprocessed node.
+* The original head of a reversed segment becomes its tail.
+* `prevTail` is used to connect consecutive reversed groups.
+* Leftover nodes smaller than `k` should remain unchanged.
+* This problem combines **linked-list reversal + group traversal + pointer connection**.
