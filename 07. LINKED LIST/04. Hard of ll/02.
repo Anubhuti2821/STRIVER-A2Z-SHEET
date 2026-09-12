@@ -1,0 +1,78 @@
+#SWAP NODES IN PAIR OF 2
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+  ListNode* reverse(ListNode* start) {
+        ListNode* prev = NULL;
+        ListNode* next = NULL;
+        ListNode* curr = start;
+        
+
+        int m = 1;
+
+
+        while (m <= 2) {
+            next = curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr = next;
+            m++;
+        }
+
+        return prev;
+    }
+    ListNode* swapPairs(ListNode* head) {
+         ListNode* temp = head;
+        ListNode* prevTail = NULL;
+        ListNode* newHead = NULL;
+     if (head == NULL || head->next == NULL) {
+    return head;
+}
+
+        while (temp != NULL) {
+
+            ListNode* check = temp;
+            int count = 0;
+
+            while (check != NULL && count < 2) {
+                check = check->next;
+                count++;
+            }
+
+            if (count < 2){
+                break;
+            }
+
+            ListNode* start = temp;
+
+            ListNode* currentHead = reverse(start);
+
+            if (newHead == NULL) {
+                newHead = currentHead;
+            }
+            else {
+                prevTail->next = currentHead;
+            }
+
+            prevTail = start;
+
+            temp = check;
+        }
+
+        if (prevTail != NULL) {
+            prevTail->next = temp;
+        }
+
+        return newHead;
+    
+    }
+};
