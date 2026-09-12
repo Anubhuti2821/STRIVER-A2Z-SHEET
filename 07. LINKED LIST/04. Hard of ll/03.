@@ -1,0 +1,90 @@
+# LeetCode 61 — Rotate List
+
+## Problem Statement
+
+Given the head of a linked list, rotate the list to the right by `k` places.
+
+## LeetCode Question No.
+
+61 — Rotate List
+
+## Approach
+
+1. Find the length of the linked list.
+2. Reduce `k` using `k % size`.
+3. If `k == 0`, return the original head.
+4. Move to the node at position `size - k`.
+5. Store the next node as the new head.
+6. Disconnect the list at that position.
+7. Connect the last node to the original head.
+8. Return the new head.
+
+## Time Complexity
+
+**O(n)**
+
+## Space Complexity
+
+**O(1)**
+
+## Code
+
+```cpp
+class Solution {
+public:
+    ListNode* rotateRight(ListNode* head, int k) {
+
+        if (head == NULL || head->next == NULL) {
+            return head;
+        }
+
+        ListNode* temp = head;
+        int size = 0;
+        int l = 1;
+
+        while (temp != NULL) {
+            size++;
+            temp = temp->next;
+        }
+
+        k = k % size;
+
+        if (k == 0) {
+            return head;
+        }
+
+        temp = head;
+
+        while (l < size - k) {
+            temp = temp->next;
+            l++;
+        }
+
+        ListNode* prev = temp;
+        ListNode* new_head = temp->next;
+        ListNode* a = temp->next;
+
+        while (a->next != NULL) {
+            a = a->next;
+        }
+
+        prev->next = NULL;
+        a->next = head;
+
+        head = new_head;
+
+        return head;
+    }
+};
+```
+
+## Mistakes & Learning
+
+* Initially handled `k % size` only when `k > size`. This fails when `k == size` or `k` is a multiple of `size`.
+* Learned to normalize `k` using `k = k % size` directly.
+* Learned to handle the `k == 0` case after normalization.
+* Main linked-list rotation approach was correct.
+
+## Optimization
+
+The solution uses **O(1) extra space** and **O(n) time**.
