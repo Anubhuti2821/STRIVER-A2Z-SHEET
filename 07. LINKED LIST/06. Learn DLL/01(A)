@@ -1,0 +1,16 @@
+stack<int> st;
+
+temp = head;
+
+while(temp != NULL) {
+    st.push(temp->val);
+    temp = temp->next;
+}
+
+temp = head;
+
+while(temp != NULL) {
+    temp->val = st.top();
+    st.pop();
+    temp = temp->next;
+}
