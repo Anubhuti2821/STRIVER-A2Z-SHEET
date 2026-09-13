@@ -1,0 +1,67 @@
+/*
+Problem: Find Pairs With Given Sum in a Sorted Doubly Linked List
+
+Approach:
+- Use two pointers:
+  - start = head
+  - end = last node
+- If sum == target:
+  - Store the pair.
+  - Move both pointers.
+- If sum > target:
+  - Move end backward using prev.
+- If sum < target:
+  - Move start forward using next.
+- Since the list is sorted, this works like the two-pointer
+  approach used in arrays.
+
+Time Complexity: O(n)
+Space Complexity: O(1)
+Output Space: O(k), where k is the number of pairs.
+
+Mistakes & Learning:
+- push_back() needs a single vector element:
+  a.push_back({start->val, end->val});
+- Linked-list pointers cannot be compared using >= like array indices.
+- Since the list is sorted with distinct values, comparing
+  end->val and start->val can be used as the stopping condition.
+- DLL allows moving from both ends because it has next and prev.
+- start gives the smaller value and end gives the larger value,
+  so the pair should be stored as [start, end].
+- Handle head == NULL before accessing head->next.
+*/
+
+class Solution {
+public:
+    vector<vector<int>> findPairsWithGivenSum(ListNode* head, int target) {
+        vector<vector<int>> a;
+
+        if(head == NULL)
+            return a;
+
+        ListNode* temp = head;
+
+        while(temp->next != NULL) {
+            temp = temp->next;
+        }
+
+        ListNode* end = temp;
+        ListNode* start = head;
+
+        while(end->val >= start->val) {
+            if(end->val + start->val == target) {
+                a.push_back({start->val, end->val});
+                end = end->prev;
+                start = start->next;
+            }
+            else if(end->val + start->val > target) {
+                end = end->prev;
+            }
+            else {
+                start = start->next;
+            }
+        }
+
+        return a;
+    }
+};
