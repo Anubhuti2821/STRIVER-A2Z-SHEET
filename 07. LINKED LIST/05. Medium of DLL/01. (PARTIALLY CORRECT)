@@ -1,0 +1,88 @@
+# Delete All Occurrences in a Doubly Linked List
+
+### Problem
+
+Given a doubly linked list and a target value, delete all nodes whose value is equal to the target.
+
+### Approach
+
+* First handle all target nodes present at the **head**.
+* For the remaining list, traverse using `temp`.
+* Check `temp->next` because the current node is used as the previous node for deletion.
+* When the next node contains the target:
+
+  * Connect `temp` with `D->next`.
+  * Update the `prev` pointer of the next node.
+  * Disconnect and delete `D`.
+* If no deletion happens, move `temp` forward.
+* Keeping `temp` at the same node after deletion helps handle **consecutive target nodes**.
+
+### Time Complexity
+
+**O(n)** — Every node is visited at most a constant number of times.
+
+### Space Complexity
+
+**O(1)** — No extra data structure is used.
+
+### Code
+
+```cpp
+class Solution {
+public:
+    ListNode* deleteAllOccurrences(ListNode* head, int target) {
+        ListNode* temp = head;
+
+        while(head != NULL && head->val == target) {
+            ListNode* D = head;
+            head = head->next;
+
+            if(head != NULL) {
+                head->prev = NULL;
+            }
+
+            delete D;
+        }
+
+        temp = head;
+
+        while(temp != NULL) {
+            if(temp->next != NULL && temp->next->val == target) {
+                ListNode* D = temp->next;
+                temp->next = D->next;
+
+                ListNode* N = D->next;
+
+                if(N != NULL) {
+                    N->prev = temp;
+                }
+
+                D->next = NULL;
+                D->prev = NULL;
+                delete D;
+            }
+            else {
+                temp = temp->next;
+            }
+        }
+
+        return head;
+    }
+};
+```
+
+### Mistakes & Learning
+
+* Compared a `ListNode*` with an `int`:
+  `temp->next == target` ❌ → `temp->next->val == target` ✅
+* Forgot that the **head itself can be the target**.
+* Forgot to handle `D->next == NULL` for the last node.
+* Used `delete d` instead of `delete D` — C++ is case-sensitive.
+* After deleting a node, moving `temp` immediately can skip **consecutive target nodes**.
+* Initially used a singly linked list style of thinking. In a DLL, `prev` is directly available, so deletion can also be done by reconnecting both neighboring nodes.
+
+### Limitation
+
+This approach works correctly, but the deletion logic is slightly more complicated because it handles **head nodes separately** and then checks `temp->next`.
+
+Since this is a **doubly linked list**, a cleaner approach is to traverse the current node and directly delete it using its `prev` and `next` pointers. This can reduce the special-case handling.
