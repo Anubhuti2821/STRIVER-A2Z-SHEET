@@ -1,0 +1,152 @@
+# LeetCode 138 — Copy List with Random Pointer
+
+## Problem Statement
+
+Given a linked list where each node has `next` and `random` pointers, create a **deep copy** of the list.
+
+Each copied node should have:
+
+* Same `val`
+* Correct `next` pointer
+* Correct `random` pointer
+
+## Approach
+
+Use an `unordered_map` to store:
+
+```text
+Original Node → Copied Node
+```
+
+### Step 1 — Copy the basic linked list
+
+* Create the copied head.
+* Store `head → newhead` in the map.
+* Traverse the remaining original nodes.
+* Create their copies.
+* Connect them using `next`.
+* Store every original node and its copy in the map.
+
+### Step 2 — Copy random pointers
+
+Traverse both lists together.
+
+For every original node:
+
+```cpp
+ntemp->random = u[temp->random];
+```
+
+The map directly gives the corresponding copied random node.
+
+## Time Complexity
+
+**O(n)**
+
+Two traversals of the linked list.
+
+## Space Complexity
+
+**O(n)**
+
+The unordered map stores `n` original-to-copy mappings.
+
+## Code
+
+```cpp
+class Solution {
+public:
+    Node* copyRandomList(Node* head) {
+        if(head == NULL){
+            return NULL;
+        }
+
+        unordered_map<Node*, Node*> u;
+
+        Node* newhead = new Node(head->val);
+        u[head] = newhead;
+
+        Node* temp = head->next;
+        Node* ntemp = newhead;
+
+        while(temp != NULL){
+
+            Node* copy = new Node(temp->val);
+            u[temp] = copy;
+
+            ntemp->next = copy;
+
+            temp = temp->next;
+            ntemp = ntemp->next;
+
+        }
+
+        temp = head;
+        ntemp = newhead;
+
+        while(temp != NULL){
+
+            ntemp->random = u[temp->random];
+
+            ntemp = ntemp->next;
+            temp = temp->next;
+        }
+
+        return newhead;
+    }
+};
+```
+
+## Mistakes & Learning
+
+### Mistake 1 — Variable Declaration
+
+Initially:
+
+```cpp
+Node* copy->next = new Node(...);
+```
+
+was incorrect.
+
+Correct:
+
+```cpp
+copy->next = new Node(...);
+```
+
+`copy->next` is an existing pointer, so we assign to it.
+
+### Mistake 2 — Scope
+
+A variable declared inside `{ }` can only be used inside that scope.
+
+### Mistake 3 — Traversal Order
+
+Initially `temp` was moved to `temp->next` before creating the copy, which could cause `temp` to become `NULL` and then `temp->val` to be accessed.
+
+### Mistake 4 — Map Mapping
+
+Initially `u[head] = newhead` was inside the loop, so the same mapping was repeatedly inserted.
+
+Correct:
+
+```cpp
+u[head] = newhead;
+```
+
+is done once before the loop.
+
+## Learning
+
+The main idea is:
+
+```text
+Original Node
+     ↓
+ unordered_map
+     ↓
+Copied Node
+```
+
+Once every original node has a corresponding copied node in the map, the `random` pointer becomes easy to connect.
