@@ -1,0 +1,10 @@
+ListNode* temp = head;
+ListNode* newHead = NULL;
+
+while(temp != NULL) {
+    newHead = temp;
+    swap(temp->next, temp->prev);
+    temp = temp->prev;
+}
+
+return newHead;
