@@ -1,0 +1,62 @@
+/*
+Problem: Delete All Occurrences of a Given Key in a Doubly Linked List
+LeetCode/GFG: Delete All Occurrences of a Given Key
+
+Approach:
+1. Delete all target nodes from the head.
+2. Traverse the remaining list.
+3. If temp->next contains the target:
+   - Connect temp with the next node.
+   - Update the next node's prev pointer.
+   - Delete the target node.
+4. Do not move temp after deletion to handle consecutive target nodes.
+
+Time Complexity: O(n)
+Space Complexity: O(1)
+
+Limitation:
+The approach handles head deletion separately and checks temp->next.
+A cleaner DLL approach can directly delete temp using both prev and next pointers.
+*/
+
+class Solution {
+public:
+    ListNode* deleteAllOccurrences(ListNode* head, int target) {
+        ListNode* temp = head;
+
+        while (head != NULL && head->val == target) {
+            ListNode* D = head;
+            head = head->next;
+
+            if (head != NULL) {
+                head->prev = NULL;
+            }
+
+            delete D;
+        }
+
+        temp = head;
+
+        while (temp != NULL) {
+            if (temp->next != NULL && temp->next->val == target) {
+                ListNode* D = temp->next;
+                temp->next = D->next;
+
+                ListNode* N = D->next;
+
+                if (N != NULL) {
+                    N->prev = temp;
+                }
+
+                D->next = NULL;
+                D->prev = NULL;
+                delete D;
+            }
+            else {
+                temp = temp->next;
+            }
+        }
+
+        return head;
+    }
+};
