@@ -1,0 +1,85 @@
+# Remove Duplicates from Sorted Doubly Linked List
+
+### Problem Statement
+
+Given the head of a **sorted doubly linked list**, remove all duplicate nodes so that each value appears only once.
+
+### LeetCode Question No.
+
+**N/A** — Platform-specific problem
+
+### Approach
+
+* Start from the head using `temp`.
+* Compare `temp->val` with `temp->next->val`.
+* If both values are equal, `temp->next` is a duplicate.
+* Store the duplicate node in `d`.
+* Connect `temp` directly to `d->next`.
+* If `d->next` exists, update its `prev` pointer to `temp`.
+* Delete `d`.
+* Do **not** move `temp` after deletion because there may be more duplicates.
+* Otherwise, move `temp` to the next node.
+
+### Time Complexity
+
+**O(n)** — Each node is visited at most a constant number of times.
+
+### Space Complexity
+
+**O(1)** — No extra data structure is used.
+
+### Code
+
+```cpp
+class Solution {
+public:
+    ListNode* removeDuplicates(ListNode* head) {
+        if (head == NULL) return head;
+
+        ListNode* temp = head;
+
+        while (temp != NULL && temp->next != NULL) {
+
+            if (temp->val == temp->next->val) {
+                ListNode* d = temp->next;
+
+                temp->next = d->next;
+
+                if (d->next != NULL) {
+                    d->next->prev = temp;
+                }
+
+                delete d;
+            }
+            else {
+                temp = temp->next;
+            }
+        }
+
+        return head;
+    }
+};
+```
+
+### Mistakes in My First Attempt
+
+1. Used `temp->prev` without checking whether `temp` was the head.
+2. Used `temp->value` instead of `temp->val`.
+3. Deleted `temp` without saving the next node.
+4. Accessed `temp->next->prev` without checking if `temp->next` was `NULL`.
+5. Missed a semicolon after `d->prev = NULL`.
+6. Moved `temp` incorrectly after deleting a duplicate.
+
+### Learning
+
+* In a DLL, deleting a node requires updating **both `next` and `prev` links**.
+* Before deleting a node, make sure all required pointers are saved/updated.
+* If consecutive duplicates are possible, don't move the pointer immediately after deleting one.
+* For a sorted list, comparing adjacent nodes is enough to remove duplicates.
+
+### Optimization
+
+The approach is already optimal:
+
+* **Time:** O(n)
+* **Space:** O(1)
