@@ -1,0 +1,99 @@
+## Problem Statement
+
+Given an array of integers `nums`, sort the array in ascending order and return it.
+
+**LeetCode Question No.:** 912 — Sort an Array
+
+## Approach
+
+Use **Merge Sort**.
+
+1. Find the middle index of the current range.
+2. Recursively sort the left half.
+3. Recursively sort the right half.
+4. Merge the two sorted halves using a temporary vector.
+5. Copy the merged elements back into the original array.
+
+The recursion stops when `start >= end`, because a subarray with zero or one element is already sorted.
+
+## Time Complexity
+
+`O(n log n)`
+
+* The array is divided into `log n` levels.
+* Each level takes `O(n)` time for merging.
+
+## Space Complexity
+
+`O(n)` for the temporary vector used during merging, plus `O(log n)` recursion stack.
+
+## Code
+
+```cpp
+class Solution {
+public:
+    vector<int> sortArray(vector<int>& nums) {
+        sort(nums, 0, nums.size() - 1);
+        return nums;
+    }
+
+    void sort(vector<int>& nums, int start, int end) {
+        if (start < end) {
+            int mid = start + (end - start) / 2;
+
+            sort(nums, start, mid);
+            sort(nums, mid + 1, end);
+
+            merge(nums, start, mid, end);
+        }
+    }
+
+    void merge(vector<int>& nums, int start, int mid, int end) {
+        vector<int> temp;
+
+        int i = start;
+        int j = mid + 1;
+
+        while (i <= mid && j <= end) {
+            if (nums[i] <= nums[j]) {
+                temp.push_back(nums[i]);
+                i++;
+            } else {
+                temp.push_back(nums[j]);
+                j++;
+            }
+        }
+
+        while (i <= mid) {
+            temp.push_back(nums[i]);
+            i++;
+        }
+
+        while (j <= end) {
+            temp.push_back(nums[j]);
+            j++;
+        }
+
+        for (int i = 0; i < temp.size(); i++) {
+            nums[i + start] = temp[i];
+        }
+    }
+};
+```
+
+## Mistakes
+
+* Forgot to `return nums` from `sortArray()`.
+* Used `st` instead of `start`.
+* Used `nums.size() - 1` instead of `end` in the recursive right-half call.
+* Missed `;` after `int j = mid + 1`.
+* Used `arr` instead of `nums`.
+* Used `vector<int>` as the return type for functions that modify `nums` directly; changed them to `void`.
+
+## Learning
+
+* `start` and `end` represent the boundaries of the **current recursive subarray**.
+* Recursive calls receive new boundary values; `end` does not change automatically.
+* Merge Sort follows: **Divide → Recursively Sort → Merge**.
+* The `i + start` index is important because `temp` contains the sorted result for only the current subarray, not necessarily the whole array.
+* `vector<int>& nums` avoids copying the entire vector during recursive calls.
