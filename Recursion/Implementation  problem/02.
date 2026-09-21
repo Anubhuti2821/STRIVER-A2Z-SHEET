@@ -1,0 +1,109 @@
+# Generate Parentheses
+
+### Problem Statement
+
+Given an integer `n`, generate all combinations of `n` pairs of balanced parentheses.
+
+A valid combination must:
+
+* Contain exactly `n` opening brackets `(`.
+* Contain exactly `n` closing brackets `)`.
+* Never have more `)` than `(` at any point.
+
+### LeetCode Question No.
+
+**LeetCode 22 — Generate Parentheses**
+
+### Approach
+
+Use **recursion + backtracking**.
+
+Maintain:
+
+* `open` → number of `(` used.
+* `close` → number of `)` used.
+* `s` → current parentheses string.
+
+Rules:
+
+1. If `open < n`, we can add `(`.
+2. If `close < open`, we can add `)`.
+3. When `open == n && close == n`, the string is complete, so store it in `ans` and return.
+
+The two choices are written as **separate `if` statements**, not `if-else`, because both branches may be possible from the same state.
+
+### Time Complexity
+
+**O(4ⁿ / √n)**
+
+There are `Cₙ` valid combinations, where `Cₙ` is the `n`th Catalan number. Each generated string has length `2n`.
+
+### Space Complexity
+
+**O(n)** auxiliary recursion stack.
+
+Additionally, the output itself requires **O(Cₙ × n)** space.
+
+### Code
+
+```cpp
+class Solution {
+public:
+    vector<string> ans;
+
+    vector<string> generateParenthesis(int n) {
+        helper("", n, 0, 0);
+        return ans;
+    }
+
+    void helper(string s, int n, int open, int close) {
+
+        if (open == n && close == n) {
+            ans.push_back(s);
+            return;
+        }
+
+        if (open < n) {
+            helper(s + '(', n, open + 1, close);
+        }
+
+        if (close < open) {
+            helper(s + ')', n, open, close + 1);
+        }
+    }
+};
+```
+
+### Mistakes
+
+* Initially used `else if` instead of a second `if`.
+
+  * This would prevent exploring both `(` and `)` branches when both are valid.
+* Initially wrote `int n` inside the recursive function call.
+
+  * `n` is already a parameter, so only `n` is passed.
+* Initially had no braces/body after the base condition.
+
+  * The complete string must be added to `ans` and then the recursive call must return.
+
+### Learning
+
+* `open < n` controls whether another `(` can be added.
+* `close < open` prevents invalid prefixes such as `())`.
+* `return` in the base case returns from the **current recursive call**, not the entire recursion.
+* When a recursive call finishes, control automatically returns to the caller.
+* Backtracking happens when one branch finishes and the previous call continues to explore its other possible branch.
+* In this version, no explicit `pop_back()` is needed because `s + '('` and `s + ')'` create new strings rather than modifying the existing string.
+
+### Optimization / Key Insight
+
+The algorithm never generates invalid prefixes.
+
+Instead of generating every possible bracket string and checking whether it is valid afterward, it only makes choices that can still lead to a valid answer:
+
+```text
+open < n       → add '('
+close < open   → add ')'
+```
+
+This pruning is what makes the recursive solution efficient.
