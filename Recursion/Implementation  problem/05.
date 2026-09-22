@@ -1,0 +1,199 @@
+# LeetCode 1922 — Count Good Numbers
+
+## Problem Statement
+
+Count the number of good digit strings of length `n`.
+
+* At even indices → 5 choices: `0, 2, 4, 6, 8`
+* At odd indices → 4 choices: `2, 3, 5, 7`
+* Return the answer modulo `10^9 + 7`.
+
+## Approach
+
+Initially, I solved the problem by recursively going through every index.
+
+For every index:
+
+* even index → multiply answer by `5`
+* odd index → multiply answer by `4`
+
+This approach was logically correct, but it gave **TLE** because it takes `O(n)` time.
+
+Then I observed the pattern:
+
+```text
+5 × 4 × 5 × 4 × 5 × ...
+```
+
+So instead of processing every index, I converted it into:
+
+```text
+5^evenPositions × 4^oddPositions
+```
+
+Number of positions:
+
+```text
+evenPositions = (n + 1) / 2
+oddPositions = n / 2
+```
+
+Since `n` can be extremely large, normal multiplication `n` times is still too slow.
+
+Therefore, I used **binary exponentiation** to calculate the powers in `O(log n)` time.
+
+### Binary Exponentiation Idea
+
+Instead of calculating:
+
+```text
+5 × 5 × 5 × 5 × ...
+```
+
+we repeatedly:
+
+* if exponent is odd → take the current `base` into `ans`
+* square the `base`
+* divide the exponent by `2`
+
+The exponent therefore becomes:
+
+```text
+n → n/2 → n/4 → n/8 → ...
+```
+
+which makes the complexity `O(log n)`.
+
+## Time Complexity
+
+`O(log n)`
+
+## Space Complexity
+
+`O(1)`
+
+## Code
+
+```cpp
+class Solution {
+public:
+    long long MOD = 1000000007;
+
+    long long power(long long base, long long exp) {
+        long long ans = 1;
+
+        while (exp > 0) {
+
+            if (exp % 2 == 1) {
+                ans = (ans * base) % MOD;
+            }
+
+            base = (base * base) % MOD;
+            exp = exp / 2;
+        }
+
+        return ans;
+    }
+
+    int countGoodNumbers(long long n) {
+        long long even = (n + 1) / 2;
+        long long odd = n / 2;
+
+        return (power(5, even) * power(4, odd)) % MOD;
+    }
+};
+```
+
+## My Doubts
+
+### 1. Why not simply use recursion?
+
+My first recursive solution went through every index:
+
+```text
+0 → 1 → 2 → 3 → ... → n
+```
+
+This was `O(n)`, so it gave TLE.
+
+I learned that **recursion itself is not the problem**. The number of recursive calls matters.
+
+A recursive solution that reduces the exponent by half can be `O(log n)`, but I chose the iterative version here.
+
+### 2. Why are we using `5^even × 4^odd`?
+
+Because every even position independently has 5 choices and every odd position independently has 4 choices.
+
+For example, for `n = 5`:
+
+```text
+5 × 4 × 5 × 4 × 5
+= 5^3 × 4^2
+```
+
+### 3. Why this condition?
+
+```cpp
+if (exp % 2 == 1)
+```
+
+When the exponent is odd, one `base` remains after dividing the exponent by `2`.
+
+For example:
+
+```text
+5^5 = 5^2 × 5^2 × 5
+```
+
+That extra `5` is multiplied into `ans`.
+
+### 4. Why square the base?
+
+```cpp
+base = (base * base) % MOD;
+```
+
+Because after halving the exponent, we need the corresponding squared power.
+
+For example:
+
+```text
+5^8
+→ 5^4
+→ 5^2
+→ 5^1
+```
+
+Squaring the base allows us to reach these powers without multiplying `5` eight times.
+
+### 5. Why divide `exp` by 2?
+
+```cpp
+exp = exp / 2;
+```
+
+This is what reduces the number of operations from `O(n)` to `O(log n)`.
+
+## Mistakes
+
+* Initially processed every index recursively → `O(n)` → TLE.
+* Initially thought recursion itself was the issue.
+* Took time to understand why `5^even × 4^odd` is possible.
+* Didn't initially understand why `if(exp % 2 == 1)` is required.
+* Didn't initially understand why the base is squared and exponent is halved.
+* Learned that `MOD` is applied during multiplication to keep values manageable.
+* Learned that intermediate multiplication should use `long long`.
+
+## Learning
+
+* Correct logic is not enough; **time complexity matters**.
+* Independent choices can often be converted into powers.
+* Very large powers should not be calculated by multiplying repeatedly.
+* Binary exponentiation reduces power calculation from `O(n)` to `O(log n)`.
+* In binary exponentiation:
+
+  * odd exponent → multiply `ans` by `base`
+  * square `base`
+  * halve `exp`
+* Recursion is not automatically slow; the way the problem size decreases determines the complexity.
+* I learned to look for a mathematical pattern before writing a brute-force/linear recursion.
