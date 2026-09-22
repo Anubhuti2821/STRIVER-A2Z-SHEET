@@ -1,0 +1,198 @@
+# Count Good Numbers
+
+## Problem Statement
+
+Given an integer `n`, count the number of good digit strings of length `n`.
+
+A good number follows these rules:
+
+* At **even indices**, only even digits can be placed: `0, 2, 4, 6, 8` → **5 choices**
+* At **odd indices**, only prime digits can be placed: `2, 3, 5, 7` → **4 choices**
+
+Return the answer modulo `10^9 + 7`.
+
+---
+
+## LeetCode Question No.
+
+**LeetCode 1922 — Count Good Numbers**
+
+---
+
+## Approach
+
+I used recursion to move through every index of the number.
+
+At every index:
+
+* If the index is even → there are **5 choices**
+* If the index is odd → there are **4 choices**
+
+I maintain a `count` variable and multiply it by the number of valid choices at every index.
+
+For example, when `n = 4`:
+
+```text
+index:    0   1   2   3
+choices:  5   4   5   4
+```
+
+So:
+
+```text
+count = 5 × 4 × 5 × 4
+```
+
+I use modulo `10^9 + 7` after every multiplication to keep the value manageable.
+
+The recursion stops when:
+
+```cpp
+idx == n
+```
+
+because all `n` positions have been processed.
+
+---
+
+## Time Complexity
+
+**O(n)**
+
+The recursive function is called once for every index.
+
+---
+
+## Space Complexity
+
+**O(n)**
+
+Because recursion creates `n` stack frames.
+
+---
+
+## Code
+
+```cpp
+class Solution { 
+public: 
+    long long count = 1; 
+    long long MOD = 1000000007; 
+ 
+    int countGoodNumbers(long long n) { 
+        helper(n, 0); 
+        return count; 
+    } 
+ 
+    void helper(long long n, long long idx) { 
+        if (idx == n) { 
+            return; 
+        } 
+        else if (idx % 2 == 0) { 
+            count = (count * 5) % MOD; 
+            helper(n, idx + 1); 
+        } 
+        else { 
+            count = (count * 4) % MOD; 
+            helper(n, idx + 1); 
+        } 
+    } 
+};
+```
+
+---
+
+## Mistakes
+
+### 1. Initially used `n` instead of `idx`
+
+I initially tried to determine whether the position was even or odd using `n`.
+
+But `n` represents the total number of positions, while `idx` represents the **current position**.
+
+So the correct check is:
+
+```cpp
+idx % 2
+```
+
+### 2. Incorrect base case
+
+Initially I used:
+
+```cpp
+if (idx == n - 1)
+```
+
+This stopped recursion before processing the last index.
+
+I changed it to:
+
+```cpp
+if (idx == n)
+```
+
+Now indices `0` through `n - 1` are all processed.
+
+### 3. Integer overflow
+
+Initially `count` was an `int`.
+
+Since the answer is repeatedly multiplied, I changed it to:
+
+```cpp
+long long count = 1;
+```
+
+and applied modulo after each multiplication.
+
+### 4. TLE
+
+Although the recursive logic is correct, this approach gives **O(n)** time complexity.
+
+For very large `n`, processing every index individually is too slow, so the solution gets **TLE**.
+
+---
+
+## Learning
+
+* Use an `idx` variable when recursion needs to track the current position.
+* Even and odd indices can be handled separately using:
+
+  ```cpp
+  idx % 2
+  ```
+* Always check whether the base case processes the final element or stops before it.
+* Correct logic does not necessarily mean an accepted solution.
+* **Time complexity matters as much as correctness.**
+* This problem has a mathematical pattern:
+
+  ```text
+  5 × 4 × 5 × 4 × ...
+  ```
+
+  which can later be optimized using exponentiation.
+
+---
+
+## Optimization
+
+The recursive approach processes every position:
+
+```text
+O(n)
+```
+
+The pattern can instead be written as:
+
+```text
+5^(number of even positions) × 4^(number of odd positions)
+```
+
+Then **binary exponentiation** can reduce the time complexity to:
+
+```text
+O(log n)
+```
+
+The recursive solution above is therefore useful for understanding the pattern, but not sufficient for the full constraints.
