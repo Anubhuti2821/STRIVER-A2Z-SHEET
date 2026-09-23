@@ -1,0 +1,67 @@
+# LeetCode 344 — Reverse String
+
+## Problem Statement
+
+Reverse a string in-place using recursion.
+
+## LeetCode
+
+**Question 344 — Reverse String**
+
+## Approach
+
+* Use two pointers: `start` and `end`.
+* Swap the characters at `start` and `end`.
+* Move `start` forward and `end` backward.
+* Recursively repeat until `start >= end`.
+* Since the vector is passed by reference, changes are made in-place.
+
+## Code
+
+```cpp
+class Solution {
+public:
+    void reverseString(vector<char>& s) {
+        helper(s, 0, s.size() - 1);
+        return;
+    }
+
+    void helper(vector<char>& s, int start, int end) {
+        if (start >= end) {
+            return;
+        }
+
+        swap(s[start], s[end]);
+
+        start++;
+        end--;
+
+        helper(s, start, end);
+    }
+};
+```
+
+## Time Complexity
+
+**O(n)**
+
+Each character is involved in a swap at most once.
+
+## Space Complexity
+
+**O(n)**
+
+Due to the recursion call stack.
+
+## Mistakes
+
+* Initially used `swap(start, end)` instead of `swap(s[start], s[end])`.
+* Initially used `end++`, but `end` needs to move toward the beginning, so it should be `end--`.
+* Initially considered printing the string, but LeetCode requires modifying the vector in-place; no printing is needed.
+
+## Learning
+
+* Two-pointer recursion: `start++`, `end--`.
+* Base case: `start >= end`.
+* In-place modification using a reference vector.
+* For recursion, first perform the current swap, then move both pointers and recurse.
