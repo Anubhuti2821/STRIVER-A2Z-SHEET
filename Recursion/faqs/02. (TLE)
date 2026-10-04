@@ -1,0 +1,153 @@
+## Problem Statement
+
+Given a collection of candidate numbers and a target number, find all unique combinations where the chosen numbers sum to the target.
+
+Each number in `candidates` may be used **at most once**.
+
+The solution must not contain duplicate combinations.
+
+## LeetCode Question
+
+**LeetCode 40 — Combination Sum II**
+https://leetcode.com/problems/combination-sum-ii/
+
+## Approach
+
+I initially used a **choose / skip recursion** approach.
+
+* At every index, I either:
+
+  * selected `candidates[i]`, or
+  * skipped it.
+* I used `i + 1` after selecting an element, so each element could be used only once.
+* Whenever `sum == target`, I copied the current combination, sorted it, and inserted it into a `set<vector<int>>`.
+* The set automatically removed duplicate combinations.
+
+### Important Backtracking Detail
+
+I must **not sort the original `pair` directly** at the base case because `pair` is the same vector used during backtracking.
+
+Instead:
+
+```cpp
+vector<int> temp = pair;
+sort(temp.begin(), temp.end());
+s.insert(temp);
+```
+
+This keeps the original `pair` unchanged for correct `pop_back()` operations.
+
+## Time Complexity
+
+Worst case is **exponential**, because the recursion explores many subsets.
+
+Additionally, sorting each valid combination and inserting into a set adds extra overhead.
+
+This approach can therefore result in **TLE** for large test cases with many duplicate values.
+
+## Space Complexity
+
+* Recursion depth: **O(n)**
+* Current combination: **O(n)**
+* Set storing unique combinations: potentially **O(2ⁿ · n)**
+
+So the overall auxiliary/output-related space can be exponential.
+
+## Code
+
+```cpp
+class Solution {
+public:
+    vector<vector<int>> ans;
+    vector<int> pair;
+    set<vector<int>> s;
+
+    vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
+
+        ans.clear();
+        pair.clear();
+        s.clear();
+
+        helper(candidates, target, 0, 0);
+
+        for(auto v : s) {
+            ans.push_back(v);
+        }
+
+        return ans;
+    }
+
+    void helper(vector<int>& candidates, int target, int i, int sum) {
+
+        if(sum == target) {
+            vector<int> temp = pair;
+            sort(temp.begin(), temp.end());
+            s.insert(temp);
+            return;
+        }
+
+        if(i == candidates.size()) {
+            return;
+        }
+
+        if(sum + candidates[i] <= target) {
+            pair.push_back(candidates[i]);
+
+            helper(candidates, target, i + 1,
+                   sum + candidates[i]);
+
+            pair.pop_back();
+        }
+
+        helper(candidates, target, i + 1, sum);
+    }
+};
+```
+
+## Mistakes
+
+1. Initially used:
+
+```cpp
+unordered_set<vector<int>> s;
+```
+
+`unordered_set` does not have a default hash for `vector<int>`.
+
+2. Initially sorted `pair` directly:
+
+```cpp
+sort(pair.begin(), pair.end());
+```
+
+This modified the actual backtracking vector and could make `pop_back()` remove the wrong element.
+
+3. The major issue is using a `set` to remove duplicates **after generating them**.
+
+This leads to unnecessary recursion and eventually **TLE**.
+
+## Learning
+
+* `i + 1` ensures that each array element is used at most once.
+* `set<vector<int>>` can remove duplicate combinations.
+* Never modify the actual backtracking state just to prepare the output.
+* Duplicate handling should ideally happen **during recursion**, not after generating all possible combinations.
+* For Combination Sum II, sorting the candidates and skipping duplicate choices during recursion gives a much more efficient solution.
+
+## Optimization
+
+The next improvement is to avoid generating duplicate branches in the first place.
+
+Instead of:
+
+```text
+Generate duplicates → store in set → remove duplicates
+```
+
+we want:
+
+```text
+Sort candidates → skip duplicate choices → generate only unique combinations
+```
+
+This leads to the standard **for-loop + duplicate-skipping** backtracking solution.
