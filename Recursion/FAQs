@@ -1,0 +1,175 @@
+# Combination Sum
+
+## Problem Statement
+
+Given an array `candidates` of distinct positive integers and a target integer `target`, return all unique combinations of candidates where the chosen numbers sum to `target`.
+
+A candidate can be chosen **unlimited times**.
+
+## LeetCode Question No.
+
+**LeetCode 39 — Combination Sum**
+
+## Approach
+
+Use **backtracking with recursion**.
+
+At every index, there are two choices:
+
+1. **Take** `candidates[i]`
+
+   * Add it to `sol`.
+   * Keep the same index `i` because the same element can be used again.
+   * Increase `sum`.
+2. **Skip** `candidates[i]`
+
+   * Remove the last selected element using `pop_back()`.
+   * Move to `i + 1`.
+
+### Base Cases
+
+* If `sum == target`, store the current combination.
+* If `i == candidates.size()`, stop exploring.
+
+### Important Backtracking Learning
+
+`push_back()` and `pop_back()` must belong to the same branch.
+
+```cpp
+sol.push_back(candidates[i]);
+helper(...);
+sol.pop_back();
+```
+
+`pop_back()` removes the last element, but it does **not know which recursive call added it**. Therefore, if `push_back()` is conditional, the corresponding `pop_back()` should remain inside that same condition.
+
+## Time Complexity
+
+Approximately **O(2^N)** recursive states, with additional cost for storing/copying valid combinations.
+
+The exact complexity depends on the target and candidate values because a candidate can be selected multiple times.
+
+## Space Complexity
+
+**O(T)** recursion depth in the worst case, where `T` depends on the target and the smallest candidate.
+
+Additionally, space is required for storing the answer and the current combination.
+
+## Code
+
+```cpp
+class Solution {
+public:
+    vector<vector<int>> ans;
+    vector<int> sol;
+
+    vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
+        helper(candidates, target, 0, 0);
+        return ans;
+    }
+
+    void helper(vector<int>& candidates, int target, int i, int sum) {
+
+        if(sum == target) {
+            ans.push_back(sol);
+            return;
+        }
+
+        if(i == candidates.size()) {
+            return;
+        }
+
+        if(sum + candidates[i] <= target) {
+            sum = sum + candidates[i];
+
+            sol.push_back(candidates[i]);
+
+            helper(candidates, target, i, sum);
+
+            sol.pop_back();
+            sum = sum - candidates[i];
+        }
+
+        helper(candidates, target, i + 1, sum);
+    }
+};
+```
+
+## Mistakes / Debugging
+
+### Mistake 1 — Wrong order of base cases
+
+Initially:
+
+```cpp
+if(i == candidates.size())
+    return;
+
+if(sum == target)
+    ans.push_back(sol);
+```
+
+This can miss a valid combination when the target is reached at the end of the candidate array.
+
+Correct:
+
+```cpp
+if(sum == target) {
+    ans.push_back(sol);
+    return;
+}
+
+if(i == candidates.size())
+    return;
+```
+
+### Mistake 2 — Not restoring `sum`
+
+After taking a candidate:
+
+```cpp
+sum = sum + candidates[i];
+```
+
+the original `sum` must be restored before exploring the skip branch:
+
+```cpp
+sum = sum - candidates[i];
+```
+
+Otherwise, the skip branch incorrectly assumes that the candidate was taken.
+
+### Mistake 3 — Putting `pop_back()` outside the condition
+
+Wrong:
+
+```cpp
+if(condition) {
+    sol.push_back(x);
+}
+
+sol.pop_back();
+```
+
+If the condition is false, nothing was added, but `pop_back()` still removes the previous element.
+
+Correct:
+
+```cpp
+if(condition) {
+    sol.push_back(x);
+
+    helper(...);
+
+    sol.pop_back();
+}
+```
+
+## Learning
+
+* **Take → same index** because repetition is allowed.
+* **Skip → `i + 1`** because we move to the next candidate.
+* Every `push_back()` should have a corresponding `pop_back()` after recursion.
+* Backtracking means: **choose → explore → undo**.
+* `sum` also needs to be restored when it is modified directly.
+* `pop_back()` always removes the last element, but it does not know which recursion level inserted that element.
