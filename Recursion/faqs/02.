@@ -1,0 +1,41 @@
+class Solution {
+public:
+    vector<vector<int>> ans;
+    vector<int> pair;
+
+    vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
+        sort(candidates.begin(), candidates.end());
+
+        helper(candidates, target, 0, 0);
+
+        return ans;
+    }
+
+    void helper(vector<int>& candidates, int target, int i, int sum) {
+
+        if(sum == target) {
+            ans.push_back(pair);
+            return;
+        }
+
+        for(int j = i; j < candidates.size(); j++) {
+
+            // Skip duplicate choices at the same recursion level
+            if(j > i && candidates[j] == candidates[j - 1]) {
+                continue;
+            }
+
+            // Since array is sorted, no later element can fit
+            if(sum + candidates[j] > target) {
+                break;
+            }
+
+            pair.push_back(candidates[j]);
+
+            // j + 1 because each element can be used only once
+            helper(candidates, target, j + 1, sum + candidates[j]);
+
+            pair.pop_back();
+        }
+    }
+};
