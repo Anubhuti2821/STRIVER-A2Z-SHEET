@@ -1,0 +1,93 @@
+# Word Search — LeetCode 79
+
+**Topic:** Backtracking, DFS, Matrix
+
+### Problem
+
+Given an `m × n` board of characters and a word, determine whether the word exists in the grid. Characters must be adjacent horizontally or vertically, and the same cell cannot be used more than once in a path.
+
+### Approach
+
+1. Traverse the board and find cells matching the first character of the word.
+2. Use DFS to explore four directions: up, down, left, and right.
+3. If the current character does not match, return `false`.
+4. Mark the current cell as visited by temporarily replacing it with `'.'`.
+5. Recursively search for the next character using `idx + 1`.
+6. Restore the original character after exploring all directions.
+7. If `idx == word.size()`, the entire word has been found.
+
+### Code (C++)
+
+```cpp
+class Solution {
+public:
+    bool dfs(vector<vector<char>>& board, string& word,
+             int i, int j, int idx) {
+        int n = board.size();
+        int m = board[0].size();
+
+        if (idx == word.size()) {
+            return true;
+        }
+
+        if (i < 0 || j < 0 || i >= n || j >= m ||
+            board[i][j] != word[idx] || board[i][j] == '.') {
+            return false;
+        }
+
+        char temp = board[i][j];
+        board[i][j] = '.';
+
+        bool A = dfs(board, word, i + 1, j, idx + 1);
+        bool B = dfs(board, word, i - 1, j, idx + 1);
+        bool C = dfs(board, word, i, j + 1, idx + 1);
+        bool D = dfs(board, word, i, j - 1, idx + 1);
+
+        board[i][j] = temp;
+
+        return A || B || C || D;
+    }
+
+    bool exist(vector<vector<char>>& board, string word) {
+        int n = board.size();
+        int m = board[0].size();
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (board[i][j] == word[0]) {
+                    if (dfs(board, word, i, j, 0)) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+};
+```
+
+### Time Complexity
+
+* Worst case: `O(m × n × 3^L)`, where `L` is the word length.
+* The first character can be searched from every cell. After the first move, the immediately previous cell cannot be revisited, leaving at most three directions to explore.
+
+### Space Complexity
+
+* `O(L)` auxiliary recursion space, where `L` is the word length.
+
+### Mistakes & Learning
+
+* Use `i >= n` for row boundaries and `j >= m` for column boundaries.
+* Use `||` in the boundary condition because any invalid condition should stop the search.
+* A single character match does not mean the entire word has been found.
+* Increment `idx` when moving to the next character.
+* Pass all function arguments in the correct order: `board, word, i, j, idx`.
+* Restore the original character after recursive calls.
+* Marking a cell as visited prevents using it twice in the same path.
+
+### Optimization
+
+* Start DFS only from cells matching `word[0]`.
+* If the word is longer than the total number of cells, return `false` immediately.
+* Consider searching from the rarer endpoint of the word to reduce the number of starting positions.
