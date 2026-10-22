@@ -1,0 +1,108 @@
+# Palindrome Partitioning — LeetCode 131
+
+**Topic:** Backtracking, Strings, Recursion
+
+### Problem
+
+Given a string `s`, partition it so that every substring in each partition is a palindrome. Return all possible valid partitions.
+
+### Approach
+
+1. Start from index `0`.
+2. Try every possible substring starting at the current index.
+3. Check whether the substring is a palindrome.
+4. If it is a palindrome:
+
+   * Add it to the current partition.
+   * Recursively process the remaining string from `j + 1`.
+   * Remove the substring using `pop_back()` to backtrack.
+5. When the starting index reaches `s.size()`, all characters have been partitioned. Save the current partition.
+
+### Code (C++)
+
+```cpp
+class Solution {
+public:
+    bool isPalindrome(string s) {
+        int i = 0;
+        int j = s.size() - 1;
+
+        while (i < j) {
+            if (s[i] != s[j]) {
+                return false;
+            }
+            i++;
+            j--;
+        }
+
+        return true;
+    }
+
+    void helper(string& s, int idx, vector<string>& sol,
+                vector<vector<string>>& ans) {
+        if (idx == s.size()) {
+            ans.push_back(sol);
+            return;
+        }
+
+        for (int j = idx; j < s.size(); j++) {
+            string sub = s.substr(idx, j - idx + 1);
+
+            if (isPalindrome(sub)) {
+                sol.push_back(sub);
+
+                helper(s, j + 1, sol, ans);
+
+                sol.pop_back();
+            }
+        }
+    }
+
+    vector<vector<string>> partition(string s) {
+        vector<vector<string>> ans;
+        vector<string> sol;
+
+        helper(s, 0, sol, ans);
+
+        return ans;
+    }
+};
+```
+
+### Example
+
+Input:
+
+```text
+s = "aab"
+```
+
+Output:
+
+```text
+[["a","a","b"],["aa","b"]]
+```
+
+### Time Complexity
+
+* Worst case: `O(n × 2^n)`, commonly given as the bound for generating all partitions with palindrome checks.
+* There can be `2^(n-1)` possible ways to place cuts between characters, and checking substrings adds work.
+
+### Space Complexity
+
+* `O(n)` auxiliary space for the recursion stack and current partition, excluding the output.
+* Output space can be exponential because all valid partitions must be stored.
+
+### Mistakes & Learning
+
+* Use `j - idx + 1` as the length in `s.substr(idx, j - idx + 1)`.
+* Check whether each substring is a palindrome before adding it.
+* Call recursion with `j + 1` because the chosen substring ends at index `j`.
+* Use `sol.pop_back()` after recursion to undo the previous choice.
+* The base case is `idx == s.size()`, meaning every character has been partitioned.
+* Do not return immediately after finding one palindrome; all valid partitions must be explored.
+
+### Optimization
+
+* Precompute palindrome results using dynamic programming to avoid checking the same substrings repeatedly.
+* Use a two-dimensional DP table where `dp[i][j]` indicates whether `s[i...j]` is a palindrome.
