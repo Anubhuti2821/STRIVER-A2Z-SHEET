@@ -1,0 +1,111 @@
+# Rat in a Maze
+
+## Problem Statement
+
+Given an `n × n` maze containing `0`s and `1`s, find all possible paths from the top-left cell `(0,0)` to the bottom-right cell `(n-1,n-1)`.
+
+* `1` represents an open cell.
+* `0` represents a blocked cell.
+* The rat can move in four directions: Down (`D`), Left (`L`), Right (`R`), and Up (`U`).
+* A cell cannot be visited more than once in the same path.
+* Return all valid paths in lexicographical order.
+
+## LeetCode Question No.
+
+* No direct standard LeetCode problem number.
+* Platform: GeeksforGeeks — Rat in a Maze Problem
+
+## Approach
+
+1. Start from `(0,0)` and explore all possible paths using recursion.
+2. Check whether the current cell is the destination. If yes, add the current path to the answer.
+3. Mark the current cell as visited by changing `maze[row][col]` to `0`.
+4. Explore all four directions if the next cell is within bounds and contains `1`.
+5. Append the corresponding direction (`D`, `L`, `R`, or `U`) to the path.
+6. After exploring all directions, restore the current cell to `1`. This is backtracking.
+7. Sort the answers lexicographically before returning them.
+
+## Time Complexity
+
+Let `N = n × n` be the total number of cells.
+
+The number of possible paths can grow exponentially. The worst-case time complexity is exponential; sorting the resulting paths additionally takes `O(K log K × L)`, where `K` is the number of paths and `L` is the average path length.
+
+## Space Complexity
+
+* Recursion stack: `O(N)` in the worst case.
+* Path string: `O(N)` in the worst case.
+* Output storage: `O(K × L)`, where `K` is the number of valid paths and `L` is the average path length.
+
+## Code
+
+```cpp
+class Solution {
+  public:
+    void solve(int row, int col, vector<vector<int>>& maze,
+               int n, string path, vector<string>& ans) {
+
+        if (row == n - 1 && col == n - 1) {
+            ans.push_back(path);
+            return;
+        }
+
+        maze[row][col] = 0;
+
+        // Down
+        if (row + 1 < n && maze[row + 1][col] == 1) {
+            solve(row + 1, col, maze, n, path + 'D', ans);
+        }
+
+        // Left
+        if (col - 1 >= 0 && maze[row][col - 1] == 1) {
+            solve(row, col - 1, maze, n, path + 'L', ans);
+        }
+
+        // Right
+        if (col + 1 < n && maze[row][col + 1] == 1) {
+            solve(row, col + 1, maze, n, path + 'R', ans);
+        }
+
+        // Up
+        if (row - 1 >= 0 && maze[row - 1][col] == 1) {
+            solve(row - 1, col, maze, n, path + 'U', ans);
+        }
+
+        maze[row][col] = 1;
+    }
+
+    vector<string> ratInMaze(vector<vector<int>>& maze) {
+        int n = maze.size();
+        vector<string> ans;
+
+        if (maze[0][0] == 0) return ans;
+
+        solve(0, 0, maze, n, "", ans);
+
+        sort(ans.begin(), ans.end());
+        return ans;
+    }
+};
+```
+
+## Mistakes to Avoid
+
+1. Forgetting to mark the current cell as visited.
+2. Forgetting to restore the cell after exploring all directions.
+3. Not checking row and column boundaries before accessing a cell.
+4. Forgetting to check whether the starting cell is blocked.
+5. Returning immediately after finding a path without exploring other possible paths.
+6. Confusing the direction characters with the actual row and column changes.
+
+## Learning
+
+* **DFS:** Explore one possible path deeply before trying another.
+* **Backtracking:** Make a choice, explore it, and undo the choice when returning.
+* **Visited Tracking:** Temporarily mark cells to prevent cycles within a path.
+* **State Restoration:** Restore the maze after recursive exploration so other paths can use the same cell.
+* **Path Tracking:** Maintain a string of directions representing the current route.
+
+### Key Takeaway
+
+Rat in a Maze follows the same core backtracking pattern as Word Search: mark the current cell, explore valid neighbours, and restore the cell when returning.
