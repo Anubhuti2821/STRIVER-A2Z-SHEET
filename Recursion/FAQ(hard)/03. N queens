@@ -1,0 +1,110 @@
+### Problem Statement
+
+Place `n` queens on an `n × n` chessboard such that no two queens attack each other. Return all valid board configurations.
+
+### LeetCode Question No.
+
+51 — N-Queens
+
+### Approach
+
+1. Place one queen in each row using recursion.
+2. Before placing a queen, check its column, upper-left diagonal, and upper-right diagonal.
+3. If the position is safe, place the queen and move to the next row.
+4. After recursion, remove the queen (backtracking) and try the next column.
+5. When `row == n`, store the valid board configuration.
+
+### Time Complexity
+
+Approximately `O(n! × n)`.
+
+### Space Complexity
+
+`O(n²)` for the board and `O(n)` recursion depth, excluding the output.
+
+### Code
+
+```cpp
+class Solution {
+public:
+    vector<vector<string>> board;
+
+    vector<vector<string>> solveNQueens(int n) {
+        board.clear();
+        vector<string> ans(n, string(n, '.'));
+        place(ans, n, 0);
+        return board;
+    }
+
+    bool isSafe(vector<string>& ans, int row, int col, int n) {
+
+        // Check column
+        for (int i = 0; i < row; i++) {
+            if (ans[i][col] == 'Q') {
+                return false;
+            }
+        }
+
+        // Check upper-left diagonal
+        int i = row - 1;
+        int j = col - 1;
+
+        while (i >= 0 && j >= 0) {
+            if (ans[i][j] == 'Q') {
+                return false;
+            }
+            i--;
+            j--;
+        }
+
+        // Check upper-right diagonal
+        i = row - 1;
+        j = col + 1;
+
+        while (i >= 0 && j < n) {
+            if (ans[i][j] == 'Q') {
+                return false;
+            }
+            i--;
+            j++;
+        }
+
+        return true;
+    }
+
+    void place(vector<string>& ans, int n, int row) {
+        if (row == n) {
+            board.push_back(ans);
+            return;
+        }
+
+        for (int col = 0; col < n; col++) {
+            if (isSafe(ans, row, col, n)) {
+                ans[row][col] = 'Q';
+
+                place(ans, n, row + 1);
+
+                ans[row][col] = '.';
+            }
+        }
+    }
+};
+```
+
+### Mistakes
+
+1. Used `''Q'` instead of `'Q'`.
+2. Used `board[i][j]` instead of `ans[i][j]` inside `isSafe()`.
+3. Used incorrect diagonal-loop initialization.
+4. Declared `i` and `j` multiple times in the same scope.
+5. Forgot `return true` in `isSafe()`.
+6. Forgot `return board` in `solveNQueens()`.
+
+### Learning
+
+* **Column check:** Keep the column fixed and decrease the row.
+* **Upper-left diagonal:** Decrease both row and column.
+* **Upper-right diagonal:** Decrease the row and increase the column.
+* **Backtracking:** Place a queen, explore possibilities, and remove it before trying the next position.
+
+Since queens are placed row by row, checking the current row is unnecessary.
