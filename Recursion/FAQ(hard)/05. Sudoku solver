@@ -1,0 +1,279 @@
+# LeetCode 37 – Sudoku Solver
+
+**Difficulty:** Hard
+**Topic:** Backtracking, Recursion, Matrix
+
+## 1. Problem Statement
+
+Given a 9×9 Sudoku board, fill the empty cells (represented by '.') so that:
+
+* Every row contains digits 1–9 without repetition.
+* Every column contains digits 1–9 without repetition.
+* Every 3×3 subgrid contains digits 1–9 without repetition.
+
+Modify the board in-place.
+
+## 2. Approach
+
+We use Recursion + Backtracking.
+
+**Step 1: Find an empty cell**
+
+* Traverse the matrix using nested loops.
+* Find a cell containing '.'.
+
+**Step 2: Try numbers 1–9**
+
+* For every empty cell, try all digits from '1' to '9'.
+
+**Step 3: Validate**
+Use `is_valid()` to check:
+
+* Whether the number exists in the same row.
+* Whether the number exists in the same column.
+* Whether the number exists in the same 3×3 subgrid.
+
+**Step 4: Place the number**
+If valid, place it in the current cell.
+
+**Step 5: Recursive call**
+Call `helper(board)` to solve the remaining Sudoku.
+
+**Step 6: Backtracking**
+If the recursive call returns false:
+
+* Remove the previously placed number.
+* Restore the cell to '.'.
+* Try the next possible number.
+
+**Step 7: Base case**
+If the entire board is filled and no empty cell is found, return true.
+
+## 3. Time Complexity
+
+Let E = number of empty cells.
+
+Worst-case upper bound:
+
+O(9^E × 27)
+
+Since validation checks at most 27 cells.
+
+Simplified:
+
+O(9^E)
+
+For a 9×9 Sudoku, E ≤ 81.
+
+## 4. Space Complexity
+
+O(E) recursion stack.
+
+Worst case: O(81).
+
+For a fixed-size 9×9 Sudoku, this is O(1).
+
+## 5. Code
+
+```cpp
+class Solution {
+public:
+
+    bool is_valid(vector<vector<char>>& board,
+                  int row, int col, char c) {
+
+        int i = row / 3;
+        int j = col / 3;
+
+        // Check 3x3 subgrid
+        for(int l = 3*i; l <= 3*i+2; l++) {
+            for(int k = 3*j; k <= 3*j+2; k++) {
+
+                if(board[l][k] == c)
+                    return false;
+            }
+        }
+
+        // Check row
+        for(int i = 0; i < 9; i++) {
+            if(board[row][i] == c)
+                return false;
+        }
+
+        // Check column
+        for(int j = 0; j < 9; j++) {
+            if(board[j][col] == c)
+                return false;
+        }
+
+        return true;
+    }
+
+    bool helper(vector<vector<char>>& board) {
+
+        for(int i = 0; i < 9; i++) {
+            for(int j = 0; j < 9; j++) {
+
+                if(board[i][j] == '.') {
+
+                    for(char c = '1'; c <= '9'; c++) {
+
+                        if(is_valid(board, i, j, c)) {
+
+                            board[i][j] = c;
+
+                            if(helper(board))
+                                return true;
+
+                            board[i][j] = '.';
+                        }
+                    }
+
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    void solveSudoku(vector<vector<char>>& board) {
+        helper(board);
+    }
+};
+```
+
+## 6. Mistakes I Made
+
+**Mistake 1: Incorrect multiplication syntax**
+
+Initially wrote:
+
+```cpp
+3i
+3j
+```
+
+Correct:
+
+```cpp
+3*i
+3*j
+```
+
+**Mistake 2: Current cell checking**
+
+Initially, I was checking the current cell itself while validating the 3×3 subgrid.
+
+I added:
+
+```cpp
+if(l == row && k == col)
+    continue;
+```
+
+However, in the final implementation, this is unnecessary because `is_valid()` is called only for empty cells.
+
+**Mistake 3: Confusion between assignment and comparison**
+
+Initially wrote:
+
+```cpp
+board[i][j] == k;
+```
+
+Correct:
+
+```cpp
+board[i][j] = c;
+```
+
+`==` compares values, whereas `=` assigns a value.
+
+**Mistake 4: Incorrect understanding of recursion**
+
+I thought that calling `helper(board)` would restart the entire process and get stuck at `(0,0)`.
+
+What I learned:
+
+* Every recursive call starts scanning from `(0,0)`.
+* But the board is not reset.
+* Previously filled cells are skipped.
+* Therefore, the next empty cell is found.
+
+**Mistake 5: Confusion about is_valid() returning false**
+
+If `is_valid()` returns false:
+
+* Number is not placed.
+* Recursive call does not happen.
+* The next number is tried.
+
+**Mistake 6: Confusion about helper() returning false**
+
+If all numbers fail for the current empty cell:
+
+* `helper()` returns false.
+* Control goes back to the previous recursive call.
+* The previous placement is undone.
+* Another number is tried.
+
+**Mistake 7: Understanding return true**
+
+I initially didn't understand why the function returns true at the end.
+
+What I learned:
+
+* If no empty cell is found, the board is completely filled.
+* All placements were validated.
+* Sudoku is solved.
+* `true` propagates through all recursive calls.
+
+## 7. Important Learning
+
+### Backtracking Pattern
+
+**Choose → Explore → Undo**
+
+```cpp
+board[i][j] = c;       // Choose
+
+if(helper(board))      // Explore
+    return true;
+
+board[i][j] = '.';     // Undo
+```
+
+### Three important concepts
+
+| Function      | Responsibility                    |
+| ------------- | --------------------------------- |
+| is_valid()    | Checks whether placement is valid |
+| helper()      | Recursively solves the Sudoku     |
+| solveSudoku() | Starts the solving process        |
+
+### My Major Doubts – Resolved
+
+1. Why divide row and column by 3?
+   To identify which 3×3 subgrid contains the current cell.
+
+2. Why multiply the quotient by 3?
+   To calculate the starting index of the subgrid.
+
+3. Why use recursion?
+   To move forward and solve the remaining empty cells.
+
+4. Why use backtracking?
+   To undo a valid placement if it doesn't lead to a complete solution.
+
+5. Why return false?
+   To communicate that the current choice cannot lead to a solution.
+
+6. Why return true?
+   To communicate that the entire Sudoku has been solved.
+
+### Final Takeaway
+
+The biggest learning from this problem is understanding how a recursive call returns control to its previous call.
+
+Backtracking is not just trying different values. It is systematically exploring choices and undoing failed choices.
