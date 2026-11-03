@@ -1,0 +1,81 @@
+# Subsets II – LeetCode 90
+
+**Problem:** Generate all unique subsets of an array containing duplicate elements.
+
+**Approach: Sorting + Recursion + Backtracking**
+
+### Intuition
+
+Instead of generating duplicate subsets and removing them using a set, we skip duplicate elements during recursion itself.
+
+### Algorithm
+
+1. Sort the original array.
+2. Start recursion with index `0`.
+3. Add the current subset to `ans`.
+4. Run a for loop from `start` to `n-1`.
+5. Skip duplicates using:
+   `if(i > start && nums[i] == nums[i-1]) continue;`
+6. Include the current element and make a recursive call.
+7. Backtrack by removing the last element.
+
+### Code
+
+```cpp
+class Solution {
+public:
+    vector<vector<int>> ans;
+
+    vector<vector<int>> subsetsWithDup(vector<int>& nums) {
+        sort(nums.begin(), nums.end());
+
+        vector<int> s;
+        helper(nums, 0, s);
+
+        return ans;
+    }
+
+    void helper(vector<int>& nums, int start, vector<int>& s) {
+        ans.push_back(s);
+
+        for(int i = start; i < nums.size(); i++) {
+
+            if(i > start && nums[i] == nums[i-1])
+                continue;
+
+            s.push_back(nums[i]);
+
+            helper(nums, i + 1, s);
+
+            s.pop_back();
+        }
+    }
+};
+```
+
+### Complexity Analysis
+
+* **Time Complexity:** O(n × 2ⁿ) upper bound.
+* **Space Complexity:** O(n × 2ⁿ) for storing subsets, excluding recursion stack.
+* Recursion stack: O(n).
+
+### Why is this better than brute force?
+
+| Brute Force                   | Optimized                         |
+| ----------------------------- | --------------------------------- |
+| Generates all subsets         | Generates only unique subsets     |
+| Sorts every subset            | Sorts original array once         |
+| Uses set to remove duplicates | Skips duplicates during recursion |
+| Extra set storage             | No set required                   |
+
+### Important Concept
+
+```cpp
+if(i > start && nums[i] == nums[i-1])
+    continue;
+```
+
+* `i > start` ensures we skip duplicates only at the same recursion level.
+* `nums[i] == nums[i-1]` checks whether the current element is a duplicate of the previous one.
+
+**Key Learning:** Avoid generating duplicate possibilities instead of generating everything and eliminating duplicates afterwards.
