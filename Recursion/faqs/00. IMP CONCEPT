@@ -1,0 +1,94 @@
+## New Concepts Learned
+
+### 1. Pass by Value vs Pass by Reference
+
+**Pass by Value:**
+
+* A copy of the variable is passed to the function.
+* Changes inside the function don't affect the original variable.
+* Every recursive call gets its own copy.
+
+Example:
+
+```cpp
+void helper(int sum) {
+    sum = sum + 5;
+}
+```
+
+**Pass by Reference:**
+
+* The function receives a reference to the original variable.
+* Changes inside the function affect the original variable.
+
+Example:
+
+```cpp
+void helper(int &sum) {
+    sum = sum + 5;
+}
+```
+
+### 2. Class Member Variables vs Local Variables
+
+In our solution:
+
+```cpp
+class Solution {
+public:
+    vector<vector<int>> ans;
+    vector<int> s;
+};
+```
+
+`ans` and `s` are class member variables.
+
+* All recursive calls access the same `ans` and `s`.
+* They are not passed as function arguments.
+* Changes to them are visible across recursive calls.
+
+Whereas `sum`, `i` and `counter` are function parameters passed by value.
+
+### 3. Shared State vs Local State in Recursion
+
+| Shared State | Local State |
+| ------------ | ----------- |
+| `ans`        | `sum`       |
+| `s`          | `i`         |
+|              | `counter`   |
+
+All recursive calls share the same `ans` and `s`, but each call has its own copies of `sum`, `i` and `counter`.
+
+### 4. Backtracking with Shared Variables
+
+```cpp
+s.push_back(counter);
+helper(...);
+s.pop_back();
+```
+
+* `push_back()` adds an element to the shared vector.
+* Recursive calls work with that updated vector.
+* `pop_back()` restores the vector before exploring another branch.
+
+**Important:** We don't manually subtract from `sum` because `sum` is passed by value.
+
+### 5. Post-increment vs Addition
+
+```cpp
+i++     // Uses current value, then increments.
+i + 1   // Calculates the next value without modifying i.
+```
+
+For recursive calls, use `i + 1` when you want to pass the next index/count.
+
+### 6. Tracking Different Variables
+
+In Combination Sum III:
+
+* `i` = Number of elements selected.
+* `counter` = Current number being considered.
+
+These represent different things and should not be confused.
+
+**Key Learning:** Always understand whether a variable represents the current position, the number of selected elements, or the accumulated result.
