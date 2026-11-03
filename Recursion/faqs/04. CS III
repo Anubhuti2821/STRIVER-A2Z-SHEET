@@ -1,25 +1,30 @@
 # Combination Sum III – LeetCode 216
 
-**Problem:** Find all valid combinations of `k` numbers that add up to `n`, using numbers from 1 to 9. Each number can be used only once.
+**Problem:** Find all combinations of `k` numbers from `1` to `9` whose sum equals `n`. Each number can be used only once.
 
-## Approach: Recursion + Backtracking (TAKE / NOT TAKE)
+## Approach: TAKE / NOT TAKE Recursion
 
-### Intuition
+For every number (`counter`), we have two choices:
 
-For every number from 1 to 9, we have two choices:
+1. **TAKE:** Include the current number in the combination.
 
-1. TAKE the current number.
-2. NOT TAKE the current number.
+   * Add it to `s`.
+   * Increase `sum` and `i`.
+   * Move to the next number.
+2. **NOT TAKE:** Skip the current number.
 
-We maintain:
+   * Do not change `sum` or `i`.
+   * Move to the next number.
 
-* `sum` = Current sum of selected elements.
-* `i` = Number of elements selected.
-* `counter` = Current number being considered.
-* `s` = Current combination.
-* `ans` = Stores all valid combinations.
+### Base Cases
 
-### Code
+* If `i == k`, exactly `k` numbers have been selected. Store the combination only if `sum == n`.
+* If `counter > 9`, no numbers are left to select.
+* If `sum > n`, the current combination cannot produce the target sum.
+
+**Important:** Check `i == k` before pruning with `counter > 9`. Otherwise, the valid combination `[1,2,3,4,5,6,7,8,9]` for `k = 9, n = 45` gets rejected.
+
+## Code
 
 ```cpp
 class Solution {
@@ -34,15 +39,14 @@ public:
 
     void helper(int k, int n, int sum, int i, int counter) {
 
-        if(counter > 9 || sum > n)
-            return;
-
         if(i == k) {
             if(sum == n)
                 ans.push_back(s);
-
             return;
         }
+
+        if(counter > 9 || sum > n)
+            return;
 
         // TAKE
         s.push_back(counter);
@@ -57,62 +61,53 @@ public:
 
 ## Complexity Analysis
 
-* **Time Complexity:** O(2⁹ × k) upper bound, considering copying valid combinations into the answer.
-* **Auxiliary Space:** O(k) for recursion stack and current combination.
-* **Output Space:** O(number of valid combinations × k).
+* **Time Complexity:** O(2⁹ × 9) — at most 2⁹ TAKE/NOT TAKE combinations, with copying a combination taking up to 9 elements.
+* **Auxiliary Space:** O(9) recursion depth + O(9) current combination.
+* **Output Space:** Depends on the number of valid combinations.
 
-## Dry Run
+## Important Concepts Learned
 
-Input:
+### 1. Meaning of Variables
 
-```cpp
-k = 3, n = 7
-```
+| Variable  | Meaning                         |
+| --------- | ------------------------------- |
+| `sum`     | Sum of selected numbers         |
+| `i`       | Count of selected numbers       |
+| `counter` | Current number being considered |
+| `s`       | Current combination             |
+| `ans`     | Stores all valid combinations   |
 
-Valid combination:
+### 2. Pass by Value vs Pass by Reference
 
-```cpp
-[1, 2, 4]
-```
+* `sum`, `i`, and `counter` are passed by value. Each recursive call gets its own copy.
+* `s` and `ans` are class member variables, shared across recursive calls.
 
-## Important Concepts
-
-### 1. Pass by Value
-
-`sum`, `i` and `counter` are passed by value. Every recursive call receives its own copies.
-
-### 2. Shared Class Members
-
-`ans` and `s` are class member variables shared across recursive calls.
-
-### 3. TAKE vs NOT TAKE
-
-| Variable  | TAKE            | NOT TAKE      |
-| --------- | --------------- | ------------- |
-| `sum`     | `sum + counter` | `sum`         |
-| `i`       | `i + 1`         | `i`           |
-| `counter` | `counter + 1`   | `counter + 1` |
-| `s`       | Push element    | No change     |
-
-### 4. Pruning
+### 3. Backtracking
 
 ```cpp
-if(counter > 9 || sum > n)
-    return;
+s.push_back(counter);
+helper(...);
+s.pop_back();
 ```
 
-Stops recursion when:
+After exploring the TAKE choice, `pop_back()` removes the selected number so that the NOT TAKE path starts with the previous state.
 
-* All available numbers have been exhausted.
-* Current sum exceeds the target.
+### 4. Why Does NOT TAKE Not Increment `i`?
+
+```cpp
+helper(k, n, sum, i, counter + 1);
+```
+
+Because `i` counts selected numbers. When we skip a number, the selected count and sum remain unchanged. Only `counter` moves forward.
+
+### 5. Why Don't We Subtract from `sum`?
+
+Because `sum` is passed by value. Every recursive call gets its own copy, so the parent's `sum` remains unchanged.
 
 ## Mistakes & Learning
 
-1. Initially used `i++` instead of `i + 1`.
-2. Initially subtracted `counter` from `sum` in NOT TAKE.
-3. Learned that `sum` is passed by value, so no manual subtraction is required.
-4. Initially increased `i` in NOT TAKE.
-5. Understood the difference between selected element count (`i`) and current number (`counter`).
-6. Understood shared class members versus local function parameters.
-
-**Key Learning:** In TAKE/NOT TAKE recursion, track the number of selected elements separately from the current index or candidate number.
+* `i` represents selected elements, not the current number.
+* NOT TAKE increments `counter`, but not `i` or `sum`.
+* TAKE increments both `counter` and `i`.
+* Always restore the shared vector using `pop_back()`.
+* Base-case ordering matters: check whether the required number of elements has been selected before pruning.
