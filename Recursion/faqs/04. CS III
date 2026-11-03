@@ -1,0 +1,118 @@
+# Combination Sum III – LeetCode 216
+
+**Problem:** Find all valid combinations of `k` numbers that add up to `n`, using numbers from 1 to 9. Each number can be used only once.
+
+## Approach: Recursion + Backtracking (TAKE / NOT TAKE)
+
+### Intuition
+
+For every number from 1 to 9, we have two choices:
+
+1. TAKE the current number.
+2. NOT TAKE the current number.
+
+We maintain:
+
+* `sum` = Current sum of selected elements.
+* `i` = Number of elements selected.
+* `counter` = Current number being considered.
+* `s` = Current combination.
+* `ans` = Stores all valid combinations.
+
+### Code
+
+```cpp
+class Solution {
+public:
+    vector<vector<int>> ans;
+    vector<int> s;
+
+    vector<vector<int>> combinationSum3(int k, int n) {
+        helper(k, n, 0, 0, 1);
+        return ans;
+    }
+
+    void helper(int k, int n, int sum, int i, int counter) {
+
+        if(counter > 9 || sum > n)
+            return;
+
+        if(i == k) {
+            if(sum == n)
+                ans.push_back(s);
+
+            return;
+        }
+
+        // TAKE
+        s.push_back(counter);
+        helper(k, n, sum + counter, i + 1, counter + 1);
+        s.pop_back();
+
+        // NOT TAKE
+        helper(k, n, sum, i, counter + 1);
+    }
+};
+```
+
+## Complexity Analysis
+
+* **Time Complexity:** O(2⁹ × k) upper bound, considering copying valid combinations into the answer.
+* **Auxiliary Space:** O(k) for recursion stack and current combination.
+* **Output Space:** O(number of valid combinations × k).
+
+## Dry Run
+
+Input:
+
+```cpp
+k = 3, n = 7
+```
+
+Valid combination:
+
+```cpp
+[1, 2, 4]
+```
+
+## Important Concepts
+
+### 1. Pass by Value
+
+`sum`, `i` and `counter` are passed by value. Every recursive call receives its own copies.
+
+### 2. Shared Class Members
+
+`ans` and `s` are class member variables shared across recursive calls.
+
+### 3. TAKE vs NOT TAKE
+
+| Variable  | TAKE            | NOT TAKE      |
+| --------- | --------------- | ------------- |
+| `sum`     | `sum + counter` | `sum`         |
+| `i`       | `i + 1`         | `i`           |
+| `counter` | `counter + 1`   | `counter + 1` |
+| `s`       | Push element    | No change     |
+
+### 4. Pruning
+
+```cpp
+if(counter > 9 || sum > n)
+    return;
+```
+
+Stops recursion when:
+
+* All available numbers have been exhausted.
+* Current sum exceeds the target.
+
+## Mistakes & Learning
+
+1. Initially used `i++` instead of `i + 1`.
+2. Initially subtracted `counter` from `sum` in NOT TAKE.
+3. Learned that `sum` is passed by value, so no manual subtraction is required.
+4. Initially increased `i` in NOT TAKE.
+5. Understood the difference between selected element count (`i`) and current number (`counter`).
+6. Understood shared class members versus local function parameters.
+
+**Key Learning:** In TAKE/NOT TAKE recursion, track the number of selected elements separately from the current index or candidate number.
