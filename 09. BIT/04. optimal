@@ -1,0 +1,59 @@
+### Approach: Brian Kernighan's Algorithm
+
+**Key Concept:**
+
+`n & (n-1)` removes the rightmost set bit (rightmost 1) from the binary representation of a number.
+
+**Steps:**
+1. Initialize `count = 0`.
+2. Run a loop while `n != 0`.
+3. In every iteration:
+   - Perform `n = n & (n-1)`.
+   - Increment `count`.
+4. Return `count`.
+
+### Code
+
+```cpp
+class Solution {
+public:
+    int hammingWeight(int n) {
+        int count = 0;
+
+        while(n != 0) {
+            n = n & (n - 1);
+            count++;
+        }
+
+        return count;
+    }
+};
+```
+
+### Dry Run
+
+Input: `n = 13`
+
+Binary representation: `1101`
+
+| Iteration | Operation | Result | Count |
+|---|---|---|---:|
+| 1 | 1101 & 1100 | 1100 | 1 |
+| 2 | 1100 & 1011 | 1000 | 2 |
+| 3 | 1000 & 0111 | 0000 | 3 |
+
+Output: `3`
+
+### Complexity
+- **Time Complexity:** O(k), where k is the number of set bits. Worst case O(32) for a 32-bit integer.
+- **Space Complexity:** O(1)
+
+### Mistakes & Learning
+- `n & (n-1)` removes exactly one set bit.
+- We increment `count` after every operation because one set bit is removed each time.
+- The loop stops when all set bits have been removed and `n` becomes 0.
+
+### Optimization Learning
+Instead of converting the number into a binary string and traversing it, we directly manipulate its bits using bitwise AND.
+
+This avoids extra string space and makes the solution more efficient.
