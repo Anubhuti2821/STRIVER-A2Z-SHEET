@@ -1,0 +1,51 @@
+### Problem
+Check whether the ith bit of a given number `n` is set (1) or unset (0).
+
+### Approach
+1. Convert the decimal number into its binary representation using repeated division by 2.
+2. Store the binary representation in a string.
+3. Since bit positions are counted from right to left, access the ith bit using `b[b.length() - 1 - i]`.
+4. If the bit is `'1'`, return `true`; otherwise, return `false`.
+
+### Code
+```cpp
+class Solution {
+public:
+    bool checkIthBit(int n, int i) {
+       string b = helper(n);
+       if(b[b.length() - 1 - i] == '1'){
+            return true;
+       }
+       return false;
+    }
+
+    string helper(int n){
+        string s = "";
+        while(n > 0){
+            if(n % 2 == 0){
+                s = '0' + s;
+            }
+            else{
+                s = '1' + s;
+            }
+            n = n / 2;
+        }
+        return s;
+    }
+};
+```
+
+### Time Complexity
+O(log n) – Binary conversion takes logarithmic time.
+
+### Space Complexity
+O(log n) – To store the binary representation.
+
+### Mistakes & Learning
+1. Use `n % 2` to extract binary digits.
+2. Binary representation is written left to right, but bit positions are counted right to left.
+3. To access the ith bit, use `b.length() - 1 - i`.
+4. Handle edge cases like `n = 0` and invalid bit positions.
+
+### Optimization
+The string-based approach is not optimal. We can directly check the ith bit using bitwise AND (`&`) and left shift (`<<`) without converting the number into a string.
