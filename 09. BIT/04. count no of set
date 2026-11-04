@@ -1,0 +1,61 @@
+### Problem
+**Number of 1 Bits (Hamming Weight)**
+
+[LeetCode 191](https://leetcode.com/problems/number-of-1-bits/)
+
+### Approach: Convert Decimal to Binary
+1. Convert the given number into its binary representation.
+2. Traverse the binary string.
+3. Count the number of `'1'` bits.
+4. Return the count.
+
+### Code
+```cpp
+class Solution {
+public:
+    int hammingWeight(int n) {
+        string b = helper(n);
+        int count = 0;
+
+        for(int i = 0; i < b.length(); i++) {
+            if(b[i] == '1') {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    string helper(int n) {
+        string s = "";
+
+        while(n > 0) {
+            if(n % 2 == 0) {
+                s = '0' + s;
+            }
+            else {
+                s = '1' + s;
+            }
+            n = n / 2;
+        }
+        return s;
+    }
+};
+```
+
+### Complexity
+- **Time Complexity:** O(log n) — converting the number to binary takes O(log n), and traversing the binary string also takes O(log n).
+- **Space Complexity:** O(log n) — storing the binary representation in a string.
+
+### Mistakes & Learning
+- Binary conversion uses `% 2`, not `% 10`.
+- Prepending each binary digit maintains the correct binary order.
+- `count` is incremented whenever we encounter `'1'`.
+- For `n = 0`, the helper returns an empty string, so the answer is 0.
+- The current helper uses `while(n > 0)`, so it does not correctly handle negative values.
+
+### Optimization
+We can avoid creating a binary string altogether.
+
+**Key property:** `n & (n - 1)` removes the rightmost set bit (rightmost `1`) from a number.
+
+Instead of converting the number into binary and counting the ones, we can repeatedly remove one set bit and count how many operations are performed.
