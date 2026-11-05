@@ -1,0 +1,145 @@
+# LeetCode 137 – Single Number II
+
+**Problem:** Every element appears exactly 3 times except one element, which appears only once. Find the single element.
+
+## 1. Sorting Approach
+
+**Logic:**
+- Sort the array.
+- Check adjacent elements.
+- If `nums[i] != nums[i+1]`, return `nums[i]`.
+- Otherwise, skip the next 3 occurrences using `i += 3`.
+- If the loop finishes, return the last element.
+
+**Code:**
+```cpp
+class Solution {
+public:
+    int singleNumber(vector<int>& nums) {
+        sort(nums.begin(), nums.end());
+
+        int i = 0;
+        int n = nums.size();
+
+        while(i < n - 1) {
+            if(nums[i] != nums[i + 1]) {
+                return nums[i];
+            }
+
+            i += 3;
+        }
+
+        return nums[n - 1];
+    }
+};
+```
+
+**Complexity:**
+- Time: O(N log N)
+- Space: O(1) auxiliary space (excluding sorting implementation details).
+
+---
+
+## 2. Bit Counting Approach
+
+**Logic:**
+- Traverse all 32 bit positions.
+- Count the number of 1s at each position.
+- Calculate `count % 3`.
+- If remainder is 1, set that bit in the answer.
+
+**Code:**
+```cpp
+class Solution {
+public:
+    int singleNumber(vector<int>& nums) {
+        int ans = 0;
+
+        for(int i = 0; i < 32; i++) {
+            int count = 0;
+
+            for(int num : nums) {
+                if((num >> i) & 1) {
+                    count++;
+                }
+            }
+
+            if(count % 3 == 1) {
+                ans |= (1U << i);
+            }
+        }
+
+        return ans;
+    }
+};
+```
+
+**Complexity:**
+- Time: O(32 × N) = O(N)
+- Space: O(1)
+
+**Learning:**
+- `>>` : Right shift.
+- `& 1` : Checks whether a particular bit is set.
+- `% 3` : Removes the contribution of elements appearing thrice.
+- `|` : Sets the required bit in the answer.
+
+---
+
+## 3. Bucket / State Machine Approach
+
+**Logic:**
+
+Maintain two bitmasks:
+- `ones`: Tracks bits appearing once.
+- `twos`: Tracks bits appearing twice.
+- When a bit appears for the third time, it gets removed from both.
+
+**Code:**
+```cpp
+class Solution {
+public:
+    int singleNumber(vector<int>& nums) {
+        int ones = 0;
+        int twos = 0;
+
+        for(int num : nums) {
+            ones = (ones ^ num) & ~twos;
+            twos = (twos ^ num) & ~ones;
+        }
+
+        return ones;
+    }
+};
+```
+
+**Complexity:**
+- Time: O(N)
+- Space: O(1)
+
+**Learning:**
+
+| Operator | Meaning |
+|---|---|
+| `^` | XOR – toggles bits |
+| `~` | NOT – reverses bits |
+| `&` | AND – filters bits |
+
+The order of updating `ones` and `twos` matters because the second statement uses the updated `ones`.
+
+---
+
+## Final Comparison
+
+| Approach | Time Complexity | Space Complexity |
+|---|---|---|
+| Sorting | O(N log N) | O(1)* |
+| Bit Counting | O(N) | O(1) |
+| Bucket | O(N) | O(1) |
+
+*Auxiliary space, excluding sorting implementation details.*
+
+**Final Takeaway:**
+- Sorting: Easy to understand.
+- Bit Counting: Good for understanding bit manipulation.
+- Bucket: Optimal state-machine approach.
