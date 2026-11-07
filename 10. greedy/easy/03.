@@ -1,0 +1,75 @@
+## Fractional Knapsack
+
+**Problem:** Maximize the total value of items that can fit into a knapsack of given capacity. We are allowed to take fractions of items.
+
+**LeetCode/GFG:** Fractional Knapsack (GFG)
+
+### Approach: Greedy Algorithm
+
+1. Calculate the value/weight ratio for every item.
+2. Store each item's value and weight together in a pair.
+3. Sort items in descending order of their value/weight ratio.
+4. Traverse the sorted items:
+   - If the complete item fits, take it.
+   - Otherwise, take only the fraction that fits and stop.
+
+**Greedy Choice:** Always select the item that provides the maximum value per unit of weight.
+
+### Code
+
+```cpp
+class Solution {
+public:
+    double fractionalKnapsack(vector<long long>& val, vector<long long>& wt, long long capacity) {
+
+        vector<pair<long long,long long>> items;
+
+        for(int i = 0; i < val.size(); i++) {
+            items.push_back({val[i], wt[i]});
+        }
+
+        sort(items.begin(), items.end(), [](pair<long long,long long> a, pair<long long,long long> b) {
+            return (double)a.first / a.second > (double)b.first / b.second;
+        });
+
+        double value = 0;
+        int w = 0;
+
+        for(int i = 0; i < items.size(); i++) {
+
+            if(w + items[i].second <= capacity) {
+                w += items[i].second;
+                value += items[i].first;
+            }
+            else {
+                value += (double)items[i].first * (capacity - w) / items[i].second;
+                break;
+            }
+        }
+
+        return value;
+    }
+};
+```
+
+### Complexity Analysis
+
+- **Time Complexity:** O(n log n)
+  - Creating the pair vector: O(n)
+  - Sorting: O(n log n)
+  - Traversal: O(n)
+
+- **Space Complexity:** O(n) for storing items in a separate pair vector.
+
+### Mistakes & Learning
+
+- Sorting only by value is incorrect; we must sort by value/weight ratio.
+- Never sort the value and weight arrays independently because their pairing will break.
+- A custom comparator allows sorting according to a calculated condition.
+- `a.first` represents value and `a.second` represents weight.
+- Use `double` for fractional calculations to avoid integer division.
+- Once the remaining capacity is filled, use `break`.
+
+### Key Learning
+
+Fractional Knapsack is a Greedy problem because selecting the item with the highest value/weight ratio at every step gives the maximum total value.
