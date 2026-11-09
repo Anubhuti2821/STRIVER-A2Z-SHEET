@@ -1,0 +1,55 @@
+```cpp
+class Solution {
+public:
+    vector<int> JobScheduling(vector<vector<int>>& Jobs) {
+
+        sort(Jobs.begin(), Jobs.end(), [](vector<int>& a, vector<int>& b) {
+            return a[2] > b[2];
+        });
+
+        int max_slot = 0;
+
+        for(int i = 0; i < Jobs.size(); i++) {
+            max_slot = max(max_slot, Jobs[i][1]);
+        }
+
+        vector<int> slot(max_slot + 1, -1);
+
+        int profit = 0;
+        int count = 0;
+
+        for(int i = 0; i < Jobs.size(); i++) {
+
+            for(int j = Jobs[i][1]; j >= 1; j--) {
+
+                if(slot[j] == -1) {
+                    slot[j] = Jobs[i][0];
+                    profit += Jobs[i][2];
+                    count++;
+                    break;
+                }
+            }
+        }
+
+        return {count, profit};
+    }
+};
+```
+
+### What changed from your code?
+
+1. `max_slot` now stores the maximum deadline.
+2. Created a separate `slot` array.
+3. Started checking from the job's deadline and moved backwards.
+4. Used `break` after scheduling a job so it isn't scheduled twice.
+5. Maintained `count` and `profit` separately.
+
+### Complexity
+- Sorting: O(N log N)
+- Finding maximum deadline: O(N)
+- Scheduling: O(N × D), where D = maximum deadline.
+- Space: O(D)
+
+**Important:** This is your brute-force greedy approach, not the optimized DSU approach.
+
+Your original greedy intuition was correct! ❤️
