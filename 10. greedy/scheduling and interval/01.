@@ -1,13 +1,41 @@
+### Problem: Minimum Average Waiting Time
+**Approach: Greedy – Shortest Job First (SJF)**
+
+**Logic:**
+1. Sort the burst times in ascending order so that shorter processes execute first.
+2. Maintain `t` to store the total execution time of previously completed processes.
+3. For every process, add `t` to `wt` because it represents the current process's waiting time.
+4. Update `t` by adding the current process's burst time.
+5. Return `wt / n` to calculate the average waiting time.
+
+### Code
+```cpp
 class Solution {
-  public:
+public:
     long long solve(vector<int>& bt) {
         sort(bt.begin(), bt.end());
+
         long long t = 0;
         long long wt = 0;
-        for(int i = 0 ; i <bt.size() ; i++){
+
+        for(int i = 0; i < bt.size(); i++) {
             wt = wt + t;
             t = t + bt[i];
         }
-        return wt/bt.size();
+
+        return wt / bt.size();
     }
 };
+```
+
+### Complexity Analysis
+- **Time Complexity:** O(N log N) – Sorting the burst times.
+- **Auxiliary Space:** O(1) – No extra data structure used (ignoring sorting stack space).
+
+### Mistakes & Learning
+- FCFS does not necessarily give minimum average waiting time.
+- Sorting is necessary to execute shorter processes first.
+- This is a Greedy algorithm because we make the locally optimal choice of executing the shortest available process first.
+
+### Key Concept
+**Shortest Job First (SJF):** The process with the smallest burst time is executed first to minimize average waiting time.
